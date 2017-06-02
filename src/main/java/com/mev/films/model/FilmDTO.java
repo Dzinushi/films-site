@@ -1,10 +1,11 @@
 package com.mev.films.model;
 
+import java.math.BigInteger;
 import java.sql.Blob;
 import java.sql.Time;
 
 public class FilmDTO {
-    private int filmId;
+    private BigInteger filmId;
     private String filmName;
     private String filmGenre;
     private Time filmLast;
@@ -14,11 +15,11 @@ public class FilmDTO {
     public FilmDTO(){
     }
 
-    public int getFilmId() {
+    public BigInteger getFilmId() {
         return filmId;
     }
 
-    public void setFilmId(int filmId) {
+    public void setFilmId(BigInteger filmId) {
         this.filmId = filmId;
     }
 
