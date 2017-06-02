@@ -7,7 +7,7 @@ public class UserDTO {
     private String userLogin;
     private String userPassword;
 
-    public UserDTO{
+    public UserDTO(){
 
     }
 
