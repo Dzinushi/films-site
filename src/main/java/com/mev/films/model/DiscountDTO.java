@@ -33,6 +33,7 @@ public class DiscountDTO {
         sb.append(discountId);
         sb.append(", discountCode = ");
         sb.append(dicountCode);
+        sb.append("]");
         sb.append(super.toString());
 
         return sb.toString();
