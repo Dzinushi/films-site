@@ -7,6 +7,10 @@ public class UserDTO {
     private String userLogin;
     private String userPassword;
 
+    public UserDTO{
+
+    }
+
     public BigInteger getUserId() {
         return userId;
     }
@@ -33,6 +37,14 @@ public class UserDTO {
 
     @Override
     public String toString(){
-        return "UserDTO [userId = ]" + userId + "]" + super.toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append("UserDTO [userId = ");
+        sb.append(userId);
+        sb.append(", userLogin = ");
+        sb.append(userLogin);
+        sb.append("]");
+        sb.append(super.toString());
+
+        return sb.toString();
     }
 }
