@@ -35,7 +35,6 @@ public class UserDTO {
         this.userPassword = userPassword;
     }
 
-    @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("UserDTO [userId = ");

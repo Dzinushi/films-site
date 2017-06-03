@@ -26,7 +26,6 @@ public class DiscountDTO {
         this.dicountCode = dicountCode;
     }
 
-    @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("DiscountDTO [discountId = ");

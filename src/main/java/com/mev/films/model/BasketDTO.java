@@ -44,7 +44,6 @@ public class BasketDTO {
         this.discountId = discountId;
     }
 
-    @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("BasketDTO [basketId = ");

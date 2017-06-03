@@ -63,7 +63,6 @@ public class FilmDTO {
         this.image = image;
     }
 
-    @Override
     public String toString(){
         StringBuilder sb = new StringBuilder();
         sb.append("FilmDTO [filmId = ");
