@@ -1,37 +1,34 @@
 package com.mev.films.model;
 
-import java.math.BigInteger;
-
 public class DiscountDTO {
-    private BigInteger discountId;
-    private String dicountCode;
+    private Long id;
+    private String code;
 
     public DiscountDTO(){
-
     }
 
-    public BigInteger getDiscountId() {
-        return discountId;
+    public Long getId() {
+        return id;
     }
 
-    public void setDiscountId(BigInteger discountId) {
-        this.discountId = discountId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getDicountCode() {
-        return dicountCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setDicountCode(String dicountCode) {
-        this.dicountCode = dicountCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("DiscountDTO [discountId = ");
-        sb.append(discountId);
+        sb.append("DiscountDTO [id = ");
+        sb.append(id);
         sb.append(", discountCode = ");
-        sb.append(dicountCode);
+        sb.append(code);
         sb.append("]");
         sb.append(super.toString());
 

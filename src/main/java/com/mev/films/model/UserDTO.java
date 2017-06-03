@@ -1,46 +1,43 @@
 package com.mev.films.model;
 
-import java.math.BigInteger;
-
 public class UserDTO {
-    private BigInteger userId;
-    private String userLogin;
-    private String userPassword;
+    private Long id;
+    private String login;
+    private String password;
 
     public UserDTO(){
-
     }
 
-    public BigInteger getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(BigInteger userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getUserLogin() {
-        return userLogin;
+    public String getLogin() {
+        return login;
     }
 
-    public void setUserLogin(String userLogin) {
-        this.userLogin = userLogin;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("UserDTO [userId = ");
-        sb.append(userId);
-        sb.append(", userLogin = ");
-        sb.append(userLogin);
+        sb.append("UserDTO [id = ");
+        sb.append(id);
+        sb.append(", login = ");
+        sb.append(login);
         sb.append("]");
         sb.append(super.toString());
 

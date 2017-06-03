@@ -1,80 +1,79 @@
 package com.mev.films.model;
 
-import java.math.BigInteger;
 import java.sql.Blob;
 import java.sql.Time;
 
 public class FilmDTO {
-    private BigInteger filmId;
-    private String filmName;
-    private String filmGenre;
-    private Time filmLast;
-    private int filmPrice;
-    private Blob image;
+    private Long id;
+    private String name;
+    private String genre;
+    private Time duration;
+    private int price;
+    private String image;
 
     public FilmDTO(){
     }
 
-    public BigInteger getFilmId() {
-        return filmId;
+    public Long getId() {
+        return id;
     }
 
-    public void setFilmId(BigInteger filmId) {
-        this.filmId = filmId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getFilmName() {
-        return filmName;
+    public String getName() {
+        return name;
     }
 
-    public void setFilmName(String filmName) {
-        this.filmName = filmName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getFilmGenre() {
-        return filmGenre;
+    public String getGenre() {
+        return genre;
     }
 
-    public void setFilmGenre(String filmGenre) {
-        this.filmGenre = filmGenre;
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
-    public Time getFilmLast() {
-        return filmLast;
+    public Time getDuration() {
+        return duration;
     }
 
-    public void setFilmLast(Time filmLast) {
-        this.filmLast = filmLast;
+    public void setDuration(Time duration) {
+        this.duration = duration;
     }
 
-    public int getFilmPrice() {
-        return filmPrice;
+    public int getPrice() {
+        return price;
     }
 
-    public void setFilmPrice(int filmPrice) {
-        this.filmPrice = filmPrice;
+    public void setPrice(int price) {
+        this.price = price;
     }
 
-    public Blob getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(Blob image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("FilmDTO [filmId = ");
-        sb.append(filmId);
-        sb.append(", filmName = ");
-        sb.append(filmName);
-        sb.append(", filmGenre = ");
-        sb.append(filmGenre);
-        sb.append(", filmLast = ");
-        sb.append(filmLast);
-        sb.append(", filmPrice = ");
-        sb.append(Integer.toString(filmPrice));
+        sb.append("FilmDTO [id = ");
+        sb.append(id);
+        sb.append(", name = ");
+        sb.append(name);
+        sb.append(", genre = ");
+        sb.append(genre);
+        sb.append(", duration = ");
+        sb.append(duration);
+        sb.append(", price = ");
+        sb.append(Integer.toString(price));
         sb.append("]");
         sb.append(super.toString());
 

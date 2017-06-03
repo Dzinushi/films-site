@@ -1,53 +1,50 @@
 package com.mev.films.model;
 
-
-import java.math.BigInteger;
-
 public class BasketDTO {
-    private BigInteger basketId;
-    private BigInteger userId;
-    private BigInteger filmId;
-    private BigInteger discountId;
+    private Long id;
+    private Long userId;
+    private Long filmId;
+    private Long discountId;
 
     public BasketDTO(){
     }
 
-    public BigInteger getBasketId() {
-        return basketId;
+    public Long getId() {
+        return id;
     }
 
-    public void setBasketId(BigInteger basketId) {
-        this.basketId = basketId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public BigInteger getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(BigInteger userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
-    public BigInteger getFilmId() {
+    public Long getFilmId() {
         return filmId;
     }
 
-    public void setFilmId(BigInteger filmId) {
+    public void setFilmId(Long filmId) {
         this.filmId = filmId;
     }
 
-    public BigInteger getDiscountId() {
+    public Long getDiscountId() {
         return discountId;
     }
 
-    public void setDiscountId(BigInteger discountId) {
+    public void setDiscountId(Long discountId) {
         this.discountId = discountId;
     }
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        sb.append("BasketDTO [basketId = ");
-        sb.append(basketId);
+        sb.append("BasketDTO [id = ");
+        sb.append(id);
         sb.append(", userId = ");
         sb.append(userId);
         sb.append(", filmId = ");
