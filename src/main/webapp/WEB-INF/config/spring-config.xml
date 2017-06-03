@@ -31,8 +31,7 @@
 
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />
-        <property name="typeAliasesPackage" value="com.github.elizabetht.model"/>
-        <property name="mapperLocations" value="classpath*:com/mev/films/mappers/implement/*.xml" />
+        <property name="configLocation" value="classpath:../webapp/WEB-INF/config/mybatis-config.xml"/>
     </bean>
 
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
