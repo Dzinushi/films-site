@@ -17,10 +17,23 @@
 		<jackson.version>1.9.0</jackson.version>
 		<apache.commons.version>2.0.1</apache.commons.version>
 		<tiles.version>3.0.5</tiles.version>
+		<log4j2.version>2.1</log4j2.version>
 	</properties>
 
 	<dependencies>
 
+		<dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j2.version}</version>
+        </dependency>
+		
+	
 		<!-- MyBatis -->
 		<dependency>
 			<groupId>org.mybatis</groupId>
@@ -158,7 +171,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>films</finalName>
+		<finalName>ROOT</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>

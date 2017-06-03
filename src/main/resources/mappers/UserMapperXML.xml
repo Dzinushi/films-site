@@ -5,27 +5,33 @@
 
 <mapper namespace="com.mev.films.mappers.interfaces.UserMapper">
 
+    <resultMap id="userDTO" type="com.mev.films.model.UserDTO">
+        <id property="id" column="id"/>
+        <id property="login" column="login"/>
+        <id property="password" column="password"/>
+    </resultMap>
+
     <select id="selectUsers" resultMap="userDTO">
-        SELECT * FROM user;
+        SELECT * FROM users;
     </select>
 
-    <select id="selectUserByName" parameterType="String" resultMap="userDTO">
-        SELECT * FROM user WHERE user.login=#{userName};
+    <select id="selectUserByName" parameterType="map" resultMap="userDTO">
+        SELECT * FROM users WHERE user.login=#{0};
     </select>
 
-    <insert id="insertUser">
-        INSERT INTO user (id, login, password)
-                VALUES (#{id}, #{login}, #{password})
+    <insert id="insertUser" parameterType="com.mev.films.model.UserDTO">
+        INSERT INTO users (login, password)
+                VALUES (#{login}, #{password})
     </insert>
 
-    <update id="updateUser">
+    <update id="updateUser" parameterType="com.mev.films.model.UserDTO">
         UPDATE user SET
             login = #{login},
             password = #{password}
         WHERE id = #{id}
     </update>
 
-    <delete id="removeUserByName">
-        DELETE FROM user WHERE id = #{id}
+    <delete id="removeUserByName" parameterType="map">
+        DELETE FROM user WHERE login = #{0}
     </delete>
 </mapper>
