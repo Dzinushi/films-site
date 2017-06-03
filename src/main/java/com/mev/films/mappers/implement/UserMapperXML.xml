@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mev.films.mappers.interfaces.UserMapper">
+
+    <select id="selectUsers" resultMap="userDTO">
+        SELECT * FROM user;
+    </select>
+
+    <select id="selectUserByName" parameterType="String" resultMap="userDTO">
+        SELECT * FROM user WHERE user.login=#{userName};
+    </select>
+
+    <insert id="insertUser">
+        INSERT INTO user (id, login, password)
+                VALUES (#{id}, #{login}, #{password})
+    </insert>
+
+    <update id="updateUser">
+        UPDATE user SET
+            login = #{login},
+            password = #{password}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="removeUserByName">
+        DELETE FROM user WHERE id = #{id}
+    </delete>
+</mapper>
