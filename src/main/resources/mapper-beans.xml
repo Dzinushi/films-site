@@ -11,5 +11,8 @@
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
         <property name="mapperInterface" value="com.mev.films.mappers.interfaces.FilmMapper"/>
     </bean>
-
+    <bean id="discountMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <property name="mapperInterface" value="com.mev.films.mappers.interfaces.DiscountMapper"/>
+    </bean>
 </beans>

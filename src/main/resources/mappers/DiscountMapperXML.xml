@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mev.films.mappers.interfaces.DiscountMapper">
+
+    <resultMap id="discountDTO" type="com.mev.films.model.DiscountDTO">
+        <id property="id" column="id"/>
+        <id property="code" column="code"/>
+    </resultMap>
+
+    <insert id="insertDiscount" parameterType="com.mev.films.model.DiscountDTO">
+        INSERT INTO discounts (id, code)
+                VALUES (#{id}, #{code})
+    </insert>
+
+    <update id="updateDiscount" parameterType="com.mev.films.model.DiscountDTO">
+        UPDATE discounts SET
+            code = #{code}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="removeDiscountByCode" parameterType="map">
+        DELETE FROM discounts WHERE code = #{0}
+    </delete>
+</mapper>
