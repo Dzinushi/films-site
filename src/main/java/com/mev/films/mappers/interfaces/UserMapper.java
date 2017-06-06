@@ -9,5 +9,5 @@ public interface UserMapper {
     UserDTO selectUserByName(String userName);
     Long insertUser(UserDTO userDTO);
     Long updateUser(UserDTO userDTO);
-    Long removeUserByName(String userName);
+    Long removeUserByLogin(String userName);
 }
