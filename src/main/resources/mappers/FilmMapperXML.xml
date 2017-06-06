@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mev.films.mappers.interfaces.FilmMapper">
+
+    <resultMap id="filmDTO" type="com.mev.films.model.FilmDTO">
+        <id property="id" column="id"/>
+        <id property="name" column="name"/>
+        <id property="genre" column="genre"/>
+        <id property="duration" column="duration"/>
+        <id property="price" column="price"/>
+        <id property="image" column="image"/>
+    </resultMap>
+
+    <select id="selectFilms" resultMap="filmDTO">
+        SELECT * FROM films;
+    </select>
+
+    <insert id="insertFilm" parameterType="com.mev.films.model.FilmDTO">
+        INSERT INTO films (name, genre, duration, price, image)
+        VALUES (#{name}, #{genre}, #{duration}, #{price}, #{image})
+    </insert>
+
+    <update id="updateFilm" parameterType="com.mev.films.model.FilmDTO">
+        UPDATE films SET
+            name = #{name},
+            genre = #{genre},
+            duration = #{duration},
+            price = #{price},
+            image = #{image}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="removeFilmById" parameterType="map">
+        DELETE FROM films WHERE id = #{0}
+    </delete>
+</mapper>
