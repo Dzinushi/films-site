@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
+             xsi:schemaLocation="
+		http://www.springframework.org/schema/security
+        http://www.springframework.org/schema/security/spring-security-4.2.xsd
+		http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.3.xsd"
+>
+
+    <http use-expressions="true">
+        <intercept-url pattern="/admin/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/anonymous*" access="isAnonymous()"/>
+        <intercept-url pattern="/login*" access="permitAll"/>
+        <intercept-url pattern="/WEB-INF/resources" access="isAuthenticated()"/>
+
+        <csrf disabled="true"/>
+
+        <form-login login-page='/login.html' login-processing-url="/perform_login" default-target-url="/homepage.html" authentication-failure-url="/login.html?error=true"
+                    always-use-default-target="true"/>
+
+        <logout logout-url="/perform_logout" delete-cookies="JSESSIONID" success-handler-ref="customLogoutSuccessHandler"/>
+
+        <!-- <access-denied-handler error-page="/accessDenied"/> -->
+        <access-denied-handler ref="customAccessDeniedHandler"/>
+
+    </http>
+
+    <beans:bean name="customLogoutSuccessHandler" class="com.mev.films.security.CustomLogoutSuccessHandler"/>
+    <beans:bean name="customAccessDeniedHandler" class="com.mev.films.security.CustomAccessDeniedHandler" />
+
+    <authentication-manager>
+        <authentication-provider>
+            <user-service>
+                <user name="dzinushi" password="5126" authorities="ROLE_USER"/>
+                <user name="fabyloz" password="qwerty" authorities="ROLE_USER"/>
+                <user name="admin" password="admin" authorities="ROLE_ADMIN"/>
+            </user-service>
+        </authentication-provider>
+    </authentication-manager>
+
+</beans:beans>
