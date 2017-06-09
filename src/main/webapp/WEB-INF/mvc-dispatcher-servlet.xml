@@ -70,7 +70,7 @@
 	<bean id="viewResolver"
 		  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/resources/" />
-		<property name="suffix" value=".html" />
+		<property name="suffix" value=".jsp" />
 	</bean>
 
 	<mvc:resources mapping="/resources/**" location="WEB-INF/resources/"  />

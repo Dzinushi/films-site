@@ -11,10 +11,14 @@ import org.springframework.web.servlet.ModelAndView;
 public class MainController {
 
     @RequestMapping(value = {"/", "/home**"}, method = RequestMethod.GET)
-    public String homePage(){
+    public ModelAndView homePage(){
         System.out.println("Connect to /home");
 
-        return "Welcome!";
+        ModelAndView model = new ModelAndView();
+        model.addObject("msg", "Default page");
+        model.setViewName("home");
+
+        return model;
     }
 
     @RequestMapping(value = "/admin**", method = RequestMethod.GET)
@@ -22,7 +26,8 @@ public class MainController {
         System.out.println("Connect to /admin");
 
         ModelAndView model = new ModelAndView();
-        model.addObject("msg", "Connected as admin");
+        model.addObject("msg", "Connected as ROLE_ADMIN");
+        model.setViewName("admin");
 
         return model;
     }
@@ -37,11 +42,14 @@ public class MainController {
         ModelAndView model = new ModelAndView();
         if (error != null) {
             model.addObject("error", "Invalid login or password");
+            System.out.println("Invalid login or password");
         }
 
         if (logout != null){
-            model.addObject("msg", "Connected as user");
+            model.addObject("msg", "You've been logged out successfully");
+            System.out.println("You've been logged out successfully");
         }
+        model.setViewName("login");
 
         return model;
     }
