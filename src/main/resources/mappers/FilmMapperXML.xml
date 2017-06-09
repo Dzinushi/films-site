@@ -37,10 +37,10 @@
             id = #{id}
     </update>
 
-    <delete id="deleteFilmById" parameterType="com.mev.films.model.FilmDTO">
+    <delete id="deleteFilmByImage" parameterType="com.mev.films.model.FilmDTO">
         DELETE FROM
             films
         WHERE
-            id = #{0}
+            image = #{0}
     </delete>
 </mapper>

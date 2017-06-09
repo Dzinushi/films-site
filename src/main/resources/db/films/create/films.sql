@@ -5,5 +5,5 @@ CREATE TABLE films (
   genre VARCHAR(128),
   duration TIME,
   price INT,
-  image VARCHAR(256)
+  image VARCHAR(256) UNIQUE
 );
