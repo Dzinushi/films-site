@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mev.films.mappers.interfaces.BasketMapper">
+
+    <resultMap id="basketDTO" type="com.mev.films.model.BasketDTO">
+        <id property="id" column="id"/>
+    
+        <association property="userDTO" resultMap="map"
+                     columnPrefix="usr_" />
+        <association property="filmDTO" resultMap="map"
+                     columnPrefix="flm_" />
+        <association property="discountDTO" resultMap="map"
+                     columnPrefix="dsc" />
+    </resultMap>
+    
+    <select id="selectBaskets" parameterType="map" resultMap="basketDTO">
+        SELECT
+            b.id AS id,
+
+            u.id AS usr_id,
+            u.login AS usr_login,
+            u.password AS usr_password,
+
+            f.id AS flm_id,
+            f.name AS flm_name,
+            f.genre AS flm_genre,
+            f.price AS flm_price,
+            f.duration AS flm_duration,
+            f.image AS flm_image,
+
+            d.id AS dsc_id,
+            d.code AS dsc_code
+
+        FROM
+            basket AS b
+            INNER JOIN users AS u ON b.user_id = u.id
+            INNER JOIN films AS f ON b.film_id = f.id
+            INNER JOIN discounts AS d ON b.discount = d.id
+    </select>
+
+    <select id="selectBasketByUserName" parameterType="map" resultMap="basketDTO">
+        SELECT
+            b.id AS id,
+
+            u.id AS usr_id,
+            u.login AS usr_login,
+            u.password AS usr_password,
+
+            f.id AS flm_id,
+            f.name AS flm_name,
+            f.genre AS flm_genre,
+            f.price AS flm_price,
+            f.duration AS flm_duration,
+            f.image AS flm_image,
+
+            d.id AS dsc_id,
+            d.code AS dsc_code
+        FROM
+            basket AS b
+            INNER JOIN users AS u ON b.user_id = u.id
+            INNER JOIN films AS f ON b.film_id = f.id
+            INNER JOIN discounts AS d ON b.discount = d.id
+        WHERE
+            u.id = #{0}
+    </select>
+
+    <insert id="insertBasket" parameterType="com.mev.films.model.BasketDTO">
+        INSERT INTO
+            baskets (user_id, film_id, discount_id)
+        VALUES
+            (#{userId}, #{filmId}, #{discountId})
+    </insert>
+
+    <update id="updateBasket" parameterType="com.mev.films.model.BasketDTO">
+        UPDATE
+            baskets
+        SET
+            user_id = #{userId},
+            film_id = #{filmId},
+            discount_id = #{discountId}
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="deleteBasketByUserName" parameterType="com.mev.films.model.BasketDTO">
+        DELETE FROM
+            baskets
+        WHERE
+            user_id = #{0}
+    </delete>
+</mapper>
