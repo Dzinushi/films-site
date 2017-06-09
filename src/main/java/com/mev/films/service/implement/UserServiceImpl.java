@@ -45,6 +45,6 @@ public class UserServiceImpl implements UserService{
         UserDTO userDTO = userMapper.selectUserByName(login);
         LOG.debug("deleteUser: id = {}, login = {}, password = {}",
                 userDTO.getId(), userDTO.getLogin(), userDTO.getPassword());
-        return userMapper.removeUserByLogin(login);
+        return userMapper.deleteUserByLogin(login);
     }
 }
