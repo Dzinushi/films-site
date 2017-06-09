@@ -11,17 +11,22 @@
     </resultMap>
 
     <insert id="insertDiscount" parameterType="com.mev.films.model.DiscountDTO">
-        INSERT INTO discounts (id, code)
-                VALUES (#{id}, #{code})
+        INSERT INTO
+            discounts (id, code)
+        VALUES (#{id}, #{code})
     </insert>
 
     <update id="updateDiscount" parameterType="com.mev.films.model.DiscountDTO">
         UPDATE discounts SET
             code = #{code}
-        WHERE id = #{id}
+        WHERE
+            id = #{id}
     </update>
 
-    <delete id="removeDiscountByCode" parameterType="map">
-        DELETE FROM discounts WHERE code = #{0}
+    <delete id="removeDiscountByCode" parameterType="com.mev.films.model.DiscountDTO">
+        DELETE FROM
+            discounts
+        WHERE
+            code = #{0}
     </delete>
 </mapper>

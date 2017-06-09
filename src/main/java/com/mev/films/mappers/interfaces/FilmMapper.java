@@ -8,5 +8,5 @@ public interface FilmMapper {
     List<FilmMapper> selectFilms();
     Long insertFilm(FilmDTO filmDTO);
     Long updateFilm(FilmDTO filmDTO);
-    Long removeFilmById(Long id);
+    Long deleteFilmById(Long id);
 }
