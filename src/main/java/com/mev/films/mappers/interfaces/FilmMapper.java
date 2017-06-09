@@ -5,7 +5,9 @@ import com.mev.films.model.FilmDTO;
 import java.util.List;
 
 public interface FilmMapper {
-    List<FilmMapper> selectFilms();
+    List<FilmDTO> selectFilms();
+    List<FilmDTO> selectFilmsByName(String name);
+    FilmDTO selectFilmByImage(String image);
     Long insertFilm(FilmDTO filmDTO);
     Long updateFilm(FilmDTO filmDTO);
     Long deleteFilmByImage(String image);

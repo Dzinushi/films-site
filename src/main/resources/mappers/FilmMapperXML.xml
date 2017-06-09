@@ -18,6 +18,18 @@
         SELECT * FROM films;
     </select>
 
+    <select id="selectFilmsByName" parameterType="com.mev.films.model.FilmDTO" resultMap="map">
+        SELECT * FROM
+            films
+        WHERE name = #{0}
+    </select>
+
+    <select id="selectFilmByImage" parameterType="com.mev.films.model.FilmDTO" resultMap="map">
+        SELECT * FROM
+            films
+        WHERE image = #{0}
+    </select>
+
     <insert id="insertFilm" parameterType="com.mev.films.model.FilmDTO">
         INSERT INTO
             films (name, genre, duration, price, image)
