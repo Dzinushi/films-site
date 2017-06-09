@@ -37,7 +37,7 @@
             id = #{id}
     </update>
 
-    <delete id="removeUserByName" parameterType="com.mev.films.model.UserDTO">
+    <delete id="deleteUserByName" parameterType="com.mev.films.model.UserDTO">
         DELETE FROM
             user
         WHERE

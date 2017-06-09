@@ -23,7 +23,7 @@
             id = #{id}
     </update>
 
-    <delete id="removeDiscountByCode" parameterType="com.mev.films.model.DiscountDTO">
+    <delete id="deleteDiscountByCode" parameterType="com.mev.films.model.DiscountDTO">
         DELETE FROM
             discounts
         WHERE
