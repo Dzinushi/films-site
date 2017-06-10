@@ -18,7 +18,7 @@
     <select id="selectUserByName" parameterType="com.mev.films.model.UserDTO" resultMap="map">
         SELECT * FROM users
         WHERE
-            user.login=#{0};
+            users.login=#{0};
     </select>
 
     <insert id="insertUser" parameterType="com.mev.films.model.UserDTO">
@@ -29,7 +29,7 @@
 
     <update id="updateUser" parameterType="com.mev.films.model.UserDTO">
         UPDATE
-            user
+            users
         SET
             login = #{login},
             password = #{password}
@@ -39,8 +39,11 @@
 
     <delete id="deleteUserByName" parameterType="com.mev.films.model.UserDTO">
         DELETE FROM
-            user
+            users
         WHERE
-            login = #{0}
+            login = #{0};
+        DELETE FROM
+            user_roles
+        WHERE login = #{0}
     </delete>
 </mapper>
