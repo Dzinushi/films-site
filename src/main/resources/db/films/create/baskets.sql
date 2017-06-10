@@ -3,7 +3,8 @@ CREATE TABLE baskets(
   id BIGINT PRIMARY KEY DEFAULT nextval('baskets_id_seq'::regclass),
   user_id BIGINT,
   film_id BIGINT,
-  discount_id BIGINT
+  discount_id BIGINT,
+  UNIQUE (user_id, film_id)
 );
 
 ALTER TABLE baskets ADD FOREIGN KEY(user_id) REFERENCES users(id);
