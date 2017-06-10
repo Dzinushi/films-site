@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mev.films.mappers.interfaces.UserMapper">
+
+    <resultMap id="userRoleDTO" type="com.mev.films.model.UserRoleDTO">
+        <id property="id" column="id"/>
+        <id property="login" column="login"/>
+        <id property="enabled" column="enabled"/>
+    </resultMap>
+
+    <select id="selectUserRoles" parameterType="com.mev.films.model.UserRoleDTO" resultMap="map">
+        SELECT * FROM
+            user_roles
+    </select>
+
+    <select id="selectUserRolesByLogin" parameterType="com.mev.films.model.UserRoleDTO" resultMap="map">
+        SELECT * FROM
+            user_roles
+        WHERE login = #{0}
+    </select>
+
+    <insert id="insertUserRole" parameterType="com.mev.films.model.UserRoleDTO">
+        INSERT INTO
+            user_roles (login, role)
+        VALUES (#{login}, #{role})
+    </insert>
+
+    <update id="updateUserRole" parameterType="com.mev.films.model.UserRoleDTO">
+        UPDATE
+            user_roles
+        SET
+            login = #{login},
+            role = #{role}
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="deleteUserRoleByLoginRole" parameterType="com.mev.films.model.UserRoleDTO">
+        DELETE FROM
+            user_roles
+        WHERE login = #{0} AND role = #{1}
+    </delete>
+</mapper>
