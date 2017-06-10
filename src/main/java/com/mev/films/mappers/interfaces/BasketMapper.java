@@ -10,4 +10,5 @@ public interface BasketMapper {
     Long insertBasket(BasketDTO basketDTO);
     Long updateBasket(BasketDTO basketDTO);
     Long deleteBasketByUserName(String userName);
+    Long deleteBasket(BasketDTO basketDTO);
 }

@@ -91,4 +91,12 @@
         WHERE
             user_id = #{0}
     </delete>
+
+    <delete id="deleteBasket" parameterType="com.mev.films.model.BasketDTO>">
+        DELETE FROM
+            baskets
+        WHERE
+            user_id = #{user_id} AND
+            film_id = #{film_id}
+    </delete>
 </mapper>
