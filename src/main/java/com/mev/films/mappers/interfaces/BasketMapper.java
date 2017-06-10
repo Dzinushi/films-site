@@ -9,6 +9,6 @@ public interface BasketMapper {
     List<BasketDTO> selectBasketByUserName(String userName);
     Long insertBasket(BasketDTO basketDTO);
     Long updateBasket(BasketDTO basketDTO);
-    Long deleteBasketByUserName(String userName);
+    List<Long> deleteBasketByUserId(Long userId);
     Long deleteBasket(BasketDTO basketDTO);
 }

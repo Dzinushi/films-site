@@ -85,7 +85,7 @@
             id = #{id}
     </update>
 
-    <delete id="deleteBasketByUserName" parameterType="com.mev.films.model.BasketDTO">
+    <delete id="deleteBasketByUserId" parameterType="com.mev.films.model.BasketDTO">
         DELETE FROM
             baskets
         WHERE
