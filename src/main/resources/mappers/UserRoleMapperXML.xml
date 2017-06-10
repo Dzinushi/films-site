@@ -8,7 +8,7 @@
     <resultMap id="userRoleDTO" type="com.mev.films.model.UserRoleDTO">
         <id property="id" column="id"/>
         <id property="login" column="login"/>
-        <id property="enabled" column="enabled"/>
+        <id property="role" column="role"/>
     </resultMap>
 
     <select id="selectUserRoles" parameterType="com.mev.films.model.UserRoleDTO" resultMap="map">

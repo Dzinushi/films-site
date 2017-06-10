@@ -3,7 +3,7 @@ package com.mev.films.model;
 public class UserRoleDTO {
     private Long id;
     private String login;
-    private short enabled;
+    private String role;
 
     public UserRoleDTO(){
 
@@ -25,12 +25,12 @@ public class UserRoleDTO {
         this.login = login;
     }
 
-    public short getEnabled() {
-        return enabled;
+    public String getRole() {
+        return role;
     }
 
-    public void setEnabled(short enabled) {
-        this.enabled = enabled;
+    public void setEnabled(String role) {
+        this.role = role;
     }
 
     @Override
@@ -41,7 +41,7 @@ public class UserRoleDTO {
         sb.append(", login = ");
         sb.append(login);
         sb.append(", enabled = ");
-        sb.append(enabled);
+        sb.append(role);
         sb.append(super.toString());
 
         return sb.toString();
