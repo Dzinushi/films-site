@@ -29,6 +29,26 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public UserDTO getUser(String login) {
+        LOG.debug("getUser: login = {}",
+                login);
+        return userMapper.selectUserByLogin(login);
+    }
+
+    @Override
+    public List<UserRoleDTO> getUserRoles() {
+        LOG.debug("getUserRoles");
+        return userRoleMapper.selectUserRoles();
+    }
+
+    @Override
+    public List<UserRoleDTO> getUserRole(String login) {
+        LOG.debug("getUserRole: login = {}",
+                login);
+        return userRoleMapper.selectUserRolesByLogin(login);
+    }
+
+    @Override
     public Long addUser(UserDTO userDTO, UserRoleDTO userRoleDTO) {
         LOG.debug("addUser: id = {}, login = {}, password = {}, role = {}",
                 userDTO.getId(), userDTO.getLogin(), userDTO.getPassword(), userRoleDTO.getRole());
