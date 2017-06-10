@@ -10,6 +10,17 @@
         <id property="code" column="code"/>
     </resultMap>
 
+    <select id="selectDiscounts" parameterType="com.mev.films.model.DiscountDTO" resultMap="map">
+        SELECT * FROM
+            discounts
+    </select>
+
+    <select id="selectDiscountByCode" parameterType="com.mev.films.model.DiscountDTO" resultMap="map">
+        SELECT * FROM
+            discounts
+        WHERE code = #{0}
+    </select>
+
     <insert id="insertDiscount" parameterType="com.mev.films.model.DiscountDTO">
         INSERT INTO
             discounts (id, code)

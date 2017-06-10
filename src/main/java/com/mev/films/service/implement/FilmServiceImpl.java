@@ -17,8 +17,7 @@ public class FilmServiceImpl implements FilmService{
 
     private static final Logger LOG = LogManager.getLogger();
 
-    @Autowired
-    private FilmMapper filmMapper;
+    @Autowired private FilmMapper filmMapper;
 
     @Override
     public List<FilmDTO> getAllFilms() {
