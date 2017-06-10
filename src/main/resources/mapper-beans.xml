@@ -7,6 +7,10 @@
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
         <property name="mapperInterface" value="com.mev.films.mappers.interfaces.UserMapper"/>
     </bean>
+    <bean id="userRoleMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <property name="mapperInterface" value="com.mev.films.mappers.interfaces.UserRoleMapper"/>
+    </bean>
     <bean id="filmMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
         <property name="mapperInterface" value="com.mev.films.mappers.interfaces.FilmMapper"/>
