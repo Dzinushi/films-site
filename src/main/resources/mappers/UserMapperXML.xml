@@ -15,7 +15,7 @@
         SELECT * FROM users;
     </select>
 
-    <select id="selectUserByName" parameterType="com.mev.films.model.UserDTO" resultMap="map">
+    <select id="selectUserByLogin" parameterType="com.mev.films.model.UserDTO" resultMap="map">
         SELECT * FROM users
         WHERE
             users.login=#{0};
