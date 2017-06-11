@@ -7,19 +7,19 @@
 
     <resultMap id="userDTO" type="com.mev.films.model.UserDTO">
         <id property="id" column="id"/>
-        <id property="login" column="login"/>
-        <id property="password" column="password"/>
+        <result property="login" column="login"/>
+        <result property="password" column="password"/>
     </resultMap>
 
-    <select id="selectUsers" parameterType="com.mev.films.model.UserDTO" resultMap="map">
+    <select id="selectUsers" resultMap="userDTO">
         SELECT * FROM users;
     </select>
 
-    <select id="selectUserSortByLogin" parameterType="com.mev.films.model.UserDTO" resultMap="map">
+    <select id="selectUserSortByLogin" resultMap="userDTO">
         SELECT * FROM users ORDER BY login;
     </select>
 
-    <select id="selectUserByLogin" parameterType="com.mev.films.model.UserDTO" resultMap="map">
+    <select id="selectUserByLogin" parameterType="map" resultMap="userDTO">
         SELECT * FROM users
         WHERE
             users.login=#{0};
@@ -41,7 +41,7 @@
             id = #{id}
     </update>
 
-    <delete id="deleteUserByName" parameterType="com.mev.films.model.UserDTO">
+    <delete id="deleteUserByName" parameterType="map">
         DELETE FROM
             users
         WHERE

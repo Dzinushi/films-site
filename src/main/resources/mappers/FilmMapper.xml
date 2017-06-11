@@ -7,28 +7,28 @@
 
     <resultMap id="filmDTO" type="com.mev.films.model.FilmDTO">
         <id property="id" column="id"/>
-        <id property="name" column="name"/>
-        <id property="genre" column="genre"/>
-        <id property="duration" column="duration"/>
-        <id property="price" column="price"/>
-        <id property="image" column="image"/>
+        <result property="name" column="name"/>
+        <result property="genre" column="genre"/>
+        <result property="duration" column="duration"/>
+        <result property="price" column="price"/>
+        <result property="image" column="image"/>
     </resultMap>
 
-    <select id="selectFilms" parameterType="com.mev.films.model.FilmDTO" resultMap="map">
+    <select id="selectFilms" resultMap="map">
         SELECT * FROM films;
     </select>
 
-    <select id="selectFilmsSortByName" parameterType="com.mev.films.model.FilmDTO" resultMap="map">
+    <select id="selectFilmsSortByName" parameterType="map" resultMap="filmDTO">
         SELECT * FROM films ORDER BY name;
     </select>
 
-    <select id="selectFilmsByName" parameterType="com.mev.films.model.FilmDTO" resultMap="map">
+    <select id="selectFilmsByName" parameterType="map" resultMap="filmDTO">
         SELECT * FROM
             films
         WHERE name = #{0}
     </select>
 
-    <select id="selectFilmByImage" parameterType="com.mev.films.model.FilmDTO" resultMap="map">
+    <select id="selectFilmByImage" parameterType="map" resultMap="filmDTO">
         SELECT * FROM
             films
         WHERE image = #{0}
@@ -53,7 +53,7 @@
             id = #{id}
     </update>
 
-    <delete id="deleteFilmByImage" parameterType="com.mev.films.model.FilmDTO">
+    <delete id="deleteFilmByImage" parameterType="map">
         DELETE FROM
             films
         WHERE

@@ -7,16 +7,16 @@
 
     <resultMap id="userRoleDTO" type="com.mev.films.model.UserRoleDTO">
         <id property="id" column="id"/>
-        <id property="login" column="login"/>
-        <id property="role" column="role"/>
+        <result property="login" column="login"/>
+        <result property="role" column="role"/>
     </resultMap>
 
-    <select id="selectUserRoles" parameterType="com.mev.films.model.UserRoleDTO" resultMap="map">
+    <select id="selectUserRoles" resultMap="userRoleDTO">
         SELECT * FROM
             user_roles
     </select>
 
-    <select id="selectUserRolesByLogin" parameterType="com.mev.films.model.UserRoleDTO" resultMap="map">
+    <select id="selectUserRolesByLogin" parameterType="map" resultMap="userRoleDTO">
         SELECT * FROM
             user_roles
         WHERE login = #{0}
@@ -38,7 +38,7 @@
             id = #{id}
     </update>
 
-    <delete id="deleteUserRoleByLoginRole" parameterType="com.mev.films.model.UserRoleDTO">
+    <delete id="deleteUserRoleByLoginRole" parameterType="map">
         DELETE FROM
             user_roles
         WHERE login = #{0} AND role = #{1}

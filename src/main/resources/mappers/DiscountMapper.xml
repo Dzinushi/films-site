@@ -7,15 +7,15 @@
 
     <resultMap id="discountDTO" type="com.mev.films.model.DiscountDTO">
         <id property="id" column="id"/>
-        <id property="code" column="code"/>
+        <result property="code" column="code"/>
     </resultMap>
 
-    <select id="selectDiscounts" parameterType="com.mev.films.model.DiscountDTO" resultMap="map">
+    <select id="selectDiscounts" resultMap="discountDTO">
         SELECT * FROM
             discounts
     </select>
 
-    <select id="selectDiscountByCode" parameterType="com.mev.films.model.DiscountDTO" resultMap="map">
+    <select id="selectDiscountByCode" parameterType="map" resultMap="discountDTO">
         SELECT * FROM
             discounts
         WHERE code = #{0}
@@ -34,7 +34,7 @@
             id = #{id}
     </update>
 
-    <delete id="deleteDiscountByCode" parameterType="com.mev.films.model.DiscountDTO">
+    <delete id="deleteDiscountByCode" parameterType="map">
         DELETE FROM
             discounts
         WHERE

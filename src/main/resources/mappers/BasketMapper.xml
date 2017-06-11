@@ -8,15 +8,15 @@
     <resultMap id="basketDTO" type="com.mev.films.model.BasketDTO">
         <id property="id" column="id"/>
     
-        <association property="userDTO" resultMap="map"
+        <association property="userDTO" resultMap="com.mev.films.mappers.interfaces.UserMapper.userDTO"
                      columnPrefix="usr_" />
-        <association property="filmDTO" resultMap="map"
+        <association property="filmDTO" resultMap="com.mev.films.mappers.interfaces.FilmMapper.filmDTO"
                      columnPrefix="flm_" />
-        <association property="discountDTO" resultMap="map"
+        <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO"
                      columnPrefix="dsc" />
     </resultMap>
     
-    <select id="selectBaskets" parameterType="map" resultMap="basketDTO">
+    <select id="selectBaskets" resultMap="basketDTO">
         SELECT
             b.id AS id,
 
@@ -85,14 +85,14 @@
             id = #{id}
     </update>
 
-    <delete id="deleteBasketByUserId" parameterType="com.mev.films.model.BasketDTO">
+    <delete id="deleteBasketByUserId" parameterType="map">
         DELETE FROM
             baskets
         WHERE
             user_id = #{0}
     </delete>
 
-    <delete id="deleteBasket" parameterType="com.mev.films.model.BasketDTO>">
+    <delete id="deleteBasket" parameterType="com.mev.films.model.BasketDTO">
         DELETE FROM
             baskets
         WHERE
