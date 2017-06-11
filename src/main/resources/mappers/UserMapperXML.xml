@@ -15,6 +15,10 @@
         SELECT * FROM users;
     </select>
 
+    <select id="selectUserSortByLogin" parameterType="com.mev.films.model.UserDTO" resultMap="map">
+        SELECT * FROM users ORDER BY login;
+    </select>
+
     <select id="selectUserByLogin" parameterType="com.mev.films.model.UserDTO" resultMap="map">
         SELECT * FROM users
         WHERE
