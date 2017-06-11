@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface FilmMapper {
     List<FilmDTO> selectFilms();
+    List<FilmDTO> selectFilmsSortByName();
     List<FilmDTO> selectFilmsByName(String name);
     FilmDTO selectFilmByImage(String image);
     Long insertFilm(FilmDTO filmDTO);

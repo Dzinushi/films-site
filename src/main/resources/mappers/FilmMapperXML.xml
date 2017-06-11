@@ -18,6 +18,10 @@
         SELECT * FROM films;
     </select>
 
+    <select id="selectFilmsSortByName" parameterType="com.mev.films.model.FilmDTO" resultMap="map">
+        SELECT * FROM films ORDER BY name;
+    </select>
+
     <select id="selectFilmsByName" parameterType="com.mev.films.model.FilmDTO" resultMap="map">
         SELECT * FROM
             films
