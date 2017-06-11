@@ -30,7 +30,7 @@ public class DiscountServiceImpl implements DiscountService{
     public DiscountDTO getDiscountByCode(String code) {
         LOG.debug("getDiscountByCode: code = {}",
                 code);
-        return discountMapper.selectDiscountByCode();
+        return discountMapper.selectDiscountByCode(code);
     }
 
     @Override
