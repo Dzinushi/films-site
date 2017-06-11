@@ -4,6 +4,10 @@
 
 <configuration>
     <mappers>
-        <mapper resource="mappers/UserMapperXML.xml"/>
+        <mapper resource="mappers/UserMapper.xml"/>
+        <mapper resource="mappers/UserRoleMapper.xml"/>
+        <mapper resource="mappers/FilmMapper.xml"/>
+        <mapper resource="mappers/DiscountMapper.xml"/>
+        <mapper resource="mappers/BasketMapper.xml"/>
     </mappers>
 </configuration>
