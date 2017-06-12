@@ -10,5 +10,4 @@ public interface UserRoleMapper {
     List<UserRoleDTO> selectUserRolesByLogin(String login);
     void insertUserRole(UserRoleDTO userRoleDTO);
     void updateUserRole(UserRoleDTO userRoleDTO);
-    void deleteUserRoleByLoginRole(String login, String role);
 }

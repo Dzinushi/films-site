@@ -32,15 +32,8 @@
         UPDATE
             user_roles
         SET
-            login = #{login},
             role = #{role}
         WHERE
             id = #{id}
     </update>
-
-    <delete id="deleteUserRoleByLoginRole" parameterType="map">
-        DELETE FROM
-            user_roles
-        WHERE login = #{0} AND role = #{1}
-    </delete>
 </mapper>
