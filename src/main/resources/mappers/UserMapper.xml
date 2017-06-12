@@ -36,12 +36,22 @@
         UPDATE
             users
         SET
-            login = #{login},
             password = #{password},
             enabled = #{enabled}
         WHERE
-            id = #{id}
+            id = #{id};
     </update>
+
+    <delete id="deleteUser" parameterType="map">
+        DELETE FROM
+            users
+        WHERE
+            id = #{0};
+        DELETE FROM
+            user_roles
+        WHERE
+            id = #{0};
+    </delete>
 
     <delete id="deleteUserByName" parameterType="map">
         DELETE FROM
@@ -52,4 +62,5 @@
             user_roles
         WHERE login = #{0}
     </delete>
+
 </mapper>

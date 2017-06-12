@@ -10,5 +10,6 @@ public interface UserMapper {
     UserDTO selectUserByLogin(String login);
     void insertUser(UserDTO userDTO);
     void updateUser(UserDTO userDTO);
+    void deleteUser(Long id);
     void deleteUserByLogin(String login);
 }
