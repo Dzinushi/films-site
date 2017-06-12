@@ -36,31 +36,31 @@ public class BasketServiceImpl implements BasketService{
     }
 
     @Override
-    public Long addBasket(BasketDTO basketDTO) {
+    public void addBasket(BasketDTO basketDTO) {
         LOG.debug("addBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
                 basketDTO.getId(), basketDTO.getUserId(), basketDTO.getFilmId(), basketDTO.getDiscountId());
-        return basketMapper.insertBasket(basketDTO);
+        basketMapper.insertBasket(basketDTO);
     }
 
     @Override
-    public Long updateBasket(BasketDTO basketDTO) {
+    public void updateBasket(BasketDTO basketDTO) {
         LOG.debug("updateBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
                 basketDTO.getId(), basketDTO.getUserId(), basketDTO.getFilmId(), basketDTO.getDiscountId());
-        return basketMapper.updateBasket(basketDTO);
+        basketMapper.updateBasket(basketDTO);
     }
 
     @Override
-    public Long deleteBasket(BasketDTO basketDTO) {
+    public void deleteBasket(BasketDTO basketDTO) {
         LOG.debug("deleteBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
                 basketDTO.getId(), basketDTO.getUserId(), basketDTO.getFilmId(), basketDTO.getDiscountId());
-        return basketMapper.deleteBasket(basketDTO);
+        basketMapper.deleteBasket(basketDTO);
     }
 
     @Override
-    public List<Long> deleteBasketByUserName(String username) {
+    public void deleteBasketByUserName(String username) {
         LOG.debug("deleteBasketByUserName: username = {}",
                 username);
         UserDTO userDTO = userMapper.selectUserByLogin(username);
-        return basketMapper.deleteBasketByUserId(userDTO.getId());
+        basketMapper.deleteBasketByUserId(userDTO.getId());
     }
 }

@@ -9,7 +9,7 @@ public interface FilmService {
     List<FilmDTO> getAllFilms();
     List<FilmDTO> getFilmByName(String name);
     FilmDTO getFilmByImage(String image);
-    Long addFilm(FilmDTO filmDTO);
-    Long updateFilm(FilmDTO filmDTO);
-    Long deleteFilmByImage(String image);
+    void addFilm(FilmDTO filmDTO);
+    void updateFilm(FilmDTO filmDTO);
+    void deleteFilmByImage(String image);
 }

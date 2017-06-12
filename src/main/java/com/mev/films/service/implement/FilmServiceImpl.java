@@ -43,25 +43,25 @@ public class FilmServiceImpl implements FilmService{
     }
 
     @Override
-    public Long addFilm(FilmDTO filmDTO) {
+    public void addFilm(FilmDTO filmDTO) {
         LOG.debug("addFilm: id = {}, name = {}, genre = {}, duration = {}, price = {}, image = {}",
                 filmDTO.getId(), filmDTO.getName(), filmDTO.getGenre(), filmDTO.getDuration(), filmDTO.getPrice(), filmDTO.getImage());
-        return filmMapper.insertFilm(filmDTO);
+        filmMapper.insertFilm(filmDTO);
     }
 
     @Override
-    public Long updateFilm(FilmDTO filmDTO) {
+    public void updateFilm(FilmDTO filmDTO) {
         LOG.debug("updateFilm: id = {}, name = {}, genre = {}, duration = {}, price = {}, image = {}",
                 filmDTO.getId(), filmDTO.getName(), filmDTO.getGenre(), filmDTO.getDuration(), filmDTO.getPrice(), filmDTO.getImage());
 
-        return filmMapper.updateFilm(filmDTO);
+        filmMapper.updateFilm(filmDTO);
     }
 
     @Override
-    public Long deleteFilmByImage(String image) {
+    public void deleteFilmByImage(String image) {
         LOG.debug("deleteFilmByImage: image = {}",
                 image);
 
-        return filmMapper.deleteFilmByImage(image);
+        filmMapper.deleteFilmByImage(image);
     }
 }

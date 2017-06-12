@@ -34,23 +34,23 @@ public class DiscountServiceImpl implements DiscountService{
     }
 
     @Override
-    public Long addDiscount(DiscountDTO discountDTO) {
+    public void addDiscount(DiscountDTO discountDTO) {
         LOG.debug("addDiscount: id = {}, code = {}",
                 discountDTO.getId(), discountDTO.getCode());
-        return discountMapper.insertDiscount(discountDTO);
+        discountMapper.insertDiscount(discountDTO);
     }
 
     @Override
-    public Long updateDiscount(DiscountDTO discountDTO) {
+    public void updateDiscount(DiscountDTO discountDTO) {
         LOG.debug("updateDiscount: id = {}, code = {}",
                 discountDTO.getId(), discountDTO.getCode());
-        return discountMapper.updateDiscount(discountDTO);
+        discountMapper.updateDiscount(discountDTO);
     }
 
     @Override
-    public Long deleteDiscountByCode(String code) {
+    public void deleteDiscountByCode(String code) {
         LOG.debug("deleteDiscountByCode: code = {}",
                 code);
-        return discountMapper.deleteDiscountByCode(code);
+        discountMapper.deleteDiscountByCode(code);
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 public interface DiscountService {
     List<DiscountDTO> getAllDiscounts();
     DiscountDTO getDiscountByCode(String code);
-    Long addDiscount(DiscountDTO discountDTO);
-    Long updateDiscount(DiscountDTO discountDTO);
-    Long deleteDiscountByCode(String code);
+    void addDiscount(DiscountDTO discountDTO);
+    void updateDiscount(DiscountDTO discountDTO);
+    void deleteDiscountByCode(String code);
 }

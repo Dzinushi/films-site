@@ -10,10 +10,10 @@ public interface UserService {
     UserDTO getUser(String login);
     List<UserRoleDTO> getUserRoles();
     List<UserRoleDTO> getUserRole(String login);
-    Long addUser(UserDTO userDTO, UserRoleDTO userRoleDTO);
-    Long addUserRole(UserRoleDTO userRoleDTO);
-    Long updateUser(UserDTO userDTO, UserRoleDTO userRoleDTO);
-    Long updateUserRole(UserRoleDTO userRoleDTO);
-    Long deleteUser(String login);
-    Long deleteUserRole(String login, String role);
+    void addUser(UserDTO userDTO, UserRoleDTO userRoleDTO);
+    void addUserRole(UserRoleDTO userRoleDTO);
+    void updateUser(UserDTO userDTO, UserRoleDTO userRoleDTO);
+    void updateUserRole(UserRoleDTO userRoleDTO);
+    void deleteUser(String login);
+    void deleteUserRole(String login, String role);
 }
