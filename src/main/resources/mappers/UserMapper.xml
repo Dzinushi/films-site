@@ -9,6 +9,7 @@
         <id property="id" column="id"/>
         <result property="login" column="login"/>
         <result property="password" column="password"/>
+        <result property="enabled" column="enabled"/>
     </resultMap>
 
     <select id="selectUsers" resultMap="userDTO">
@@ -27,8 +28,8 @@
 
     <insert id="insertUser" parameterType="com.mev.films.model.UserDTO">
         INSERT INTO
-            users (login, password)
-        VALUES (#{login}, #{password})
+            users (login, password, enabled)
+        VALUES (#{login}, #{password}, #{enabled})
     </insert>
 
     <update id="updateUser" parameterType="com.mev.films.model.UserDTO">
@@ -36,7 +37,8 @@
             users
         SET
             login = #{login},
-            password = #{password}
+            password = #{password},
+            enabled = #{enabled}
         WHERE
             id = #{id}
     </update>

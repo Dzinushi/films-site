@@ -4,8 +4,15 @@ public class UserDTO {
     private Long id;
     private String login;
     private String password;
+    private short enabled;
 
     public UserDTO(){
+    }
+
+    public UserDTO(String login, String password, short enabled){
+        setLogin(login);
+        setPassword(password);
+        setEnabled(enabled);
     }
 
     public Long getId() {
@@ -30,6 +37,14 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public short getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(short enabled) {
+        this.enabled = enabled;
     }
 
     public String toString(){
