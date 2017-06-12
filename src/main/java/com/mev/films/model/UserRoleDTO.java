@@ -9,6 +9,11 @@ public class UserRoleDTO {
 
     }
 
+    public UserRoleDTO(String login, String role){
+        setLogin(login);
+        setRole(role);
+    }
+
     public Long getId() {
         return id;
     }
@@ -29,7 +34,7 @@ public class UserRoleDTO {
         return role;
     }
 
-    public void setEnabled(String role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
