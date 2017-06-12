@@ -8,7 +8,7 @@ public interface UserMapper {
     List<UserDTO> selectUsers();
     List<UserDTO> selectUsersSortByLogin();
     UserDTO selectUserByLogin(String login);
-    Long insertUser(UserDTO userDTO);
-    Long updateUser(UserDTO userDTO);
-    Long deleteUserByLogin(String login);
+    void insertUser(UserDTO userDTO);
+    void updateUser(UserDTO userDTO);
+    void deleteUserByLogin(String login);
 }

@@ -7,7 +7,7 @@ import java.util.List;
 public interface DiscountMapper {
     List<DiscountDTO> selectDiscounts();
     DiscountDTO selectDiscountByCode(String code);
-    Long insertDiscount(DiscountDTO discountDTO);
-    Long updateDiscount(DiscountDTO discountDTO);
-    Long deleteDiscountByCode(String code);
+    void insertDiscount(DiscountDTO discountDTO);
+    void updateDiscount(DiscountDTO discountDTO);
+    void deleteDiscountByCode(String code);
 }

@@ -9,7 +9,7 @@ public interface FilmMapper {
     List<FilmDTO> selectFilmsSortByName();
     List<FilmDTO> selectFilmsByName(String name);
     FilmDTO selectFilmByImage(String image);
-    Long insertFilm(FilmDTO filmDTO);
-    Long updateFilm(FilmDTO filmDTO);
-    Long deleteFilmByImage(String image);
+    void insertFilm(FilmDTO filmDTO);
+    void updateFilm(FilmDTO filmDTO);
+    void deleteFilmByImage(String image);
 }
