@@ -12,8 +12,8 @@ public interface UserService {
     List<UserRoleDTO> getUserRole(String login);
     void addUser(UserDTO userDTO, UserRoleDTO userRoleDTO);
     void addUserRole(UserRoleDTO userRoleDTO);
-    void updateUser(UserDTO userDTO, UserRoleDTO userRoleDTO);
+    void updateUser(UserDTO userDTO);
     void updateUserRole(UserRoleDTO userRoleDTO);
-    void deleteUser(String login);
-    void deleteUserRole(String login, String role);
+    void deleteUser(Long id);
+    void deleteUserByLogin(String login);
 }

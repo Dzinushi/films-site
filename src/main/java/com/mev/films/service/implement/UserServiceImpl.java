@@ -63,9 +63,9 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void updateUser(UserDTO userDTO, UserRoleDTO userRoleDTO) {
-        LOG.debug("updateUser: id = {}, login = {}, password = {}, role = {}",
-                userDTO.getId(), userDTO.getLogin(), userDTO.getPassword(), userRoleDTO.getRole());
+    public void updateUser(UserDTO userDTO) {
+        LOG.debug("updateUser: id = {}, login = {}, password = {}",
+                userDTO.getId(), userDTO.getLogin(), userDTO.getPassword());
         userMapper.updateUser(userDTO);
     }
 
@@ -77,16 +77,16 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void deleteUser(String login) {
-        LOG.debug("deleteUser: login = {}",
-                login);
-        userMapper.deleteUserByLogin(login);
+    public void deleteUser(Long id) {
+        LOG.debug("deleteUser: id = {}",
+                id);
+        userMapper.deleteUser(id);
     }
 
     @Override
-    public void deleteUserRole(String login, String role) {
-        LOG.debug("deleteUserRole: login = {}m role = {}",
-                login, role);
-        userRoleMapper.deleteUserRoleByLoginRole(login, role);
+    public void deleteUserByLogin(String login) {
+        LOG.debug("deleteUserByLogin: login = {}",
+                login);
+        userMapper.deleteUserByLogin(login);
     }
 }
