@@ -1,5 +1,14 @@
 DROP TABLE users CASCADE;
+DROP SEQUENCE users_id_seq CASCADE;
+
 DROP TABLE user_roles CASCADE;
+DROP SEQUENCE user_roles_id_seq CASCADE;
+
 DROP TABLE films CASCADE;
+DROP SEQUENCE films_id_seq CASCADE;
+
 DROP TABLE discounts CASCADE;
+DROP SEQUENCE discounts_id_seq CASCADE;
+
 DROP TABLE baskets CASCADE;
+DROP SEQUENCE baskets_id_seq CASCADE;
