@@ -21,7 +21,6 @@ public class FilmServiceImpl implements FilmService{
     @Autowired private FilmMapper filmMapper;
 
     @Override
-    @RequestMapping(value = "getAllFilms")
     public List<FilmDTO> getAllFilms() {
         LOG.debug("getAllFilms");
 
