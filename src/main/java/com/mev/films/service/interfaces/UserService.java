@@ -9,9 +9,9 @@ public interface UserService {
     List<UserDTO> getAllUsers();
     UserDTO getUser(String login);
     List<UserRoleDTO> getUserRoles();
-    List<UserRoleDTO> getUserRole(String login);
+    UserRoleDTO getUserRole(Long id);
+    UserRoleDTO getUserRoleByLogin(String login);
     void addUser(UserDTO userDTO, UserRoleDTO userRoleDTO);
-    void addUserRole(UserRoleDTO userRoleDTO);
     void updateUser(UserDTO userDTO);
     void updateUserRole(UserRoleDTO userRoleDTO);
     void deleteUser(Long id);
