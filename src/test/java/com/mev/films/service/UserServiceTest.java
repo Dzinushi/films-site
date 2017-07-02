@@ -45,8 +45,8 @@ public class UserServiceTest {
     @Test
     public void getAllUsersTest(){
 
-        userMapper.insertUser(userDTO1);
-        userMapper.insertUser(userDTO2);
+        userMapper.insertUser(userDTO1, userRoleDTO1);
+        userMapper.insertUser(userDTO2, userRoleDTO2);
 
         List<UserDTO> users = userService.getAllUsers();
 
@@ -68,8 +68,8 @@ public class UserServiceTest {
     @Test
     public void getUserTest(){
 
-        userMapper.insertUser(userDTO1);
-        userMapper.insertUser(userDTO2);
+        userMapper.insertUser(userDTO1, userRoleDTO1);
+        userMapper.insertUser(userDTO2, userRoleDTO2);
 
         UserDTO userDTO = userService.getUser(userDTO2.getLogin());
         assertTrue("password2 = " + userDTO.getPassword(),
@@ -81,8 +81,8 @@ public class UserServiceTest {
     @Test
     public void getUserRolesTest(){
 
-        userRoleMapper.insertUserRole(userRoleDTO1);
-        userRoleMapper.insertUserRole(userRoleDTO2);
+        userService.addUser(userDTO1, userRoleDTO1);
+        userService.addUser(userDTO2, userRoleDTO2);
 
         List<UserRoleDTO> userRoles = userService.getUserRoles();
 
@@ -100,19 +100,19 @@ public class UserServiceTest {
     @Test
     public void getUserRoleTest(){
 
-        userRoleMapper.insertUserRole(userRoleDTO1);
-        userRoleMapper.insertUserRole(userRoleDTO2);
+        userService.addUser(userDTO1, userRoleDTO1);
+        userService.addUser(userDTO2, userRoleDTO2);
 
-        List<UserRoleDTO> userRoles = userService.getUserRole(userDTO1.getLogin());
-        assertTrue("role1 = " + userRoles.get(0).getRole(),
-                userRoles.get(0).getRole().equals(userRoleDTO1.getRole()));
+        UserRoleDTO userRoles = userService.getUserRoleByLogin(userDTO1.getLogin());
+        assertTrue("role1 = " + userRoles.getRole(),
+                userRoles.getRole().equals(userRoleDTO1.getRole()));
     }
 
     @Test
     public void addUserTest(){
 
         UserDTO userDTO3 = new UserDTO("user3", "user3", (short) 1);
-        UserRoleDTO userRoleDTO3 = new UserRoleDTO(userDTO3.getLogin(), "ROLE_USER");
+        UserRoleDTO userRoleDTO3 = new UserRoleDTO("user3", "ROLE_USER");
 
         userService.addUser(userDTO3, userRoleDTO3);
 
@@ -122,27 +122,15 @@ public class UserServiceTest {
         assertTrue("enabled2 = " + getUser3.getEnabled(),
                 getUser3.getEnabled() == userDTO3.getEnabled());
 
-        List<UserRoleDTO> getUserRole3 = userService.getUserRole(userDTO3.getLogin());
-        assertTrue("role3 = " + getUserRole3.get(0).getRole(),
-                getUserRole3.get(0).getRole().equals(userRoleDTO3.getRole()));
-    }
-
-    @Test
-    public void addUserRoleTest(){
-
-        UserRoleDTO userRoleDTO3 = new UserRoleDTO("user3", "ROLE_USER");
-
-        userService.addUserRole(userRoleDTO3);
-
-        List<UserRoleDTO> getUserRole3 = userService.getUserRole(userRoleDTO3.getLogin());
-        assertTrue("role3 = " + getUserRole3.get(0).getRole(),
-                getUserRole3.get(0).getRole().equals(userRoleDTO3.getRole()));
+        UserRoleDTO getUserRole3 = userService.getUserRoleByLogin(userDTO3.getLogin());
+        assertTrue("role3 = " + getUserRole3.getRole(),
+                getUserRole3.getRole().equals(userRoleDTO3.getRole()));
     }
 
     @Test
     public void updateUserTest(){
 
-        userMapper.insertUser(userDTO2);
+        userMapper.insertUser(userDTO2, userRoleDTO2);
 
         UserDTO getUserDTO2 = userService.getUser(userDTO2.getLogin());
         getUserDTO2.setPassword("user22");
@@ -160,47 +148,29 @@ public class UserServiceTest {
     @Test
     public void updateUserRoleTest(){
 
-        userRoleMapper.insertUserRole(userRoleDTO1);
+        userService.addUser(userDTO1, userRoleDTO1);
 
-        List<UserRoleDTO> getUserRole1 = userService.getUserRole(userDTO1.getLogin());
-        getUserRole1.get(0).setLogin("user11");
-        getUserRole1.get(0).setRole("USER_ADMIN");
+        UserRoleDTO getUserRole1 = userService.getUserRoleByLogin(userDTO1.getLogin());
+        getUserRole1.setRole("USER_ADMIN");
 
-        userService.updateUserRole(getUserRole1.get(0));
+        userService.updateUserRole(getUserRole1);
 
-        getUserRole1 = userService.getUserRole("user11");
-        assertTrue("login2 = " + getUserRole1.get(0).getLogin(),
-                getUserRole1.get(0).getLogin().equals("user11"));
-        assertTrue("role2 = " + getUserRole1.get(0).getRole(),
-                getUserRole1.get(0).getRole().equals("USER_ADMIN"));
+        getUserRole1 = userService.getUserRoleByLogin(userDTO1.getLogin());
+        assertTrue("role2 = " + getUserRole1.getRole(),
+                getUserRole1.getRole().equals("USER_ADMIN"));
     }
 
     @Test
     public void deleteUserTest(){
 
-        userMapper.insertUser(userDTO1);
-        userMapper.insertUser(userDTO2);
-        userRoleMapper.insertUserRole(userRoleDTO1);
-        userRoleMapper.insertUserRole(userRoleDTO2);
+        userService.addUser(userDTO1, userRoleDTO1);
+        userService.addUser(userDTO2, userRoleDTO2);
 
-        UserDTO getUserDTO1 = userService.getUser("user1");
-        assertTrue("password2 = " + getUserDTO1.getPassword(),
-                getUserDTO1.getPassword().equals("user1"));
+        UserDTO getUserDTO1 = userService.getUser(userDTO1.getLogin());
+        UserDTO getUserDTO2 = userService.getUser(userDTO2.getLogin());
 
-        UserDTO getUserDTO2 = userService.getUser("user2");
-        assertTrue("password2 = " + getUserDTO2.getPassword(),
-                getUserDTO2.getPassword().equals("user2"));
-
-        List<UserRoleDTO> getUserRoleDTO1 = userService.getUserRole(userRoleDTO1.getLogin());
-        assertTrue("role2 = " + getUserRoleDTO1.get(0).getRole(),
-                getUserRoleDTO1.get(0).getRole().equals(userRoleDTO1.getRole()));
-
-        List<UserRoleDTO> getUserRoleDTO2 = userService.getUserRole(userRoleDTO2.getLogin());
-        assertTrue("role2 = " + getUserRoleDTO1.get(0).getRole(),
-                getUserRoleDTO2.get(0).getRole().equals(userRoleDTO2.getRole()));
-
-        userService.deleteUser(userDTO1.getId());
-        userService.deleteUser(userDTO2.getId());
+        userService.deleteUser(getUserDTO1.getId());
+        userService.deleteUser(getUserDTO2.getId());
 
         List<UserDTO> usersAfterDelete = userService.getAllUsers();
         assertTrue("usersAll = " + usersAfterDelete.size(), usersAfterDelete.size() == 0);

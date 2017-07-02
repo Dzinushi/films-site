@@ -26,10 +26,13 @@
             users.login=#{0};
     </select>
 
-    <insert id="insertUser" parameterType="com.mev.films.model.UserDTO">
+    <insert id="insertUser" parameterType="map">
         INSERT INTO
             users (login, password, enabled)
-        VALUES (#{login}, #{password}, #{enabled})
+        VALUES (#{0.login}, #{0.password}, #{0.enabled});
+        INSERT INTO
+            user_roles (login, role)
+        VALUES (#{1.login}, #{1.role})
     </insert>
 
     <update id="updateUser" parameterType="com.mev.films.model.UserDTO">
@@ -44,23 +47,24 @@
 
     <delete id="deleteUser" parameterType="map">
         DELETE FROM
-            users
-        WHERE
-            id = #{0};
-        DELETE FROM
             user_roles
         WHERE
             id = #{0};
+        DELETE FROM
+            users
+        WHERE
+            id = #{0}
     </delete>
 
     <delete id="deleteUserByName" parameterType="map">
         DELETE FROM
-            users
+            user_roles
         WHERE
             login = #{0};
         DELETE FROM
-            user_roles
-        WHERE login = #{0}
+            users
+        WHERE
+            login = #{0}
     </delete>
 
 </mapper>
