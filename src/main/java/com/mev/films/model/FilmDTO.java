@@ -1,6 +1,5 @@
 package com.mev.films.model;
 
-import java.sql.Blob;
 import java.sql.Time;
 
 public class FilmDTO {
