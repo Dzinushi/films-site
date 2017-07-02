@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserRoleMapper {
     List<UserRoleDTO> selectUserRoles();
-    List<UserRoleDTO> selectUserRolesByLogin(String login);
-    void insertUserRole(UserRoleDTO userRoleDTO);
+    UserRoleDTO selectUserRole(Long id);
+    UserRoleDTO selectUserRoleByLogin(String login);
     void updateUserRole(UserRoleDTO userRoleDTO);
 }

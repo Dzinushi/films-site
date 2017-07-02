@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.mev.films.mappers.interfaces.UserMapper">
+<mapper namespace="com.mev.films.mappers.interfaces.UserRoleMapper">
 
     <resultMap id="userRoleDTO" type="com.mev.films.model.UserRoleDTO">
         <id property="id" column="id"/>
@@ -16,17 +16,17 @@
             user_roles
     </select>
 
-    <select id="selectUserRolesByLogin" parameterType="map" resultMap="userRoleDTO">
+    <select id="selectUserRole" parameterType="map" resultMap="userRoleDTO">
+        SELECT * FROM
+        user_roles
+        WHERE id = #{0}
+    </select>
+
+    <select id="selectUserRoleByLogin" parameterType="map" resultMap="userRoleDTO">
         SELECT * FROM
             user_roles
         WHERE login = #{0}
     </select>
-
-    <insert id="insertUserRole" parameterType="com.mev.films.model.UserRoleDTO">
-        INSERT INTO
-            user_roles (login, role)
-        VALUES (#{login}, #{role})
-    </insert>
 
     <update id="updateUserRole" parameterType="com.mev.films.model.UserRoleDTO">
         UPDATE
