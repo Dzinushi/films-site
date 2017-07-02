@@ -1,0 +1,24 @@
+<Configuration status="WARN">
+    <Appenders>
+        <RollingFile name="serverLogic" fileName="logs/server.log" filePattern="logs/server-%d{yyyy-MM-dd}.log.gz">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+            </Policies>
+        </RollingFile>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{dd MMM yyyy HH:mm:ss,SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="ERROR">
+            <appender-ref ref="Console"/>
+        </Root>
+        <Logger name="org.springframework" level="DEBUG" additivity="true">
+            <appender-ref ref="serverLogic"/>
+        </Logger>
+        <Logger name="com.mev.films" level="DEBUG" additivity="true">
+            <appender-ref ref="serverLogic"/>
+        </Logger>
+    </Loggers>
+</Configuration>

@@ -69,11 +69,11 @@
 
 	<bean id="viewResolver"
 		  class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix" value="/resources/" />
+		<property name="prefix" value="/WEB-INF/resources/" />
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-	<mvc:resources mapping="/resources/**" location="WEB-INF/resources/"  />
-	<mvc:resources mapping="/**" location="WEB-INF/resources/" />
+	<mvc:resources mapping="/resources/**" location="/WEB-INF/resources/"  />
+	<mvc:resources mapping="/**" location="/WEB-INF/resources/" />
 
 </beans>
