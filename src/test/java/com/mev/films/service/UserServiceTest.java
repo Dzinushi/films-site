@@ -23,8 +23,6 @@ import static junit.framework.TestCase.assertTrue;
 public class UserServiceTest {
 
     @Autowired private UserMapper userMapper;
-    @Autowired private UserRoleMapper userRoleMapper;
-
     @Autowired private UserService userService;
 
     private static UserDTO userDTO1 = new UserDTO("user1", "user1", (short) 1);

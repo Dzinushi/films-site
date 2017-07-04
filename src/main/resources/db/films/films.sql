@@ -3,7 +3,7 @@ CREATE TABLE films (
   id BIGINT PRIMARY KEY DEFAULT nextval('films_id_seq'::regclass),
   name VARCHAR(128),
   genre VARCHAR(128),
-  duration TIME,
+  duration SMALLINT,
   price INT,
   image VARCHAR(256) UNIQUE
 );

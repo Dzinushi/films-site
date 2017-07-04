@@ -6,11 +6,19 @@ public class FilmDTO {
     private Long id;
     private String name;
     private String genre;
-    private Time duration;
+    private short duration;
     private int price;
     private String image;
 
     public FilmDTO(){
+    }
+
+    public FilmDTO(String name, String genre, short duration, int price, String image){
+        setName(name);
+        setGenre(genre);
+        setDuration(duration);
+        setPrice(price);
+        setImage(image);
     }
 
     public Long getId() {
@@ -37,11 +45,11 @@ public class FilmDTO {
         this.genre = genre;
     }
 
-    public Time getDuration() {
+    public short getDuration() {
         return duration;
     }
 
-    public void setDuration(Time duration) {
+    public void setDuration(short duration) {
         this.duration = duration;
     }
 
