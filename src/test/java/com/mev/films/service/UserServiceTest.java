@@ -1,8 +1,5 @@
 package com.mev.films.service;
 
-
-import com.mev.films.mappers.interfaces.UserMapper;
-import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserRoleDTO;
 import com.mev.films.service.interfaces.UserService;
@@ -22,7 +19,6 @@ import static junit.framework.TestCase.assertTrue;
 @ContextConfiguration(locations = "classpath*:test-dispatcher.xml")
 public class UserServiceTest {
 
-    @Autowired private UserMapper userMapper;
     @Autowired private UserService userService;
 
     private static UserDTO userDTO1 = new UserDTO("user1", "user1", (short) 1);
@@ -43,8 +39,8 @@ public class UserServiceTest {
     @Test
     public void getAllUsersTest(){
 
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
+        userService.addUser(userDTO1, userRoleDTO1);
+        userService.addUser(userDTO2, userRoleDTO2);
 
         List<UserDTO> users = userService.getAllUsers();
 
@@ -66,8 +62,8 @@ public class UserServiceTest {
     @Test
     public void getUserTest(){
 
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
+        userService.addUser(userDTO1, userRoleDTO1);
+        userService.addUser(userDTO2, userRoleDTO2);
 
         UserDTO userDTO = userService.getUser(userDTO2.getLogin());
         assertTrue("password2 = " + userDTO.getPassword(),
@@ -128,7 +124,7 @@ public class UserServiceTest {
     @Test
     public void updateUserTest(){
 
-        userMapper.insertUser(userDTO2, userRoleDTO2);
+        userService.addUser(userDTO2, userRoleDTO2);
 
         UserDTO getUserDTO2 = userService.getUser(userDTO2.getLogin());
         getUserDTO2.setPassword("user22");

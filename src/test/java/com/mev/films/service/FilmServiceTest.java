@@ -20,7 +20,6 @@ import static junit.framework.TestCase.assertTrue;
 public class FilmServiceTest {
 
     @Autowired private FilmService filmService;
-    @Autowired private FilmMapper filmMapper;
 
     private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 100, 1, "imageUrl1");
     private FilmDTO filmDTO2 = new FilmDTO("film2", "genre1", (short) 200, 2, "imageUrl2");
@@ -101,19 +100,19 @@ public class FilmServiceTest {
 
     @Test
     public void addFilmTest(){
-        filmMapper.insertFilm(filmDTO1);
+        filmService.addFilm(filmDTO2);
 
-        FilmDTO filmDTO = filmService.getFilmByImage(filmDTO1.getImage());
-        assertTrue("name1 = " + filmDTO1.getName(),
-                filmDTO.getName().equals(filmDTO1.getName()));
-        assertTrue("genre1 = " + filmDTO1.getGenre(),
-                filmDTO.getGenre().equals(filmDTO1.getGenre()));
-        assertTrue("duration1 = " + filmDTO1.getDuration(),
-                filmDTO.getDuration() == filmDTO1.getDuration());
-        assertTrue("price1 = " + filmDTO1.getPrice(),
-                filmDTO.getPrice() == filmDTO1.getPrice());
-        assertTrue("image1 = " + filmDTO1.getImage(),
-                filmDTO.getImage().equals(filmDTO1.getImage()));
+        FilmDTO filmDTO = filmService.getFilmByImage(filmDTO2.getImage());
+        assertTrue("name2 = " + filmDTO2.getName(),
+                filmDTO.getName().equals(filmDTO2.getName()));
+        assertTrue("genre2 = " + filmDTO2.getGenre(),
+                filmDTO.getGenre().equals(filmDTO2.getGenre()));
+        assertTrue("duration2 = " + filmDTO2.getDuration(),
+                filmDTO.getDuration() == filmDTO2.getDuration());
+        assertTrue("price2 = " + filmDTO2.getPrice(),
+                filmDTO.getPrice() == filmDTO2.getPrice());
+        assertTrue("image2 = " + filmDTO2.getImage(),
+                filmDTO.getImage().equals(filmDTO2.getImage()));
     }
 
     @Test

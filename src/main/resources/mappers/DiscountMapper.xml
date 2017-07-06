@@ -23,8 +23,8 @@
 
     <insert id="insertDiscount" parameterType="com.mev.films.model.DiscountDTO">
         INSERT INTO
-            discounts (id, code)
-        VALUES (#{id}, #{code})
+            discounts (code)
+        VALUES (#{code})
     </insert>
 
     <update id="updateDiscount" parameterType="com.mev.films.model.DiscountDTO">

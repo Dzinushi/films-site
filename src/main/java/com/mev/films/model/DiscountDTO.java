@@ -7,6 +7,10 @@ public class DiscountDTO {
     public DiscountDTO(){
     }
 
+    public DiscountDTO(String code){
+        setCode(code);
+    }
+
     public Long getId() {
         return id;
     }
