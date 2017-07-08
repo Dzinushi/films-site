@@ -38,21 +38,21 @@ public class BasketServiceImpl implements BasketService{
     @Override
     public void addBasket(BasketDTO basketDTO) {
         LOG.debug("addBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
-                basketDTO.getId(), basketDTO.getUserId(), basketDTO.getFilmId(), basketDTO.getDiscountId());
+                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
         basketMapper.insertBasket(basketDTO);
     }
 
     @Override
     public void updateBasket(BasketDTO basketDTO) {
         LOG.debug("updateBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
-                basketDTO.getId(), basketDTO.getUserId(), basketDTO.getFilmId(), basketDTO.getDiscountId());
+                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
         basketMapper.updateBasket(basketDTO);
     }
 
     @Override
     public void deleteBasket(BasketDTO basketDTO) {
         LOG.debug("deleteBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
-                basketDTO.getId(), basketDTO.getUserId(), basketDTO.getFilmId(), basketDTO.getDiscountId());
+                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
         basketMapper.deleteBasket(basketDTO);
     }
 

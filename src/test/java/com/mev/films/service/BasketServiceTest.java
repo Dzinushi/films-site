@@ -78,26 +78,17 @@ public class BasketServiceTest {
         List<FilmDTO> filmDTOS = filmService.getAllFilms();
         List<UserDTO> userDTOS = userService.getAllUsers();
 
-        BasketDTO basketDTO1 = new BasketDTO(userDTOS.get(0).getId(), filmDTOS.get(0).getId(), discountDTOS.get(0).getId());
-        BasketDTO basketDTO2 = new BasketDTO(userDTOS.get(1).getId(), filmDTOS.get(1).getId(), discountDTOS.get(1).getId());
+        BasketDTO basketDTO1 = new BasketDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
+        BasketDTO basketDTO2 = new BasketDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1));
 
         basketService.addBasket(basketDTO1);
         basketService.addBasket(basketDTO2);
 
         List<BasketDTO> basketDTOS = basketService.getAllBaskets();
-        assertTrue("userId1 = " + basketDTO1.getUserId(),
-                Objects.equals(basketDTOS.get(0).getUserId(), userDTOS.get(0).getId()));
-        assertTrue("filmId1 = " + basketDTO1.getFilmId(),
-                Objects.equals(basketDTOS.get(0).getFilmId(), filmDTOS.get(0).getId()));
-        assertTrue("discountId1 = " + basketDTO1.getDiscountId(),
-                Objects.equals(basketDTOS.get(0).getDiscountId(), discountDTOS.get(0).getId()));
-
-        assertTrue("userId2 = " + basketDTO2.getUserId(),
-                Objects.equals(basketDTOS.get(1).getUserId(), userDTOS.get(1).getId()));
-        assertTrue("filmId2 = " + basketDTO2.getFilmId(),
-                Objects.equals(basketDTOS.get(1).getFilmId(), filmDTOS.get(1).getId()));
-        assertTrue("discountId2 = " + basketDTO2.getDiscountId(),
-                Objects.equals(basketDTOS.get(1).getDiscountId(), discountDTOS.get(1).getId()));
+        assertTrue("basketDTO1 = " + basketDTO1.toString(),
+                basketDTOS.get(0).equals(new BasketDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0))));
+        assertTrue("basketDTO2 = " + basketDTO2.toString(),
+                basketDTOS.get(1).equals(new BasketDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1))));
     }
 
     @Test

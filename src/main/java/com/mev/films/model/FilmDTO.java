@@ -86,4 +86,30 @@ public class FilmDTO {
 
         return sb.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof FilmDTO)) return false;
+
+        FilmDTO filmDTO = (FilmDTO) o;
+
+        if (getDuration() != filmDTO.getDuration()) return false;
+        if (getPrice() != filmDTO.getPrice()) return false;
+        if (getId() != null ? !getId().equals(filmDTO.getId()) : filmDTO.getId() != null) return false;
+        if (getName() != null ? !getName().equals(filmDTO.getName()) : filmDTO.getName() != null) return false;
+        if (getGenre() != null ? !getGenre().equals(filmDTO.getGenre()) : filmDTO.getGenre() != null) return false;
+        return getImage() != null ? getImage().equals(filmDTO.getImage()) : filmDTO.getImage() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getId() != null ? getId().hashCode() : 0;
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        result = 31 * result + (getGenre() != null ? getGenre().hashCode() : 0);
+        result = 31 * result + (int) getDuration();
+        result = 31 * result + getPrice();
+        result = 31 * result + (getImage() != null ? getImage().hashCode() : 0);
+        return result;
+    }
 }

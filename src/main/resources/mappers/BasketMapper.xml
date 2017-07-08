@@ -35,10 +35,10 @@
             d.code AS dsc_code
 
         FROM
-            basket AS b
+            baskets AS b
             INNER JOIN users AS u ON b.user_id = u.id
             INNER JOIN films AS f ON b.film_id = f.id
-            INNER JOIN discounts AS d ON b.discount = d.id
+            INNER JOIN discounts AS d ON b.discount_id = d.id
     </select>
 
     <select id="selectBasketByUserName" parameterType="map" resultMap="basketDTO">
@@ -59,28 +59,28 @@
             d.id AS dsc_id,
             d.code AS dsc_code
         FROM
-            basket AS b
+            baskets AS b
             INNER JOIN users AS u ON b.user_id = u.id
             INNER JOIN films AS f ON b.film_id = f.id
-            INNER JOIN discounts AS d ON b.discount = d.id
+            INNER JOIN discounts AS d ON b.discount_id = d.id
         WHERE
-            u.id = #{0}
+            u.id = #{0.id}
     </select>
 
     <insert id="insertBasket" parameterType="com.mev.films.model.BasketDTO">
         INSERT INTO
             baskets (user_id, film_id, discount_id)
         VALUES
-            (#{userId}, #{filmId}, #{discountId})
+            (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id})
     </insert>
 
     <update id="updateBasket" parameterType="com.mev.films.model.BasketDTO">
         UPDATE
             baskets
         SET
-            user_id = #{userId},
-            film_id = #{filmId},
-            discount_id = #{discountId}
+            user_id = #{userDTO.id},
+            film_id = #{filmDTO.id},
+            discount_id = #{discountDTO.id}
         WHERE
             id = #{id}
     </update>
@@ -89,14 +89,14 @@
         DELETE FROM
             baskets
         WHERE
-            user_id = #{0}
+            user_id = #{0.id}
     </delete>
 
     <delete id="deleteBasket" parameterType="com.mev.films.model.BasketDTO">
         DELETE FROM
             baskets
         WHERE
-            user_id = #{user_id} AND
-            film_id = #{film_id}
+            user_id = #{userDTO.id} AND
+            film_id = #{filmDTO.id}
     </delete>
 </mapper>
