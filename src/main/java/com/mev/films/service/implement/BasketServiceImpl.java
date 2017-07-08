@@ -24,8 +24,8 @@ public class BasketServiceImpl implements BasketService{
     @Autowired private BasketMapper basketMapper;
 
     @Override
-    public List<BasketDTO> getBaskets() {
-        LOG.debug("getBaskets");
+    public List<BasketDTO> getAllBaskets() {
+        LOG.debug("getAllBaskets");
         return basketMapper.selectBaskets();
     }
 

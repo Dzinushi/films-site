@@ -9,6 +9,12 @@ public class BasketDTO {
     public BasketDTO(){
     }
 
+    public BasketDTO(Long userId, Long filmId, Long discountId){
+        setUserId(userId);
+        setFilmId(filmId);
+        setDiscountId(discountId);
+    }
+
     public Long getId() {
         return id;
     }
