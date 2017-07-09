@@ -116,9 +116,10 @@
 		</dependency>
 
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>javax.servlet-api</artifactId>
-			<version>3.0.1</version>
+			<groupId>org.mortbay.jetty</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>3.0.20100224</version>
+			<scope>provided</scope>
 		</dependency>
 		<!--<dependency>-->
 			<!--<groupId>org.springframework</groupId>-->
