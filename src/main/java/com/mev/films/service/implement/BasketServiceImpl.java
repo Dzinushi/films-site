@@ -43,10 +43,10 @@ public class BasketServiceImpl implements BasketService{
     }
 
     @Override
-    public void updateBasket(BasketDTO basketDTO) {
-        LOG.debug("updateBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
-                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
-        basketMapper.updateBasket(basketDTO);
+    public void updateBasket(Long id) {
+        LOG.debug("updateBasket: id = {}",
+                id);
+        basketMapper.updateBasket(id);
     }
 
     @Override
