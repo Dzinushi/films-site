@@ -33,7 +33,7 @@ public class BasketServiceTest {
     private static UserRoleDTO userRoleDTO2 = new UserRoleDTO("user2", "ROLE_ADMIN");
 
     private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 100, 1, "imageUrl1");
-    private FilmDTO filmDTO2 = new FilmDTO("film2", "genre1", (short) 200, 2, "imageUrl2");
+    private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 200, 2, "imageUrl2");
 
     private DiscountDTO discountDTO1 = new DiscountDTO("code1");
     private DiscountDTO discountDTO2 = new DiscountDTO("code2");
@@ -142,16 +142,19 @@ public class BasketServiceTest {
         List<FilmDTO> filmDTOS = filmService.getAllFilms();
         List<UserDTO> userDTOS = userService.getAllUsers();
 
-        BasketDTO basketDTO1 = new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
+        BasketDTO basketDTO1 = new BasketDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
         basketService.addBasket(basketDTO1);
 
-        BasketDTO basketDTO11 = new BasketDTO(1L, userDTOS.get(1),filmDTOS.get(1), discountDTOS.get(1));
-        System.out.println(basketDTO11);
+        List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+        basketDTOS.get(0).setUserDTO(userDTOS.get(1));
+        basketDTOS.get(0).setFilmDTO(filmDTOS.get(1));
+        basketDTOS.get(0).setDiscountDTO(discountDTOS.get(1));
 
-        basketService.updateBasket(basketDTO11);
-        List<BasketDTO> basketDTOS = basketService.getBasketByUser(basketDTO11.getUserDTO().getId());
+        basketService.updateBasket(basketDTOS.get(0));
+        basketDTOS = basketService.getAllBaskets();
+
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
-                basketDTOS.get(0).equals(basketDTO11));
+                basketDTOS.get(0).equals(new BasketDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1))));
     }
 
     @Test
