@@ -69,22 +69,16 @@ public class FilmDTO {
         this.image = image;
     }
 
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("FilmDTO [id = ");
-        sb.append(id);
-        sb.append(", name = ");
-        sb.append(name);
-        sb.append(", genre = ");
-        sb.append(genre);
-        sb.append(", duration = ");
-        sb.append(duration);
-        sb.append(", price = ");
-        sb.append(Integer.toString(price));
-        sb.append("]");
-        sb.append(super.toString());
-
-        return sb.toString();
+    @Override
+    public String toString() {
+        return "FilmDTO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", genre='" + genre + '\'' +
+                ", duration=" + duration +
+                ", price=" + price +
+                ", image='" + image + '\'' +
+                '}';
     }
 
     @Override
@@ -96,7 +90,6 @@ public class FilmDTO {
 
         if (getDuration() != filmDTO.getDuration()) return false;
         if (getPrice() != filmDTO.getPrice()) return false;
-        if (getId() != null ? !getId().equals(filmDTO.getId()) : filmDTO.getId() != null) return false;
         if (getName() != null ? !getName().equals(filmDTO.getName()) : filmDTO.getName() != null) return false;
         if (getGenre() != null ? !getGenre().equals(filmDTO.getGenre()) : filmDTO.getGenre() != null) return false;
         return getImage() != null ? getImage().equals(filmDTO.getImage()) : filmDTO.getImage() == null;

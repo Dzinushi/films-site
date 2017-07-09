@@ -47,16 +47,14 @@ public class UserDTO {
         this.enabled = enabled;
     }
 
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("UserDTO [id = ");
-        sb.append(id);
-        sb.append(", login = ");
-        sb.append(login);
-        sb.append("]");
-        sb.append(super.toString());
-
-        return sb.toString();
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                '}';
     }
 
     @Override
@@ -67,7 +65,6 @@ public class UserDTO {
         UserDTO userDTO = (UserDTO) o;
 
         if (getEnabled() != userDTO.getEnabled()) return false;
-        if (getId() != null ? !getId().equals(userDTO.getId()) : userDTO.getId() != null) return false;
         if (getLogin() != null ? !getLogin().equals(userDTO.getLogin()) : userDTO.getLogin() != null) return false;
         return getPassword() != null ? getPassword().equals(userDTO.getPassword()) : userDTO.getPassword() == null;
     }

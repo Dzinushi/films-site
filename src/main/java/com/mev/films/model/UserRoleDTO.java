@@ -39,27 +39,12 @@ public class UserRoleDTO {
     }
 
     @Override
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("UserRoleDTO [id = ");
-        sb.append(id);
-        sb.append(", login = ");
-        sb.append(login);
-        sb.append(", enabled = ");
-        sb.append(role);
-        sb.append(super.toString());
-
-        return sb.toString();
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof UserRoleDTO)) return false;
 
         UserRoleDTO that = (UserRoleDTO) o;
 
-        if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
         if (getLogin() != null ? !getLogin().equals(that.getLogin()) : that.getLogin() != null) return false;
         return getRole() != null ? getRole().equals(that.getRole()) : that.getRole() == null;
     }
@@ -70,5 +55,14 @@ public class UserRoleDTO {
         result = 31 * result + (getLogin() != null ? getLogin().hashCode() : 0);
         result = 31 * result + (getRole() != null ? getRole().hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "UserRoleDTO{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }
