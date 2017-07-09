@@ -23,7 +23,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @RequestMapping(value = {"/api/users/user"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/api/users/login"}, method = RequestMethod.GET)
     public UserDTO getUser(@RequestParam String login) {
         LOG.debug("getUser: login = {}",
                 login);
@@ -43,7 +43,7 @@ public class UserController {
         return userService.getUserRole(id);
     }
 
-    @RequestMapping(value = {"/api/users/login"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/api/users/role/login"}, method = RequestMethod.GET)
     public UserRoleDTO getUserRoleByLogin(@RequestParam String login) {
         LOG.debug("getUserRole: login = {}",
                 login);
@@ -64,7 +64,7 @@ public class UserController {
         userService.updateUser(userDTO);
     }
 
-    @RequestMapping(value = {"/api/users"}, method = RequestMethod.PUT)
+    @RequestMapping(value = {"/api/users/role"}, method = RequestMethod.PUT)
     public void updateUserRole(@RequestBody UserRoleDTO userRoleDTO) {
         LOG.debug("updateRole: id = {}, login = {}, role = {}",
                 userRoleDTO.getId(), userRoleDTO.getLogin(), userRoleDTO.getRole());
@@ -78,7 +78,7 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    @RequestMapping(value = {"/api/users"}, method = RequestMethod.DELETE)
+    @RequestMapping(value = {"/api/users/login"}, method = RequestMethod.DELETE)
     public void deleteUserByLogin(@RequestParam String login) {
         LOG.debug("deleteUserByLogin: login = {}",
                 login);

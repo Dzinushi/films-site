@@ -49,14 +49,14 @@ public class BasketController {
         basketService.deleteBasket(id);
     }
 
-    @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.DELETE)
+    @RequestMapping(value = {"/api/baskets/user"}, method = RequestMethod.DELETE)
     public void deleteBasketByUser(@RequestParam Long userId) {
         LOG.debug("deleteBasket: userId = {}",
                 userId);
         basketService.deleteBasketByUser(userId);
     }
 
-    @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.DELETE)
+    @RequestMapping(value = {"/api/baskets/user/film"}, method = RequestMethod.DELETE)
     public void deleteBasketByUserFilm(@RequestBody BasketDTO basketDTO) {
         LOG.debug("deleteBasketByUserFilm: id = {}, user_id = {}, film_id = {}",
                 basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO());
