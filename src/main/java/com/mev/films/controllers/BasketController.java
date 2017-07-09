@@ -36,10 +36,10 @@ public class BasketController {
     }
 
     @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.PUT)
-    public void updateBasket(@RequestParam Long id) {
-        LOG.debug("updateBasket: id = {}",
-                id);
-        basketService.updateBasket(id);
+    public void updateBasket(@RequestParam BasketDTO basketDTO) {
+        LOG.debug("updateBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
+                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
+        basketService.updateBasket(basketDTO);
     }
 
     @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.DELETE)

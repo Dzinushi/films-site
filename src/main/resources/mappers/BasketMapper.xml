@@ -77,7 +77,7 @@
             (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id})
     </insert>
 
-    <update id="updateBasket" parameterType="map">
+    <update id="updateBasket" parameterType="com.mev.films.model.BasketDTO">
         UPDATE
             baskets
         SET
@@ -85,7 +85,7 @@
             film_id = #{filmDTO.id},
             discount_id = #{discountDTO.id}
         WHERE
-            id = #{0}
+            id = #{id}
     </update>
 
     <delete id="deleteBasket" parameterType="map">

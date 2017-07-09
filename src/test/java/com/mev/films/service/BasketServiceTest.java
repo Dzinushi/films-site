@@ -148,7 +148,7 @@ public class BasketServiceTest {
         BasketDTO basketDTO11 = new BasketDTO(1L, userDTOS.get(1),filmDTOS.get(1), discountDTOS.get(1));
         System.out.println(basketDTO11);
 
-        basketService.updateBasket(basketDTO11.getId());
+        basketService.updateBasket(basketDTO11);
         List<BasketDTO> basketDTOS = basketService.getBasketByUser(basketDTO11.getUserDTO().getId());
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
                 basketDTOS.get(0).equals(basketDTO11));
