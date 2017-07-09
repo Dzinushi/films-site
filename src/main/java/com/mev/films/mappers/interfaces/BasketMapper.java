@@ -6,9 +6,10 @@ import java.util.List;
 
 public interface BasketMapper {
     List<BasketDTO> selectBaskets();
-    List<BasketDTO> selectBasketByUserName(String userName);
+    List<BasketDTO> selectBasketByUser(Long id);
     void insertBasket(BasketDTO basketDTO);
     void updateBasket(BasketDTO basketDTO);
-    void deleteBasketByUserId(Long userId);
-    void deleteBasket(BasketDTO basketDTO);
+    void deleteBasket(Long id);
+    void deleteBasketByUser(Long userId);
+    void deleteBasketByUserFilm(BasketDTO basketDTO);
 }

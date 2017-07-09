@@ -13,7 +13,7 @@
         <association property="filmDTO" resultMap="com.mev.films.mappers.interfaces.FilmMapper.filmDTO"
                      columnPrefix="flm_" />
         <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO"
-                     columnPrefix="dsc" />
+                     columnPrefix="dsc_" />
     </resultMap>
     
     <select id="selectBaskets" resultMap="basketDTO">
@@ -23,6 +23,7 @@
             u.id AS usr_id,
             u.login AS usr_login,
             u.password AS usr_password,
+            u.enabled AS usr_enabled,
 
             f.id AS flm_id,
             f.name AS flm_name,
@@ -38,16 +39,17 @@
             baskets AS b
             INNER JOIN users AS u ON b.user_id = u.id
             INNER JOIN films AS f ON b.film_id = f.id
-            INNER JOIN discounts AS d ON b.discount_id = d.id
+            LEFT JOIN discounts AS d ON b.discount_id = d.id
     </select>
 
-    <select id="selectBasketByUserName" parameterType="map" resultMap="basketDTO">
+    <select id="selectBasketByUser" parameterType="map" resultMap="basketDTO">
         SELECT
             b.id AS id,
 
             u.id AS usr_id,
             u.login AS usr_login,
             u.password AS usr_password,
+            u.enabled AS usr_enabled,
 
             f.id AS flm_id,
             f.name AS flm_name,
@@ -58,13 +60,14 @@
 
             d.id AS dsc_id,
             d.code AS dsc_code
+
         FROM
             baskets AS b
             INNER JOIN users AS u ON b.user_id = u.id
             INNER JOIN films AS f ON b.film_id = f.id
-            INNER JOIN discounts AS d ON b.discount_id = d.id
+            LEFT JOIN discounts AS d ON b.discount_id = d.id
         WHERE
-            u.id = #{0.id}
+            u.id = #{0}
     </select>
 
     <insert id="insertBasket" parameterType="com.mev.films.model.BasketDTO">
@@ -85,14 +88,21 @@
             id = #{id}
     </update>
 
-    <delete id="deleteBasketByUserId" parameterType="map">
+    <delete id="deleteBasket" parameterType="map">
         DELETE FROM
             baskets
         WHERE
-            user_id = #{0.id}
+            id = #{0}
     </delete>
 
-    <delete id="deleteBasket" parameterType="com.mev.films.model.BasketDTO">
+    <delete id="deleteBasketByUser" parameterType="map">
+        DELETE FROM
+            baskets
+        WHERE
+            user_id = #{0}
+    </delete>
+
+    <delete id="deleteBasketByUserFilm" parameterType="com.mev.films.model.BasketDTO">
         DELETE FROM
             baskets
         WHERE

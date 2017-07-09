@@ -14,7 +14,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
-import java.util.Objects;
 
 import static junit.framework.TestCase.assertTrue;
 
@@ -44,7 +43,7 @@ public class BasketServiceTest {
     public void setup(){
         List<BasketDTO> basketDTOS = basketService.getAllBaskets();
         for (BasketDTO basketDTO : basketDTOS){
-            basketService.deleteBasket(basketDTO);
+            basketService.deleteBasketByUserFilm(basketDTO);
         }
 
         List<DiscountDTO> discountDTOS = discountService.getAllDiscounts();
@@ -78,41 +77,142 @@ public class BasketServiceTest {
         List<FilmDTO> filmDTOS = filmService.getAllFilms();
         List<UserDTO> userDTOS = userService.getAllUsers();
 
-        BasketDTO basketDTO1 = new BasketDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
-        BasketDTO basketDTO2 = new BasketDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1));
+        BasketDTO basketDTO1 = new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
+        BasketDTO basketDTO2 = new BasketDTO(2L, userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1));
 
         basketService.addBasket(basketDTO1);
         basketService.addBasket(basketDTO2);
 
         List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
-                basketDTOS.get(0).equals(new BasketDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0))));
+                basketDTOS.get(0).equals(new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0))));
         assertTrue("basketDTO2 = " + basketDTO2.toString(),
-                basketDTOS.get(1).equals(new BasketDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1))));
+                basketDTOS.get(1).equals(new BasketDTO(2L, userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1))));
     }
 
     @Test
-    public void getBasketByUserName() {
+    public void getBasketByUserTest() {
+        discountService.addDiscount(discountDTO1);
+        filmService.addFilm(filmDTO1);
+        userService.addUser(userDTO1, userRoleDTO1);
 
+        DiscountDTO discountDTO = discountService.getDiscountByCode(discountDTO1.getCode());
+        FilmDTO filmDTO = filmService.getFilmByImage(filmDTO1.getImage());
+        UserDTO userDTO = userService.getUser(userDTO1.getLogin());
+
+        BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
+
+        basketService.addBasket(basketDTO1);
+        List<BasketDTO> basketDTOS = basketService.getBasketByUser(basketDTO1.getUserDTO().getId());
+        assertTrue("basketDTO1 = " + basketDTO1.toString(),
+                basketDTOS.get(0).equals(new BasketDTO(1L, userDTO, filmDTO, discountDTO)));
     }
 
     @Test
-    public void addBasket(){
+    public void addBasketTest(){
+        discountService.addDiscount(discountDTO1);
+        filmService.addFilm(filmDTO1);
+        userService.addUser(userDTO1, userRoleDTO1);
 
+        DiscountDTO discountDTO = discountService.getDiscountByCode(discountDTO1.getCode());
+        FilmDTO filmDTO = filmService.getFilmByImage(filmDTO1.getImage());
+        UserDTO userDTO = userService.getUser(userDTO1.getLogin());
+
+        BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
+
+        basketService.addBasket(basketDTO1);
+        List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+        assertTrue("basketDTO1 = " + basketDTO1.toString(),
+                basketDTOS.get(0).equals(new BasketDTO(1L, userDTO, filmDTO, discountDTO)));
     }
 
     @Test
-    public void updateBasket(){
+    public void updateBasketTest(){
+        discountService.addDiscount(discountDTO1);
+        discountService.addDiscount(discountDTO2);
 
+        filmService.addFilm(filmDTO1);
+        filmService.addFilm(filmDTO2);
+
+        userService.addUser(userDTO1, userRoleDTO1);
+        userService.addUser(userDTO2, userRoleDTO2);
+
+        List<DiscountDTO> discountDTOS = discountService.getAllDiscounts();
+        List<FilmDTO> filmDTOS = filmService.getAllFilms();
+        List<UserDTO> userDTOS = userService.getAllUsers();
+
+        BasketDTO basketDTO1 = new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
+        basketService.addBasket(basketDTO1);
+
+        BasketDTO basketDTO11 = new BasketDTO(1L, userDTOS.get(1),filmDTOS.get(1), discountDTOS.get(1));
+
+        basketService.updateBasket(basketDTO11);
+        List<BasketDTO> basketDTOS = basketService.getBasketByUser(basketDTO11.getUserDTO().getId());
+        assertTrue("basketDTO1 = " + basketDTO1.toString(),
+                basketDTOS.get(0).equals(basketDTO11));
     }
 
     @Test
-    public void deleteBasket(){
+    public void deleteBasketTest(){
+        discountService.addDiscount(discountDTO1);
+        filmService.addFilm(filmDTO1);
+        userService.addUser(userDTO1, userRoleDTO1);
 
+        DiscountDTO discountDTO = discountService.getDiscountByCode(discountDTO1.getCode());
+        FilmDTO filmDTO = filmService.getFilmByImage(filmDTO1.getImage());
+        UserDTO userDTO = userService.getUser(userDTO1.getLogin());
+
+        BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
+
+        basketService.addBasket(basketDTO1);
+        List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+        assertTrue("count = 1", basketDTOS.size() == 1);
+
+        basketService.deleteBasket(basketDTOS.get(0).getId());
+        basketDTOS = basketService.getAllBaskets();
+        assertTrue("count = 0", basketDTOS.size() == 0);
     }
 
     @Test
-    public void deleteBasketByUserName(){
+    public void deleteBasketByUserTest(){
+        discountService.addDiscount(discountDTO1);
+        filmService.addFilm(filmDTO1);
+        userService.addUser(userDTO1, userRoleDTO1);
 
+        DiscountDTO discountDTO = discountService.getDiscountByCode(discountDTO1.getCode());
+        FilmDTO filmDTO = filmService.getFilmByImage(filmDTO1.getImage());
+        UserDTO userDTO = userService.getUser(userDTO1.getLogin());
+
+        BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
+
+        basketService.addBasket(basketDTO1);
+        List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+        assertTrue("count = 1", basketDTOS.size() == 1);
+
+        basketService.deleteBasketByUser(basketDTOS.get(0).getUserDTO().getId());
+        basketDTOS = basketService.getAllBaskets();
+        assertTrue("count = 0", basketDTOS.size() == 0);
+    }
+
+    @Test
+    public void deleteBasketByUserFilmTest(){
+        discountService.addDiscount(discountDTO1);
+        filmService.addFilm(filmDTO1);
+        userService.addUser(userDTO1, userRoleDTO1);
+
+        DiscountDTO discountDTO = discountService.getDiscountByCode(discountDTO1.getCode());
+        FilmDTO filmDTO = filmService.getFilmByImage(filmDTO1.getImage());
+        UserDTO userDTO = userService.getUser(userDTO1.getLogin());
+
+        BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
+
+        basketService.addBasket(basketDTO1);
+        List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+        assertTrue("count = 1", basketDTOS.size() == 1);
+
+        basketService.deleteBasketByUserFilm(basketDTOS.get(0));
+        basketDTOS = basketService.getAllBaskets();
+        assertTrue("count = 0", basketDTOS.size() == 0);
     }
 }

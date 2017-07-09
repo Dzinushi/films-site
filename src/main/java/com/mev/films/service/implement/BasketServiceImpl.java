@@ -20,7 +20,6 @@ public class BasketServiceImpl implements BasketService{
 
     private static Logger LOG = LogManager.getLogger();
 
-    @Autowired private UserMapper userMapper;
     @Autowired private BasketMapper basketMapper;
 
     @Override
@@ -30,9 +29,10 @@ public class BasketServiceImpl implements BasketService{
     }
 
     @Override
-    public List<BasketDTO> getBasketByUserName(String username) {
-        LOG.debug("getBasketByUser");
-        return basketMapper.selectBasketByUserName(username);
+    public List<BasketDTO> getBasketByUser(Long id) {
+        LOG.debug("getBasketByUser: id = {}",
+                id);
+        return basketMapper.selectBasketByUser(id);
     }
 
     @Override
@@ -50,17 +50,23 @@ public class BasketServiceImpl implements BasketService{
     }
 
     @Override
-    public void deleteBasket(BasketDTO basketDTO) {
-        LOG.debug("deleteBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
-                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
-        basketMapper.deleteBasket(basketDTO);
+    public void deleteBasket(Long id){
+        LOG.debug("deleteBasket: id = {}",
+                id);
+        basketMapper.deleteBasket(id);
     }
 
     @Override
-    public void deleteBasketByUserName(String username) {
-        LOG.debug("deleteBasketByUserName: username = {}",
-                username);
-        UserDTO userDTO = userMapper.selectUserByLogin(username);
-        basketMapper.deleteBasketByUserId(userDTO.getId());
+    public void deleteBasketByUser(Long userId) {
+        LOG.debug("deleteBasket: userId = {}",
+                userId);
+        basketMapper.deleteBasketByUser(userId);
+    }
+
+    @Override
+    public void deleteBasketByUserFilm(BasketDTO basketDTO) {
+        LOG.debug("deleteBasketByUserFilm: id = {}, user_id = {}, film_id = {}, discount_id = {}",
+                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
+        basketMapper.deleteBasketByUserFilm(basketDTO);
     }
 }
