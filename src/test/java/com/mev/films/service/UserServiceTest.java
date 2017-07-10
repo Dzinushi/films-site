@@ -1,8 +1,13 @@
 package com.mev.films.service;
 
+import com.mev.films.mappers.interfaces.UserMapper;
+import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserRoleDTO;
+import com.mev.films.service.implement.UserServiceImpl;
 import com.mev.films.service.interfaces.UserService;
+import org.easymock.EasyMock;
+import org.easymock.IAnswer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,9 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.easymock.EasyMock.*;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -20,6 +27,9 @@ import static junit.framework.TestCase.assertTrue;
 public class UserServiceTest {
 
     @Autowired private UserService userService;
+
+    @Autowired private UserMapper userMapperMock;
+    @Autowired private UserRoleMapper userRoleMapperMock;
 
     private static UserDTO userDTO1 = new UserDTO("user1", "user1", (short) 1);
     private static UserDTO userDTO2 = new UserDTO("user2", "user2", (short) 1);
@@ -29,100 +39,196 @@ public class UserServiceTest {
 
     @Before
     public void setup(){
-
-        List<UserDTO> userDTOS = userService.getAllUsers();
-        for (UserDTO userDTO : userDTOS) {
-            userService.deleteUser(userDTO.getId());
-        }
+        userMapperMock = createNiceMock(UserMapper.class);
+        userRoleMapperMock = createNiceMock(UserRoleMapper.class);
+        userService = new UserServiceImpl(userMapperMock, userRoleMapperMock);
     }
 
     @Test
     public void getAllUsersTest(){
 
+        expect(userService.getAllUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
+            @Override
+            public List<UserDTO> answer() throws Throwable {
+                List<UserDTO> userDTOS = new ArrayList<>();
+                userDTOS.add(userDTO1);
+                userDTOS.add(userDTO2);
+                return userDTOS;
+            }
+        });
+
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
+
         userService.addUser(userDTO1, userRoleDTO1);
         userService.addUser(userDTO2, userRoleDTO2);
 
-        List<UserDTO> users = userService.getAllUsers();
+        List<UserDTO> userDTOS = userService.getAllUsers();
+        assertTrue("UserDTO1 = " + userDTO1,
+                userDTOS.get(0).equals(userDTO1));
+        assertTrue("UserDTO2 = " + userDTO2,
+                userDTOS.get(1).equals(userDTO2));
 
-        assertTrue("login1 = " + users.get(0).getLogin(),
-                users.get(0).getLogin().equals(userDTO1.getLogin()));
-        assertTrue("password1 = " + users.get(0).getPassword(),
-                users.get(0).getPassword().equals(userDTO1.getPassword()));
-        assertTrue("enabled1 = " + users.get(0).getEnabled(),
-                users.get(0).getEnabled() == userDTO1.getEnabled());
-
-        assertTrue("login2 = " + users.get(1).getLogin(),
-                users.get(1).getLogin().equals(userDTO2.getLogin()));
-        assertTrue("password2 = " + users.get(1).getPassword(),
-                users.get(1).getPassword().equals(userDTO2.getPassword()));
-        assertTrue("enabled2 = " + users.get(1).getEnabled(),
-                users.get(1).getEnabled() == userDTO2.getEnabled());
+        verify(userMapperMock);
+        verify(userRoleMapperMock);
     }
 
     @Test
     public void getUserTest(){
 
-        userService.addUser(userDTO1, userRoleDTO1);
+        expect(userService.getUser(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+            @Override
+            public UserDTO answer() throws Throwable {
+                return userDTO2;
+            }
+        });
+
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
+
         userService.addUser(userDTO2, userRoleDTO2);
 
         UserDTO userDTO = userService.getUser(userDTO2.getLogin());
-        assertTrue("password2 = " + userDTO.getPassword(),
-                userDTO.getPassword().equals(userDTO2.getPassword()));
-        assertTrue("enabled2 = " + userDTO.getEnabled(),
-                userDTO.getEnabled() == userDTO2.getEnabled());
+        assertTrue("UserDTO2 = " + userDTO2,
+                userDTO.equals(userDTO2));
+
+        verify(userMapperMock);
+        verify(userRoleMapperMock);
     }
 
     @Test
     public void getUserRolesTest(){
+
+        expect(userService.getUserRoles()).andStubAnswer(new IAnswer<List<UserRoleDTO>>() {
+            @Override
+            public List<UserRoleDTO> answer() throws Throwable {
+                List<UserRoleDTO> userRoleDTOS = new ArrayList<>();
+                userRoleDTOS.add(userRoleDTO1);
+                userRoleDTOS.add(userRoleDTO2);
+                return userRoleDTOS;
+            }
+        });
+
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
 
         userService.addUser(userDTO1, userRoleDTO1);
         userService.addUser(userDTO2, userRoleDTO2);
 
         List<UserRoleDTO> userRoles = userService.getUserRoles();
 
-        assertTrue("login1 = " + userRoles.get(0).getLogin(),
-                userRoles.get(0).getLogin().equals(userRoleDTO1.getLogin()));
-        assertTrue("role1 = " + userRoles.get(0).getRole(),
-                userRoles.get(0).getRole().equals(userRoleDTO1.getRole()));
+        assertTrue("userRoleDTO1 = " + userRoles.get(0),
+                userRoles.get(0).equals(userRoleDTO1));
+        assertTrue("userRoleDTO2 = " + userRoles.get(1),
+                userRoles.get(1).equals(userRoleDTO2));
 
-        assertTrue("login2 = " + userRoles.get(1).getLogin(),
-                userRoles.get(1).getLogin().equals(userRoleDTO2.getLogin()));
-        assertTrue("role2 = " + userRoles.get(1).getRole(),
-                userRoles.get(1).getRole().equals(userRoleDTO2.getRole()));
+        verify(userMapperMock);
+        verify(userRoleMapperMock);
     }
 
     @Test
     public void getUserRoleTest(){
 
-        userService.addUser(userDTO1, userRoleDTO1);
-        userService.addUser(userDTO2, userRoleDTO2);
+        expect(userService.getUserRole(userRoleDTO1.getId())).andStubAnswer(new IAnswer<UserRoleDTO>() {
+            @Override
+            public UserRoleDTO answer() throws Throwable {
+                return userRoleDTO1;
+            }
+        });
 
-        UserRoleDTO userRoles = userService.getUserRoleByLogin(userDTO1.getLogin());
-        assertTrue("role1 = " + userRoles.getRole(),
-                userRoles.getRole().equals(userRoleDTO1.getRole()));
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
+
+        userService.addUser(userDTO1, userRoleDTO1);
+
+        UserRoleDTO userRole = userService.getUserRole(userRoleDTO1.getId());
+        assertTrue("userRoleDTO1 = " + userRoleDTO1,
+                userRole.equals(userRoleDTO1));
+
+        verify(userMapperMock);
+        verify(userRoleMapperMock);
+    }
+
+    @Test
+    public void getUserRoleByLoginTest(){
+
+        expect(userService.getUserRoleByLogin(userDTO1.getLogin())).andStubAnswer(new IAnswer<UserRoleDTO>() {
+            @Override
+            public UserRoleDTO answer() throws Throwable {
+                return userRoleDTO1;
+            }
+        });
+
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
+
+        userService.addUser(userDTO1, userRoleDTO1);
+
+        UserRoleDTO userRole = userService.getUserRoleByLogin(userDTO1.getLogin());
+        assertTrue("userRoleDTO1 = " + userRoleDTO1,
+                userRole.equals(userRoleDTO1));
+
+        verify(userMapperMock);
+        verify(userRoleMapperMock);
     }
 
     @Test
     public void addUserTest(){
 
-        UserDTO userDTO3 = new UserDTO("user3", "user3", (short) 1);
-        UserRoleDTO userRoleDTO3 = new UserRoleDTO("user3", "ROLE_USER");
+        expect(userService.getUser(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+            @Override
+            public UserDTO answer() throws Throwable {
+                return userDTO2;
+            }
+        });
 
-        userService.addUser(userDTO3, userRoleDTO3);
+        expect(userService.getUserRoleByLogin(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserRoleDTO>() {
+            @Override
+            public UserRoleDTO answer() throws Throwable {
+                return userRoleDTO2;
+            }
+        });
 
-        UserDTO getUser3 = userService.getUser(userDTO3.getLogin());
-        assertTrue("password3 = " + getUser3.getPassword(),
-                getUser3.getPassword().equals(userDTO3.getPassword()));
-        assertTrue("enabled2 = " + getUser3.getEnabled(),
-                getUser3.getEnabled() == userDTO3.getEnabled());
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
 
-        UserRoleDTO getUserRole3 = userService.getUserRoleByLogin(userDTO3.getLogin());
-        assertTrue("role3 = " + getUserRole3.getRole(),
-                getUserRole3.getRole().equals(userRoleDTO3.getRole()));
+        userService.addUser(userDTO2, userRoleDTO2);
+
+
+        UserDTO userDTO = userService.getUser(userDTO2.getLogin());
+        assertTrue("userDTO2 = " + userDTO2,
+                userDTO.equals(userDTO2));
+
+        UserRoleDTO userRoleDTO = userService.getUserRoleByLogin(userDTO2.getLogin());
+        assertTrue("userRoleDTO2 = " + userRoleDTO2,
+                userRoleDTO.equals(userRoleDTO2));
     }
 
     @Test
     public void updateUserTest(){
+
+        expect(userService.getUser(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+            @Override
+            public UserDTO answer() throws Throwable {
+                return userDTO2;
+            }
+        });
+
+        expect(userService.getAllUsers()).andStubAnswer(new IAnswer <List<UserDTO>>() {
+            @Override
+            public List<UserDTO> answer() throws Throwable {
+                UserDTO userDTO = new UserDTO();
+                userDTO.setLogin("user2");
+                userDTO.setPassword("user22");
+                userDTO.setEnabled((short) 2);
+                List<UserDTO> userDTOS = new ArrayList<>();
+                userDTOS.add(userDTO);
+                return userDTOS;
+            }
+        });
+
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
 
         userService.addUser(userDTO2, userRoleDTO2);
 
@@ -132,30 +238,82 @@ public class UserServiceTest {
 
         userService.updateUser(getUserDTO2);
 
-        getUserDTO2 = userService.getUser("user2");
-        assertTrue("password2 = " + getUserDTO2.getPassword(),
-                getUserDTO2.getPassword().equals("user22"));
-        assertTrue("enabled2 = " + getUserDTO2.getEnabled(),
-                getUserDTO2.getEnabled() == (short) 2);
+        List<UserDTO> userDTOS = userService.getAllUsers();
+        assertTrue("userDTO2 = " + getUserDTO2,
+                userDTOS.get(0).equals(getUserDTO2));
+
+        verify(userMapperMock);
+        verify(userRoleMapperMock);
     }
 
     @Test
     public void updateUserRoleTest(){
 
+        expect(userService.getUserRoleByLogin(userRoleDTO1.getLogin())).andStubAnswer(new IAnswer<UserRoleDTO>() {
+            @Override
+            public UserRoleDTO answer() throws Throwable {
+                return userRoleDTO1;
+            }
+        });
+
+        expect(userService.getUserRoles()).andStubAnswer(new IAnswer<List<UserRoleDTO>>() {
+            @Override
+            public List<UserRoleDTO> answer() throws Throwable {
+                UserRoleDTO userRoleDTO = new UserRoleDTO("user1", "USER_ADMIN");
+                List<UserRoleDTO> userRoleDTOS = new ArrayList<>();
+                userRoleDTOS.add(userRoleDTO);
+                return userRoleDTOS;
+            }
+        });
+
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
+
         userService.addUser(userDTO1, userRoleDTO1);
 
-        UserRoleDTO getUserRole1 = userService.getUserRoleByLogin(userDTO1.getLogin());
+        UserRoleDTO getUserRole1 = userService.getUserRoleByLogin(userRoleDTO1.getLogin());
         getUserRole1.setRole("USER_ADMIN");
 
         userService.updateUserRole(getUserRole1);
 
-        getUserRole1 = userService.getUserRoleByLogin(userDTO1.getLogin());
-        assertTrue("role2 = " + getUserRole1.getRole(),
-                getUserRole1.getRole().equals("USER_ADMIN"));
+        List<UserRoleDTO> userRoleDTOS = userService.getUserRoles();
+        assertTrue("userRoleDTO1 = " + getUserRole1,
+                userRoleDTOS.get(0).equals(getUserRole1));
     }
 
     @Test
     public void deleteUserTest(){
+
+        expect(userService.getUser(userDTO1.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+            @Override
+            public UserDTO answer() throws Throwable {
+                return userDTO1;
+            }
+        });
+
+        expect(userService.getUser(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+            @Override
+            public UserDTO answer() throws Throwable {
+                return userDTO2;
+            }
+        });
+
+        expect(userService.getAllUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
+            @Override
+            public List<UserDTO> answer() throws Throwable {
+                return new ArrayList<>();
+            }
+        });
+
+        expect(userService.getUserRoles()).andStubAnswer(new IAnswer<List<UserRoleDTO>>() {
+            @Override
+            public List<UserRoleDTO> answer() throws Throwable {
+                return new ArrayList<>();
+            }
+        });
+
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
 
         userService.addUser(userDTO1, userRoleDTO1);
         userService.addUser(userDTO2, userRoleDTO2);
@@ -165,6 +323,55 @@ public class UserServiceTest {
 
         userService.deleteUser(getUserDTO1.getId());
         userService.deleteUser(getUserDTO2.getId());
+
+        List<UserDTO> usersAfterDelete = userService.getAllUsers();
+        assertTrue("usersAll = " + usersAfterDelete.size(), usersAfterDelete.size() == 0);
+
+        List<UserRoleDTO> userRolesAfterDelete = userService.getUserRoles();
+        assertTrue("userRolesAll = " + userRolesAfterDelete.size(), userRolesAfterDelete.size() == 0);
+    }
+
+    @Test
+    public void deleteUserByLogin(){
+        expect(userService.getUser(userDTO1.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+            @Override
+            public UserDTO answer() throws Throwable {
+                return userDTO1;
+            }
+        });
+
+        expect(userService.getUser(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+            @Override
+            public UserDTO answer() throws Throwable {
+                return userDTO2;
+            }
+        });
+
+        expect(userService.getAllUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
+            @Override
+            public List<UserDTO> answer() throws Throwable {
+                return new ArrayList<>();
+            }
+        });
+
+        expect(userService.getUserRoles()).andStubAnswer(new IAnswer<List<UserRoleDTO>>() {
+            @Override
+            public List<UserRoleDTO> answer() throws Throwable {
+                return new ArrayList<>();
+            }
+        });
+
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
+
+        userService.addUser(userDTO1, userRoleDTO1);
+        userService.addUser(userDTO2, userRoleDTO2);
+
+        UserDTO getUserDTO1 = userService.getUser(userDTO1.getLogin());
+        UserDTO getUserDTO2 = userService.getUser(userDTO2.getLogin());
+
+        userService.deleteUserByLogin(getUserDTO1.getLogin());
+        userService.deleteUserByLogin(getUserDTO2.getLogin());
 
         List<UserDTO> usersAfterDelete = userService.getAllUsers();
         assertTrue("usersAll = " + usersAfterDelete.size(), usersAfterDelete.size() == 0);
