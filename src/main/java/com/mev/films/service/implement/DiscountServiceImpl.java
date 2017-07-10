@@ -20,6 +20,13 @@ public class DiscountServiceImpl implements DiscountService{
 
     @Autowired private DiscountMapper discountMapper;
 
+    public DiscountServiceImpl(){
+    }
+
+    public DiscountServiceImpl(DiscountMapper discountMapper){
+        this.discountMapper = discountMapper;
+    }
+
     @Override
     public List<DiscountDTO> getAllDiscounts() {
         LOG.debug("getAllDiscounts");

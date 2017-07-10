@@ -20,6 +20,13 @@ public class FilmServiceImpl implements FilmService{
 
     @Autowired private FilmMapper filmMapper;
 
+    public FilmServiceImpl(){
+    }
+
+    public FilmServiceImpl(FilmMapper filmMapper) {
+       this.filmMapper = filmMapper;
+    }
+
     @Override
     public List<FilmDTO> getAllFilms() {
         LOG.debug("getAllFilms");

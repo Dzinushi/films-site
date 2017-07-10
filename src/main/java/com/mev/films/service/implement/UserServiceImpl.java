@@ -23,6 +23,14 @@ public class UserServiceImpl implements UserService{
     @Autowired private UserMapper userMapper;
     @Autowired private UserRoleMapper userRoleMapper;
 
+    public UserServiceImpl(){
+    }
+
+    public UserServiceImpl(UserMapper userMapper, UserRoleMapper userRoleMapper){
+        this.userMapper = userMapper;
+        this.userRoleMapper = userRoleMapper;
+    }
+
     @Override
     public List<UserDTO> getAllUsers() {
         LOG.debug("getAllUsers");
