@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.ArrayList;
 import java.util.List;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.easymock.EasyMock.createMock;
 
 import static org.easymock.EasyMock.expect;
@@ -43,8 +44,8 @@ public class DiscountControllerTest {
                 DiscountDTO discountDTO1 = new DiscountDTO("code1");
                 DiscountDTO discountDTO2 = new DiscountDTO("code2");
 
-                discountDTO1.setId(1L);
-                discountDTO2.setId(2L);
+//                discountDTO1.setId(1L);
+//                discountDTO2.setId(2L);
 
                 List<DiscountDTO> discountDTOS = new ArrayList<>();
                 discountDTOS.add(discountDTO1);
@@ -54,7 +55,10 @@ public class DiscountControllerTest {
         });
 
         replay(discountServiceMock);
-        discountController.getAllDiscounts();
+        List<DiscountDTO> discountDTOS = discountController.getAllDiscounts();
         verify(discountServiceMock);
+
+        assert(discountDTOS.get(0).equals(new DiscountDTO("code1")));
+        assert(discountDTOS.get(1).equals(new DiscountDTO("code2")));
     }
 }
