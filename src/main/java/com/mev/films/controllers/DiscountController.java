@@ -12,6 +12,15 @@ import java.util.List;
 
 @RestController
 public class DiscountController {
+
+    public DiscountController(){
+
+    }
+
+    public DiscountController(DiscountService discountService){
+        this.discountService = discountService;
+    }
+
     private static final Logger LOG = LogManager.getLogger();
 
     @Autowired private DiscountService discountService;
