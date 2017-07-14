@@ -32,27 +32,31 @@ public class BasketServiceImpl implements BasketService{
     @Override
     public List<BasketDTO> getAllBaskets() {
         LOG.debug("getAllBaskets");
+
         return basketMapper.selectBaskets();
     }
 
     @Override
-    public List<BasketDTO> getBasketByUser(Long id) {
-        LOG.debug("getBasketByUser: id = {}",
-                id);
-        return basketMapper.selectBasketByUser(id);
+    public List<BasketDTO> getBasketByUser(Long userId) {
+        LOG.debug("getBasketByUser: user_id = {}",
+                userId);
+
+        return basketMapper.selectBasketByUser(userId);
     }
 
     @Override
     public void addBasket(BasketDTO basketDTO) {
-        LOG.debug("addBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
-                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
+        LOG.debug("addBasket: basketDTO = {}",
+                basketDTO);
+
         basketMapper.insertBasket(basketDTO);
     }
 
     @Override
     public void updateBasket(BasketDTO basketDTO) {
-        LOG.debug("updateBasket: id = {}, user_id = {}, film_id = {}",
-                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO());
+        LOG.debug("updateBasket: basketDTO = {}",
+                basketDTO);
+
         basketMapper.updateBasket(basketDTO);
     }
 
@@ -60,6 +64,7 @@ public class BasketServiceImpl implements BasketService{
     public void deleteBasket(Long id){
         LOG.debug("deleteBasket: id = {}",
                 id);
+
         basketMapper.deleteBasket(id);
     }
 
@@ -67,13 +72,15 @@ public class BasketServiceImpl implements BasketService{
     public void deleteBasketByUser(Long userId) {
         LOG.debug("deleteBasket: userId = {}",
                 userId);
+
         basketMapper.deleteBasketByUser(userId);
     }
 
     @Override
     public void deleteBasketByUserFilm(BasketDTO basketDTO) {
-        LOG.debug("deleteBasketByUserFilm: id = {}, user_id = {}, film_id = {}, discount_id = {}",
-                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
+        LOG.debug("deleteBasketByUserFilm: basketDTO = {}",
+                basketDTO);
+
         basketMapper.deleteBasketByUserFilm(basketDTO);
     }
 }

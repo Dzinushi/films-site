@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserDTO> getAllUsers() {
         LOG.debug("getAllUsers");
+
         return userMapper.selectUsers();
     }
 
@@ -41,12 +42,14 @@ public class UserServiceImpl implements UserService{
     public UserDTO getUser(String login) {
         LOG.debug("getUser: login = {}",
                 login);
+
         return userMapper.selectUserByLogin(login);
     }
 
     @Override
     public List<UserRoleDTO> getUserRoles() {
         LOG.debug("getUserRoles");
+
         return userRoleMapper.selectUserRoles();
     }
 
@@ -54,6 +57,7 @@ public class UserServiceImpl implements UserService{
     public UserRoleDTO getUserRole(Long id){
         LOG.debug("getUserRole: id = {}",
                 id);
+
         return userRoleMapper.selectUserRole(id);
     }
 
@@ -61,27 +65,31 @@ public class UserServiceImpl implements UserService{
     public UserRoleDTO getUserRoleByLogin(String login) {
         LOG.debug("getUserRole: login = {}",
                 login);
+
         return userRoleMapper.selectUserRoleByLogin(login);
     }
 
     @Override
     public void addUser(UserDTO userDTO, UserRoleDTO userRoleDTO) {
-        LOG.debug("addUser: id = {}, login = {}, password = {}, role = {}",
-                userDTO.getId(), userDTO.getLogin(), userDTO.getPassword(), userRoleDTO.getRole());
+        LOG.debug("addUser: userDTO = {}, userRoleDTO = {}",
+                userDTO, userRoleDTO);
+
         userMapper.insertUser(userDTO, userRoleDTO);
     }
 
     @Override
     public void updateUser(UserDTO userDTO) {
-        LOG.debug("updateUser: id = {}, login = {}, password = {}",
-                userDTO.getId(), userDTO.getLogin(), userDTO.getPassword());
+        LOG.debug("updateUser: userDTO = {}",
+                userDTO);
+
         userMapper.updateUser(userDTO);
     }
 
     @Override
     public void updateUserRole(UserRoleDTO userRoleDTO) {
-        LOG.debug("updateRole: id = {}, login = {}, role = {}",
-                userRoleDTO.getId(), userRoleDTO.getLogin(), userRoleDTO.getRole());
+        LOG.debug("updateRole: userRoleDTO = {}",
+                userRoleDTO);
+
         userRoleMapper.updateUserRole(userRoleDTO);
     }
 
@@ -89,6 +97,7 @@ public class UserServiceImpl implements UserService{
     public void deleteUser(Long id) {
         LOG.debug("deleteUser: id = {}",
                 id);
+
         userMapper.deleteUser(id);
     }
 
@@ -96,6 +105,7 @@ public class UserServiceImpl implements UserService{
     public void deleteUserByLogin(String login) {
         LOG.debug("deleteUserByLogin: login = {}",
                 login);
+
         userMapper.deleteUserByLogin(login);
     }
 }

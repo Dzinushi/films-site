@@ -52,15 +52,15 @@ public class FilmServiceImpl implements FilmService{
 
     @Override
     public void addFilm(FilmDTO filmDTO) {
-        LOG.debug("addFilm: id = {}, name = {}, genre = {}, duration = {}, price = {}, image = {}",
-                filmDTO.getId(), filmDTO.getName(), filmDTO.getGenre(), filmDTO.getDuration(), filmDTO.getPrice(), filmDTO.getImage());
+        LOG.debug("addFilm: filmDTO = {}",
+                filmDTO);
         filmMapper.insertFilm(filmDTO);
     }
 
     @Override
     public void updateFilm(FilmDTO filmDTO) {
-        LOG.debug("updateFilm: id = {}, name = {}, genre = {}, duration = {}, price = {}, image = {}",
-                filmDTO.getId(), filmDTO.getName(), filmDTO.getGenre(), filmDTO.getDuration(), filmDTO.getPrice(), filmDTO.getImage());
+        LOG.debug("updateFilm: filmDTO = {}",
+                filmDTO);
 
         filmMapper.updateFilm(filmDTO);
     }

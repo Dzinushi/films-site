@@ -30,6 +30,7 @@ public class DiscountServiceImpl implements DiscountService{
     @Override
     public List<DiscountDTO> getAllDiscounts() {
         LOG.debug("getAllDiscounts");
+
         return discountMapper.selectDiscounts();
     }
 
@@ -37,20 +38,23 @@ public class DiscountServiceImpl implements DiscountService{
     public DiscountDTO getDiscountByCode(String code) {
         LOG.debug("getDiscountByCode: code = {}",
                 code);
+
         return discountMapper.selectDiscountByCode(code);
     }
 
     @Override
     public void addDiscount(DiscountDTO discountDTO) {
-        LOG.debug("addDiscount: id = {}, code = {}",
-                discountDTO.getId(), discountDTO.getCode());
+        LOG.debug("addDiscount: discountDTO = {}",
+                discountDTO);
+
         discountMapper.insertDiscount(discountDTO);
     }
 
     @Override
     public void updateDiscount(DiscountDTO discountDTO) {
-        LOG.debug("updateDiscount: id = {}, code = {}",
-                discountDTO.getId(), discountDTO.getCode());
+        LOG.debug("updateDiscount: discountDTO = {}",
+                discountDTO);
+
         discountMapper.updateDiscount(discountDTO);
     }
 
@@ -58,6 +62,7 @@ public class DiscountServiceImpl implements DiscountService{
     public void deleteDiscountByCode(String code) {
         LOG.debug("deleteDiscountByCode: code = {}",
                 code);
+
         discountMapper.deleteDiscountByCode(code);
     }
 }
