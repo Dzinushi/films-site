@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mev.films.mappers.interfaces.PaymentMapper">
+    <resultMap id="paymentDTO" type="com.mev.films.model.PaymentDTO">
+        <id property="id" column="id"/>
+        <result property="count" column="count"/>
+        <result property="time" column="time"/>
+        <association property="userDTO" resultMap="com.mev.films.model.UserDTO" columnPrefix="usr_"/>
+        <association property="filmDTO" resultMap="com.mev.films.model.FilmDTO" columnPrefix="flm_"/>
+        <association property="discountDTO" resultMap="com.mev.films.model.DiscountDTO" columnPrefix="dsc_"/>
+    </resultMap>
+
+    <select id="selectPaymentsDTO" resultMap="paymentDTO">
+        SELECT
+            p.id as id,
+            p.count as count,
+            p.time as time,
+
+            u.id as usr_id,
+            u.login as usr_login,
+
+            f.id as flm_id,
+            f.name as flm_name,
+            f.genre as flm_genre,
+            f.duration as flm_duration,
+            f.price as flm_price,
+            f.image as flm_image,
+
+            d.id as dsc_id,
+            d.code as dsc_code
+        FROM
+            payments AS p
+            INNER JOIN users AS u ON p.user_id = u.id
+            INNER JOIN films AS f ON p.film_id = f.id
+            LEFT JOIN discounts AS d ON p.discount_id = d.id
+    </select>
+
+    <select id="selectPaymentsDTOByUser" parameterType="map" resultMap="paymentDTO">
+        SELECT
+            p.id as id,
+            p.count as count,
+            p.time as time,
+
+            u.id as usr_id,
+            u.login as usr_login,
+
+            f.id as flm_id,
+            f.name as flm_name,
+            f.genre as flm_genre,
+            f.duration as flm_duration,
+            f.price as flm_price,
+            f.image as flm_image,
+
+            d.id as dsc_id,
+            d.code as dsc_code
+        FROM
+            payments AS p
+            INNER JOIN users AS u ON p.user_id = u.id
+            INNER JOIN films AS f ON p.film_id = f.id
+            LEFT JOIN discounts AS d ON p.discount_id = d.id
+        WHERE
+            u.id = #{0}
+    </select>
+
+    <select id="selectPaymentsDTOByFilm" parameterType="map" resultMap="paymentDTO">
+        SELECT
+            p.id as id,
+            p.count as count,
+            p.time as time,
+
+            u.id as usr_id,
+            u.login as usr_login,
+
+            f.id as flm_id,
+            f.name as flm_name,
+            f.genre as flm_genre,
+            f.duration as flm_duration,
+            f.price as flm_price,
+            f.image as flm_image,
+
+            d.id as dsc_id,
+            d.code as dsc_code
+        FROM
+            payments AS p
+            INNER JOIN users AS u ON p.user_id = u.id
+            INNER JOIN films AS f ON p.film_id = f.id
+            LEFT JOIN discounts AS d ON p.discount_id = d.id
+        WHERE
+            f.id = #{0}
+    </select>
+
+    <select id="selectPayment" parameterType="map" resultMap="paymentDT0">
+        SELECT
+            p.id as id,
+            p.count as count,
+            p.time as time,
+
+            u.id as usr_id,
+            u.login as usr_login,
+
+            f.id as flm_id,
+            f.name as flm_name,
+            f.genre as flm_genre,
+            f.duration as flm_duration,
+            f.price as flm_price,
+            f.image as flm_image,
+
+            d.id as dsc_id,
+            d.code as dsc_code
+        FROM
+            payments AS p
+            INNER JOIN users AS u ON p.user_id = u.id
+            INNER JOIN films AS f ON p.film_id = f.id
+            LEFT JOIN discounts AS d ON p.discount_id = d.id
+        WHERE
+            p.id = #{0}
+    </select>
+
+    <insert id="insertPayment" parameterType="com.mev.films.model.PaymentDTO">
+        INSERT INTO
+            payments (user_id, film_id, discount_id, count, time)
+        VALUES (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, #{count}, clock_timestamp())
+    </insert>
+
+    <update id="updatePayment" parameterType="com.mev.films.model.PaymentDTO">
+        UPDATE
+            payments
+        SET
+            id = #{id},
+            count = #{count},
+            time = clock_timestamp(),
+            user_id = #{userDTO.id},
+            film_id = #{filmDTO.id},
+            discount_id = #{discountDTO.id}
+    </update>
+
+    <delete id="deletePayment" parameterType="map">
+          DELETE FROM
+              payments
+          WHERE
+              id = #{0}
+    </delete>
+
+    <delete id="deletePaymentByUser" parameterType="map">
+          DELETE FROM
+              payments
+          WHERE
+              user_id = #{0}
+    </delete>
+
+    <delete id="deletePaymentByFilm" parameterType="map">
+          DELETE FROM
+              payments
+          WHERE
+              film_id = #{0}
+    </delete>
+</mapper>

@@ -9,5 +9,7 @@
         <mapper resource="mappers/FilmMapper.xml"/>
         <mapper resource="mappers/DiscountMapper.xml"/>
         <mapper resource="mappers/BasketMapper.xml"/>
+        <mapper resource="mappers/UserDiscountMapper.xml"/>
+        <mapper resource="mappers/PaymentMapper.xml"/>
     </mappers>
 </configuration>

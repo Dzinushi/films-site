@@ -1,24 +1,27 @@
 package com.mev.films.model;
 
 
+import java.sql.Timestamp;
+
 public class PaymentDTO {
     private Long id;
     private UserDTO userDTO;
     private FilmDTO filmDTO;
     private DiscountDTO discountDTO;
     private int count;
-    private String time;
+    private Timestamp time;
 
 
     public PaymentDTO(){
 
     }
 
-    public PaymentDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, int count){
+    public PaymentDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, int count, Timestamp time){
         this.userDTO = userDTO;
         this.filmDTO = filmDTO;
         this.discountDTO = discountDTO;
         this.count = count;
+        this.time = time;
     }
 
     public Long getId() {
@@ -61,11 +64,11 @@ public class PaymentDTO {
         this.count = count;
     }
 
-    public String getTime() {
+    public Timestamp getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Timestamp time) {
         this.time = time;
     }
 

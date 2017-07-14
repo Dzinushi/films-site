@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mev.films.mappers.interfaces.UserDiscountMapper">
+    <resultMap id="userDiscountDTO" type="com.mev.films.model.UserDiscountDTO">
+        <id property="id" column="id"/>
+        <result property="used" column="used"/>
+        <association property="userDTO" resultMap="com.mev.films.model.UserDTO" columnPrefix="usr_"/>
+        <association property="discountDTO" resultMap="com.mev.films.model.DiscountDTO" columnPrefix="dsc_"/>
+    </resultMap>
+
+    <select id="selectUserDiscounts" resultMap="userDiscountDTO">
+        SELECT
+            ud.id AS id,
+            ud.used AS used,
+
+            u.id AS usr_id,
+            u.login AS usr_login,
+
+            d.id AS dsc_id,
+            d.code AS dsc_code
+
+        FROM
+            user_discounts AS ud
+            INNER JOIN users AS u ON ud.user_id = u.id
+            LEFT JOIN discounts AS d ON ud.discount_id = d.id
+    </select>
+
+    <select id="selectUserDiscount" parameterType="map" resultMap="userDiscountDTO">
+        SELECT
+            ud.id AS id,
+            ud.used AS used,
+
+            u.id AS usr_id,
+            u.login AS usr_login,
+
+            d.id AS dsc_id,
+            d.code AS dsc_code
+
+        FROM
+            user_discounts AS ud
+            INNER JOIN users AS u ON ud.user_id = u.id
+            LEFT JOIN discounts AS d ON ud.discount_id = d.id
+        WHERE
+            ud.id = #{0}
+    </select>
+
+    <select id="selectUserDiscountsByUser" parameterType="map" resultMap="userDiscountDTO">
+        SELECT
+            ud.id AS id,
+            ud.used AS used,
+
+            u.id AS usr_id,
+            u.login AS usr_login,
+
+            d.id AS dsc_id,
+            d.code AS dsc_code
+
+        FROM
+            user_discounts AS ud
+            INNER JOIN users AS u ON ud.user_id = u.id
+            LEFT JOIN discounts AS d ON ud.discount_id = d.id
+        WHERE
+            u.id = #{0}
+    </select>
+
+    <select id="selectUserDiscountByDiscount" parameterType="map" resultMap="userDiscountDTO">
+        SELECT
+            ud.id AS id,
+            ud.used AS used,
+
+            u.id AS usr_id,
+            u.login AS usr_login,
+
+            d.id AS dsc_id,
+            d.code AS dsc_code
+
+        FROM
+            user_discounts AS ud
+            INNER JOIN users AS u ON ud.user_id = u.id
+            LEFT JOIN discounts AS d ON ud.discount_id = d.id
+        WHERE
+            d.id = #{0}
+    </select>
+
+    <insert id="insertUserDiscount" parameterType="com.mev.films.model.UserDiscountDTO">
+        INSERT INTO
+            user_discounts (user_id, discount_id, used)
+        VALUES (#{userDTO.id}, #{discountDTO.id}, #{used})
+    </insert>
+
+    <update id="updateUserDiscount" parameterType="com.mev.films.model.UserDiscountDTO">
+        UPDATE
+            user_discounts
+        SET
+            used = #{used},
+            user_id = #{userDTO.id},
+            discount_id = #{discountDTO.id}
+    </update>
+
+    <delete id="deleteUserDiscount" parameterType="map">
+        DELETE FROM
+            user_discounts
+        WHERE
+            id = #{0}
+    </delete>
+
+    <delete id="deleteUserDiscountByDiscount" parameterType="map">
+        DELETE FROM
+            user_discounts
+        WHERE
+            discount_id = #{0}
+    </delete>
+
+    <delete id="deleteUserDiscountByUser" parameterType="map">
+        DELETE FROM
+            user_discounts
+        WHERE
+            user_id = #{0}
+    </delete>
+
+</mapper>
