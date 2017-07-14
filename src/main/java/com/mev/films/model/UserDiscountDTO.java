@@ -2,9 +2,9 @@ package com.mev.films.model;
 
 public class UserDiscountDTO {
     private Long id;
-    UserDTO userDTO;
-    DiscountDTO discountDTO;
-    boolean used;
+    private UserDTO userDTO;
+    private DiscountDTO discountDTO;
+    private boolean used;
 
     public UserDiscountDTO(){
 

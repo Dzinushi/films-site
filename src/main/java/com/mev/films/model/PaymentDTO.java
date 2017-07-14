@@ -2,12 +2,12 @@ package com.mev.films.model;
 
 
 public class PaymentDTO {
-    Long id;
-    UserDTO userDTO;
-    FilmDTO filmDTO;
-    DiscountDTO discountDTO;
-    int count;
-    String time;
+    private Long id;
+    private UserDTO userDTO;
+    private FilmDTO filmDTO;
+    private DiscountDTO discountDTO;
+    private int count;
+    private String time;
 
 
     public PaymentDTO(){
