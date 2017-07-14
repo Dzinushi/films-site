@@ -92,7 +92,7 @@
             f.id = #{0}
     </select>
 
-    <select id="selectPayment" parameterType="map" resultMap="paymentDT0">
+    <select id="selectPayment" parameterType="map" resultMap="paymentDTO">
         SELECT
             p.id as id,
             p.count as count,
