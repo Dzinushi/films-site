@@ -20,6 +20,7 @@ public class UserController {
     @RequestMapping(value = {"/api/users"}, method = RequestMethod.GET)
     public List<UserDTO> getAllUsers() {
         LOG.debug("getAllUsers");
+
         return userService.getAllUsers();
     }
 
@@ -27,12 +28,14 @@ public class UserController {
     public UserDTO getUser(@RequestParam String login) {
         LOG.debug("getUser: login = {}",
                 login);
+
         return userService.getUser(login);
     }
 
     @RequestMapping(value = {"/api/users/roles"}, method = RequestMethod.GET)
     public List<UserRoleDTO> getUserRoles() {
         LOG.debug("getUserRoles");
+
         return userService.getUserRoles();
     }
 
@@ -40,34 +43,40 @@ public class UserController {
     public UserRoleDTO getUserRole(Long id){
         LOG.debug("getUserRole: id = {}",
                 id);
+
         return userService.getUserRole(id);
     }
 
-    @RequestMapping(value = {"/api/users/role/login"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/api/users/roles/login"}, method = RequestMethod.GET)
     public UserRoleDTO getUserRoleByLogin(@RequestParam String login) {
         LOG.debug("getUserRole: login = {}",
                 login);
+
         return userService.getUserRoleByLogin(login);
     }
 
     @RequestMapping(value = {"/api/users"}, method = RequestMethod.POST)
-    public void addUser(@RequestBody UserDTO userDTO, @RequestBody UserRoleDTO userRoleDTO) {
-        LOG.debug("addUser: id = {}, login = {}, password = {}, role = {}",
-                userDTO.getId(), userDTO.getLogin(), userDTO.getPassword(), userRoleDTO.getRole());
+    public void addUser(@RequestBody UserDTO userDTO,
+                        @RequestBody UserRoleDTO userRoleDTO) {
+        LOG.debug("addUser: userDTO = {}, userRoleDTO = {}",
+                userDTO, userRoleDTO);
+
         userService.addUser(userDTO, userRoleDTO);
     }
 
     @RequestMapping(value = {"/api/users"}, method = RequestMethod.PUT)
     public void updateUser(@RequestBody UserDTO userDTO) {
-        LOG.debug("updateUser: id = {}, login = {}, password = {}",
-                userDTO.getId(), userDTO.getLogin(), userDTO.getPassword());
+        LOG.debug("updateUser: userDTO = {}",
+                userDTO);
+
         userService.updateUser(userDTO);
     }
 
     @RequestMapping(value = {"/api/users/role"}, method = RequestMethod.PUT)
     public void updateUserRole(@RequestBody UserRoleDTO userRoleDTO) {
-        LOG.debug("updateRole: id = {}, login = {}, role = {}",
-                userRoleDTO.getId(), userRoleDTO.getLogin(), userRoleDTO.getRole());
+        LOG.debug("updateRole: userDTO = {}, userRoleDTO = {}",
+                userRoleDTO, userRoleDTO);
+
         userService.updateUserRole(userRoleDTO);
     }
 
@@ -75,6 +84,7 @@ public class UserController {
     public void deleteUser(@RequestParam Long id) {
         LOG.debug("deleteUser: id = {}",
                 id);
+
         userService.deleteUser(id);
     }
 
@@ -82,6 +92,7 @@ public class UserController {
     public void deleteUserByLogin(@RequestParam String login) {
         LOG.debug("deleteUserByLogin: login = {}",
                 login);
+
         userService.deleteUserByLogin(login);
     }
 }

@@ -28,6 +28,7 @@ public class DiscountController {
     @RequestMapping(value = {"/api/discounts"}, method = RequestMethod.GET)
     public List<DiscountDTO> getAllDiscounts() {
         LOG.debug("getAllDiscounts");
+
         return discountService.getAllDiscounts();
     }
 
@@ -35,27 +36,31 @@ public class DiscountController {
     public DiscountDTO getDiscountByCode(@RequestParam String code) {
         LOG.debug("getDiscountByCode: code = {}",
                 code);
+
         return discountService.getDiscountByCode(code);
     }
 
     @RequestMapping(value = {"/api/discounts"}, method = RequestMethod.POST)
     public void addDiscount(@RequestBody DiscountDTO discountDTO) {
-        LOG.debug("addDiscount: id = {}, code = {}",
-                discountDTO.getId(), discountDTO.getCode());
+        LOG.debug("addDiscount: discountDTO = {}",
+                discountDTO);
+
         discountService.addDiscount(discountDTO);
     }
 
     @RequestMapping(value = {"/api/discounts"}, method = RequestMethod.PUT)
     public void updateDiscount(@RequestBody DiscountDTO discountDTO) {
-        LOG.debug("updateDiscount: id = {}, code = {}",
-                discountDTO.getId(), discountDTO.getCode());
+        LOG.debug("updateDiscount: discountDTO = {}",
+                discountDTO);
+
         discountService.updateDiscount(discountDTO);
     }
 
-    @RequestMapping(value = {"/api/discounts"}, method = RequestMethod.DELETE)
+    @RequestMapping(value = {"/api/discounts/code"}, method = RequestMethod.DELETE)
     public void deleteDiscountByCode(@RequestParam String code) {
         LOG.debug("deleteDiscountByCode: code = {}",
                 code);
+
         discountService.deleteDiscountByCode(code);
     }
 }

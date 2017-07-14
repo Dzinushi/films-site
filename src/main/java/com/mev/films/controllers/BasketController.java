@@ -18,27 +18,31 @@ public class BasketController {
     @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.GET)
     public List<BasketDTO> getAllBaskets() {
         LOG.debug("getAllBaskets");
+
         return basketService.getAllBaskets();
     }
 
     @RequestMapping(value = {"/api/baskets/user"}, method = RequestMethod.GET)
-    public List<BasketDTO> getBasketByUser(@RequestParam Long id) {
-        LOG.debug("getBasketByUser: id = {}",
-                id);
-        return basketService.getBasketByUser(id);
+    public List<BasketDTO> getBasketByUser(@RequestParam Long userId) {
+        LOG.debug("getBasketByUser: user_id = {}",
+                userId);
+
+        return basketService.getBasketByUser(userId);
     }
 
     @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.POST)
     public void addBasket(@RequestBody BasketDTO basketDTO) {
-        LOG.debug("addBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
-                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
+        LOG.debug("addBasket: basketDTO",
+                basketDTO);
+
         basketService.addBasket(basketDTO);
     }
 
     @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.PUT)
     public void updateBasket(@RequestParam BasketDTO basketDTO) {
-        LOG.debug("updateBasket: id = {}, user_id = {}, film_id = {}, discount_id = {}",
-                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO(), basketDTO.getDiscountDTO());
+        LOG.debug("updateBasket: basketDTO = {}",
+                basketDTO);
+
         basketService.updateBasket(basketDTO);
     }
 
@@ -46,20 +50,23 @@ public class BasketController {
     public void deleteBasket(@RequestParam Long id) {
         LOG.debug("deleteBasket: id = {}",
                 id);
+
         basketService.deleteBasket(id);
     }
 
     @RequestMapping(value = {"/api/baskets/user"}, method = RequestMethod.DELETE)
     public void deleteBasketByUser(@RequestParam Long userId) {
-        LOG.debug("deleteBasket: userId = {}",
+        LOG.debug("deleteBasket: user_id = {}",
                 userId);
+
         basketService.deleteBasketByUser(userId);
     }
 
     @RequestMapping(value = {"/api/baskets/user/film"}, method = RequestMethod.DELETE)
     public void deleteBasketByUserFilm(@RequestBody BasketDTO basketDTO) {
-        LOG.debug("deleteBasketByUserFilm: id = {}, user_id = {}, film_id = {}",
-                basketDTO.getId(), basketDTO.getUserDTO(), basketDTO.getFilmDTO());
+        LOG.debug("deleteBasketByUserFilm: basketDTO = {}",
+                basketDTO);
+
         basketService.deleteBasketByUserFilm(basketDTO);
     }
 }

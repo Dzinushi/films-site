@@ -19,6 +19,7 @@ public class FilmController {
     @RequestMapping(value = {"/api/films"}, method = RequestMethod.GET)
     public List<FilmDTO> getAllFilms(){
         LOG.debug("getAllFilms");
+
         return filmService.getAllFilms();
     }
 
@@ -26,6 +27,7 @@ public class FilmController {
     public List<FilmDTO> getFilmByName(@RequestParam String name){
         LOG.debug("getFilmByName: name = {}",
                 name);
+
         return filmService.getFilmByName(name);
     }
 
@@ -33,6 +35,7 @@ public class FilmController {
     public FilmDTO getFilmByImage(@RequestParam String image){
         LOG.debug("getFilmByImage: image = {}",
                 image);
+
         return filmService.getFilmByImage(image);
     }
 
@@ -40,6 +43,7 @@ public class FilmController {
     public void addFilm(@RequestBody FilmDTO filmDTO){
         LOG.debug("addFilm = {}",
                 filmDTO);
+
         filmService.addFilm(filmDTO);
     }
 
@@ -47,13 +51,15 @@ public class FilmController {
     public void updateFilm(@RequestParam FilmDTO filmDTO){
         LOG.debug("filmDTO = {}",
                 filmDTO);
+
         filmService.updateFilm(filmDTO);
     }
 
-    @RequestMapping(value = {"/api/films"}, method = RequestMethod.DELETE)
+    @RequestMapping(value = {"/api/films/image"}, method = RequestMethod.DELETE)
     public void deleteFilmByImage(@RequestParam String image){
         LOG.debug("deleteFilmByImage = {}",
                 image);
+
         filmService.deleteFilmByImage(image);
     }
 }
