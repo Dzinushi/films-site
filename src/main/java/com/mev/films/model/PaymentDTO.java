@@ -16,12 +16,11 @@ public class PaymentDTO {
 
     }
 
-    public PaymentDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, int count, Timestamp time){
+    public PaymentDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, int count){
         this.userDTO = userDTO;
         this.filmDTO = filmDTO;
         this.discountDTO = discountDTO;
         this.count = count;
-        this.time = time;
     }
 
     public Long getId() {
