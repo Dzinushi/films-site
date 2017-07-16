@@ -17,9 +17,9 @@ public class BasketController {
 
     @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.GET)
     public List<BasketDTO> getAllBaskets() {
-        LOG.debug("getAllBaskets");
+        LOG.debug("getBaskets");
 
-        return basketService.getAllBaskets();
+        return basketService.getBaskets();
     }
 
     @RequestMapping(value = {"/api/baskets/user"}, method = RequestMethod.GET)

@@ -27,9 +27,9 @@ public class DiscountController {
 
     @RequestMapping(value = {"/api/discounts"}, method = RequestMethod.GET)
     public List<DiscountDTO> getAllDiscounts() {
-        LOG.debug("getAllDiscounts");
+        LOG.debug("getDiscounts");
 
-        return discountService.getAllDiscounts();
+        return discountService.getDiscounts();
     }
 
     @RequestMapping(value = {"/api/discounts/code"}, method = RequestMethod.GET)

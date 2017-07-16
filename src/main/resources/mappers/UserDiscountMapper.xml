@@ -4,11 +4,12 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mev.films.mappers.interfaces.UserDiscountMapper">
+
     <resultMap id="userDiscountDTO" type="com.mev.films.model.UserDiscountDTO">
         <id property="id" column="id"/>
         <result property="used" column="used"/>
-        <association property="userDTO" resultMap="com.mev.films.model.UserDTO" columnPrefix="usr_"/>
-        <association property="discountDTO" resultMap="com.mev.films.model.DiscountDTO" columnPrefix="dsc_"/>
+        <association property="userDTO" resultMap="com.mev.films.mappers.interfaces.UserMapper.userDTO" columnPrefix="usr_"/>
+        <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO" columnPrefix="dsc_"/>
     </resultMap>
 
     <select id="selectUserDiscounts" resultMap="userDiscountDTO">

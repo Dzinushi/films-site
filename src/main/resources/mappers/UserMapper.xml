@@ -16,7 +16,11 @@
         SELECT * FROM users;
     </select>
 
-    <select id="selectUserSortByLogin" resultMap="userDTO">
+    <select id="selectUsersIdLogin" resultMap="userDTO">
+        SELECT id,login FROM users;
+    </select>
+
+    <select id="selectUsersSortByLogin" resultMap="userDTO">
         SELECT * FROM users ORDER BY login;
     </select>
 
