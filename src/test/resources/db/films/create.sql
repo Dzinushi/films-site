@@ -43,31 +43,23 @@ CREATE TABLE baskets(
   discount_id BIGINT,
   UNIQUE (user_id, film_id)
 );
-ALTER TABLE baskets ADD FOREIGN KEY(user_id) REFERENCES users(id);
-ALTER TABLE baskets ADD FOREIGN KEY(film_id) REFERENCES films(id);
-ALTER TABLE baskets ADD FOREIGN KEY(discount_id) REFERENCES discounts(id);
 
 
 CREATE SEQUENCE user_discounts_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
 CREATE TABLE user_discounts(
   id BIGINT PRIMARY KEY DEFAULT nextval('user_discounts_id_seq'::regclass),
-  user_id BIGINT,
-  discount_id BIGINT,
+  user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+  discount_id BIGINT REFERENCES discounts(id) ON DELETE SET NULL,
   used BOOLEAN
 );
-ALTER TABLE user_discounts ADD FOREIGN KEY(user_id) REFERENCES users(id);
-ALTER TABLE user_discounts ADD FOREIGN KEY(discount_id) REFERENCES discounts(id);
 
 
 CREATE SEQUENCE payments_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
 CREATE TABLE payments(
   id BIGINT PRIMARY KEY DEFAULT nextval('payments_id_seq'::regclass),
-  user_id BIGINT,
-  film_id BIGINT,
-  discount_id BIGINT,
+  user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+  film_id BIGINT REFERENCES films(id) ON DELETE SET NULL,
+  discount_id BIGINT REFERENCES discounts(id) ON DELETE SET NULL,
   count INT,
   time TIMESTAMP
 );
-ALTER TABLE payments ADD FOREIGN KEY(user_id) REFERENCES users(id);
-ALTER TABLE payments ADD FOREIGN KEY(film_id) REFERENCES films(id);
-ALTER TABLE payments ADD FOREIGN KEY(discount_id) REFERENCES discounts(id);

@@ -18,25 +18,25 @@ public class PaymentController {
 
     @RequestMapping(value = "/api/payments", method = RequestMethod.GET)
     public List<PaymentDTO> getPaymentsDTO() {
-        LOG.debug("getPaymentsDTO");
+        LOG.debug("getPayments");
 
-        return paymentService.getPaymentsDTO();
+        return paymentService.getPayments();
     }
 
     @RequestMapping(value = "/api/payments/user", method = RequestMethod.GET)
     public List<PaymentDTO> getPaymentsDTOByUser(@RequestParam Long userId) {
-        LOG.debug("getPaymentsDTOByUser: user_id = {}",
+        LOG.debug("getPaymentsByUser: user_id = {}",
                 userId);
 
-        return paymentService.getPaymentsDTOByUser(userId);
+        return paymentService.getPaymentsByUser(userId);
     }
 
     @RequestMapping(value = "/api/payments/film", method = RequestMethod.GET)
     public List<PaymentDTO> getPaymentsDTOByFilm(@RequestParam Long filmId) {
-        LOG.debug("getPaymentsDTOByFilm: film_id = {}",
+        LOG.debug("getPaymentsByFilm: film_id = {}",
                 filmId);
 
-        return paymentService.getPaymentsDTOByFilm(filmId);
+        return paymentService.getPaymentsByFilm(filmId);
     }
 
     @RequestMapping(value = "/api/payment", method = RequestMethod.GET)

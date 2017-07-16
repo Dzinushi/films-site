@@ -6,9 +6,9 @@ import com.mev.films.model.PaymentDTO;
 import java.util.List;
 
 public interface PaymentService {
-    List<PaymentDTO> getPaymentsDTO();
-    List<PaymentDTO> getPaymentsDTOByUser(Long userId);
-    List<PaymentDTO> getPaymentsDTOByFilm(Long filmId);
+    List<PaymentDTO> getPayments();
+    List<PaymentDTO> getPaymentsByUser(Long userId);
+    List<PaymentDTO> getPaymentsByFilm(Long filmId);
     PaymentDTO getPayment(Long id);
     void addPayment(PaymentDTO paymentDTO);
     void updatePayment(PaymentDTO paymentDTO);

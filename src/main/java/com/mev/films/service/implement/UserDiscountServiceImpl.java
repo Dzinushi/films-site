@@ -19,6 +19,14 @@ public class UserDiscountServiceImpl implements UserDiscountService{
 
     @Autowired private UserDiscountMapper userDiscountMapper;
 
+    public UserDiscountServiceImpl(){
+
+    }
+
+    public UserDiscountServiceImpl(UserDiscountMapper userDiscountMapper){
+        this.userDiscountMapper = userDiscountMapper;
+    }
+
     @Override
     public List<UserDiscountDTO> getUserDiscounts() {
         LOG.debug("getUserDiscounts");

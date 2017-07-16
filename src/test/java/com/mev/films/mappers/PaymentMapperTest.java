@@ -80,7 +80,7 @@ public class PaymentMapperTest {
     }
 
     @Test
-    public void selectPaymentsDTOTest(){
+    public void selectPaymentsTest(){
 
         paymentMapper.insertPayment(paymentDTO1);
         paymentMapper.insertPayment(paymentDTO2);
@@ -93,7 +93,7 @@ public class PaymentMapperTest {
     }
 
     @Test
-    public void selectPaymentsDTOByUserTest(){
+    public void selectPaymentsByUserTest(){
 
         paymentMapper.insertPayment(paymentDTO1);
         paymentMapper.insertPayment(paymentDTO2);
@@ -105,7 +105,7 @@ public class PaymentMapperTest {
     }
 
     @Test
-    public void selectPaymentsDTOByFilmTest(){
+    public void selectPaymentsByFilmTest(){
 
         paymentMapper.insertPayment(paymentDTO1);
         paymentMapper.insertPayment(paymentDTO2);
@@ -117,7 +117,7 @@ public class PaymentMapperTest {
     }
 
     @Test
-    public void selectPaymentDTOTest(){
+    public void selectPaymentTest(){
 
         paymentMapper.insertPayment(paymentDTO1);
         paymentMapper.insertPayment(paymentDTO2);

@@ -22,24 +22,33 @@ public class PaymentServiceImpl implements PaymentService{
     @Autowired private PaymentMapper paymentMapper;
     @Autowired private UserDiscountMapper userDiscountMapper;
 
+    public PaymentServiceImpl(){
+
+    }
+
+    public PaymentServiceImpl(PaymentMapper paymentMapper, UserDiscountMapper userDiscountMapper) {
+        this.paymentMapper = paymentMapper;
+        this.userDiscountMapper = userDiscountMapper;
+    }
+
     @Override
-    public List<PaymentDTO> getPaymentsDTO() {
-        LOG.debug("getPaymentsDTO");
+    public List<PaymentDTO> getPayments() {
+        LOG.debug("getPayments");
 
         return paymentMapper.selectPayments();
     }
 
     @Override
-    public List<PaymentDTO> getPaymentsDTOByUser(Long userId) {
-        LOG.debug("getPaymentsDTOByUser: user_id = {}",
+    public List<PaymentDTO> getPaymentsByUser(Long userId) {
+        LOG.debug("getPaymentsByUser: user_id = {}",
                 userId);
 
         return paymentMapper.selectPaymentsByUser(userId);
     }
 
     @Override
-    public List<PaymentDTO> getPaymentsDTOByFilm(Long filmId) {
-        LOG.debug("getPaymentsDTOByFilm: film_id = {}",
+    public List<PaymentDTO> getPaymentsByFilm(Long filmId) {
+        LOG.debug("getPaymentsByFilm: film_id = {}",
                 filmId);
 
         return paymentMapper.selectPaymentsByFilm(filmId);
@@ -61,9 +70,11 @@ public class PaymentServiceImpl implements PaymentService{
         // set code for insert payment as "used"
         UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(
                 paymentDTO.getDiscountDTO().getId());
-        userDiscountDTO.setUsed(true);
-        userDiscountMapper.updateUserDiscount(userDiscountDTO);
 
+        if (userDiscountDTO != null) {
+            userDiscountDTO.setUsed(true);
+            userDiscountMapper.updateUserDiscount(userDiscountDTO);
+        }
         paymentMapper.insertPayment(paymentDTO);
     }
 
