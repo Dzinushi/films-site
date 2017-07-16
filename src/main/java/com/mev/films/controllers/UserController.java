@@ -19,9 +19,9 @@ public class UserController {
 
     @RequestMapping(value = {"/api/users"}, method = RequestMethod.GET)
     public List<UserDTO> getAllUsers() {
-        LOG.debug("getAllUsers");
+        LOG.debug("getUsers");
 
-        return userService.getAllUsers();
+        return userService.getUsers();
     }
 
     @RequestMapping(value = {"/api/users/login"}, method = RequestMethod.GET)
