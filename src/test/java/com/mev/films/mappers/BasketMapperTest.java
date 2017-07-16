@@ -37,9 +37,12 @@ public class BasketMapperTest {
     private DiscountDTO discountDTO1 = new DiscountDTO("code1");
     private DiscountDTO discountDTO2 = new DiscountDTO("code2");
 
+    private BasketDTO basketDTO1;
+    private BasketDTO basketDTO2;
 
     @Before
     public void setup(){
+
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
         for (BasketDTO basketDTO : basketDTOS){
             basketMapper.deleteBasketByUserFilm(basketDTO);
@@ -59,10 +62,8 @@ public class BasketMapperTest {
         for (UserDTO userDTO : userDTOS){
             userMapper.deleteUser(userDTO.getId());
         }
-    }
 
-    @Test
-    public void selectAllBasketsTest(){
+
         discountMapper.insertDiscount(discountDTO1);
         discountMapper.insertDiscount(discountDTO2);
 
@@ -72,12 +73,16 @@ public class BasketMapperTest {
         userMapper.insertUser(userDTO1, userRoleDTO1);
         userMapper.insertUser(userDTO2, userRoleDTO2);
 
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsers();
+        discountDTOS = discountMapper.selectDiscounts();
+        filmDTOS = filmMapper.selectFilms();
+        userDTOS = userMapper.selectUsers();
 
-        BasketDTO basketDTO1 = new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
-        BasketDTO basketDTO2 = new BasketDTO(2L, userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1));
+        basketDTO1 = new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
+        basketDTO2 = new BasketDTO(2L, userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1));
+    }
+
+    @Test
+    public void selectAllBasketsTest(){
 
         basketMapper.insertBasket(basketDTO1);
         basketMapper.insertBasket(basketDTO2);
@@ -85,90 +90,52 @@ public class BasketMapperTest {
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
 
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
-                basketDTOS.get(0).equals(new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0))));
+                basketDTOS.get(0).equals(basketDTO1));
         assertTrue("basketDTO2 = " + basketDTO2.toString(),
-                basketDTOS.get(1).equals(new BasketDTO(2L, userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1))));
+                basketDTOS.get(1).equals(basketDTO2));
     }
 
     @Test
     public void selectBasketByUserTest() {
-        discountMapper.insertDiscount(discountDTO1);
-        filmMapper.insertFilm(filmDTO1);
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-
-        DiscountDTO discountDTO = discountMapper.selectDiscountByCode(discountDTO1.getCode());
-        FilmDTO filmDTO = filmMapper.selectFilmByImage(filmDTO1.getImage());
-        UserDTO userDTO = userMapper.selectUserByLogin(userDTO1.getLogin());
-
-        BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
 
         basketMapper.insertBasket(basketDTO1);
+
         List<BasketDTO> basketDTOS = basketMapper.selectBasketByUser(basketDTO1.getUserDTO().getId());
+
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
-                basketDTOS.get(0).equals(new BasketDTO(1L, userDTO, filmDTO, discountDTO)));
+                basketDTOS.get(0).equals(basketDTO1));
     }
 
     @Test
     public void insertBasketTest(){
-        discountMapper.insertDiscount(discountDTO1);
-        filmMapper.insertFilm(filmDTO1);
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-
-        DiscountDTO discountDTO = discountMapper.selectDiscountByCode(discountDTO1.getCode());
-        FilmDTO filmDTO = filmMapper.selectFilmByImage(filmDTO1.getImage());
-        UserDTO userDTO = userMapper.selectUserByLogin(userDTO1.getLogin());
-
-        BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
 
         basketMapper.insertBasket(basketDTO1);
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
         assertTrue("count = 1",
                 basketDTOS.size() == 1);
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
-                basketDTOS.get(0).equals(new BasketDTO(1L, userDTO, filmDTO, discountDTO)));
+                basketDTOS.get(0).equals(basketDTO1));
     }
 
     @Test
     public void updateBasketTest(){
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
 
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsers();
-
-        BasketDTO basketDTO1 = new BasketDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
         basketMapper.insertBasket(basketDTO1);
 
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
-        basketDTOS.get(0).setUserDTO(userDTOS.get(1));
-        basketDTOS.get(0).setFilmDTO(filmDTOS.get(1));
-        basketDTOS.get(0).setDiscountDTO(discountDTOS.get(1));
+        basketDTOS.get(0).setUserDTO(basketDTO2.getUserDTO());
+        basketDTOS.get(0).setFilmDTO(basketDTO2.getFilmDTO());
+        basketDTOS.get(0).setDiscountDTO(basketDTO2.getDiscountDTO());
 
         basketMapper.updateBasket(basketDTOS.get(0));
         basketDTOS = basketMapper.selectBaskets();
 
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
-                basketDTOS.get(0).equals(new BasketDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1))));
+                basketDTOS.get(0).equals(basketDTO2));
     }
 
     @Test
     public void deleteBasketTest(){
-        discountMapper.insertDiscount(discountDTO1);
-        filmMapper.insertFilm(filmDTO1);
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-
-        DiscountDTO discountDTO = discountMapper.selectDiscountByCode(discountDTO1.getCode());
-        FilmDTO filmDTO = filmMapper.selectFilmByImage(filmDTO1.getImage());
-        UserDTO userDTO = userMapper.selectUserByLogin(userDTO1.getLogin());
-
-        BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
 
         basketMapper.insertBasket(basketDTO1);
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
@@ -181,15 +148,6 @@ public class BasketMapperTest {
 
     @Test
     public void deleteBasketByUserTest(){
-        discountMapper.insertDiscount(discountDTO1);
-        filmMapper.insertFilm(filmDTO1);
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-
-        DiscountDTO discountDTO = discountMapper.selectDiscountByCode(discountDTO1.getCode());
-        FilmDTO filmDTO = filmMapper.selectFilmByImage(filmDTO1.getImage());
-        UserDTO userDTO = userMapper.selectUserByLogin(userDTO1.getLogin());
-
-        BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
 
         basketMapper.insertBasket(basketDTO1);
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
@@ -202,15 +160,6 @@ public class BasketMapperTest {
 
     @Test
     public void deleteBasketByUserFilmTest(){
-        discountMapper.insertDiscount(discountDTO1);
-        filmMapper.insertFilm(filmDTO1);
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-
-        DiscountDTO discountDTO = discountMapper.selectDiscountByCode(discountDTO1.getCode());
-        FilmDTO filmDTO = filmMapper.selectFilmByImage(filmDTO1.getImage());
-        UserDTO userDTO = userMapper.selectUserByLogin(userDTO1.getLogin());
-
-        BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
 
         basketMapper.insertBasket(basketDTO1);
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
