@@ -39,7 +39,7 @@ public class DiscountServiceTest {
     @Test
     public void getAllDiscountsTest(){
 
-        expect(discountService.getAllDiscounts()).andStubAnswer(new IAnswer<List<DiscountDTO>>() {
+        expect(discountService.getDiscounts()).andStubAnswer(new IAnswer<List<DiscountDTO>>() {
             @Override
             public List<DiscountDTO> answer() throws Throwable {
                 List<DiscountDTO> discountDTOS = new ArrayList<>();
@@ -54,7 +54,7 @@ public class DiscountServiceTest {
         discountService.addDiscount(discountDTO1);
         discountService.addDiscount(discountDTO2);
 
-        List<DiscountDTO> discountDTOS = discountService.getAllDiscounts();
+        List<DiscountDTO> discountDTOS = discountService.getDiscounts();
         assertTrue("discountDTO1 = " + discountDTO1,
                 discountDTOS.get(0).equals(discountDTO1));
         assertTrue("discountDTO2 = " + discountDTO2,
@@ -120,7 +120,7 @@ public class DiscountServiceTest {
     @Test
     public void deleteDiscountByCodeTest(){
 
-        expect(discountService.getAllDiscounts()).andStubAnswer(new IAnswer<List<DiscountDTO>>() {
+        expect(discountService.getDiscounts()).andStubAnswer(new IAnswer<List<DiscountDTO>>() {
             @Override
             public List<DiscountDTO> answer() throws Throwable {
                 return new ArrayList<>();
@@ -133,7 +133,7 @@ public class DiscountServiceTest {
 
         discountService.deleteDiscountByCode(discountDTO1.getCode());
 
-        List<DiscountDTO> discountDTOS = discountService.getAllDiscounts();
+        List<DiscountDTO> discountDTOS = discountService.getDiscounts();
         assertTrue("list count = 0",
                 discountDTOS.size() == 0);
 

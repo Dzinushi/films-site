@@ -6,7 +6,6 @@ import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserRoleDTO;
 import com.mev.films.service.implement.UserServiceImpl;
 import com.mev.films.service.interfaces.UserService;
-import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.junit.Before;
 import org.junit.Test;
@@ -47,7 +46,7 @@ public class UserServiceTest {
     @Test
     public void getAllUsersTest(){
 
-        expect(userService.getAllUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
+        expect(userService.getUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
             @Override
             public List<UserDTO> answer() throws Throwable {
                 List<UserDTO> userDTOS = new ArrayList<>();
@@ -63,10 +62,39 @@ public class UserServiceTest {
         userService.addUser(userDTO1, userRoleDTO1);
         userService.addUser(userDTO2, userRoleDTO2);
 
-        List<UserDTO> userDTOS = userService.getAllUsers();
+        List<UserDTO> userDTOS = userService.getUsers();
         assertTrue("UserDTO1 = " + userDTO1,
                 userDTOS.get(0).equals(userDTO1));
         assertTrue("UserDTO2 = " + userDTO2,
+                userDTOS.get(1).equals(userDTO2));
+
+        verify(userMapperMock);
+        verify(userRoleMapperMock);
+    }
+
+    @Test
+    public void getUsersSortByLoginTest(){
+        expect(userService.getUsersSortByLogin()).andStubAnswer(new IAnswer<List<UserDTO>>() {
+            @Override
+            public List<UserDTO> answer() throws Throwable {
+                List<UserDTO> userDTOS = new ArrayList<>();
+                userDTOS.add(userDTO1);
+                userDTOS.add(userDTO2);
+
+                return userDTOS;
+            }
+        });
+
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
+
+        userService.addUser(userDTO2, userRoleDTO2);
+        userService.addUser(userDTO1, userRoleDTO1);
+
+        List<UserDTO> userDTOS = userService.getUsersSortByLogin();
+        assertTrue("userDTO1 = " + userDTO1.toString(),
+                userDTOS.get(0).equals(userDTO1));
+        assertTrue("userDTO2 = " + userDTO2.toString(),
                 userDTOS.get(1).equals(userDTO2));
 
         verify(userMapperMock);
@@ -214,7 +242,7 @@ public class UserServiceTest {
             }
         });
 
-        expect(userService.getAllUsers()).andStubAnswer(new IAnswer <List<UserDTO>>() {
+        expect(userService.getUsers()).andStubAnswer(new IAnswer <List<UserDTO>>() {
             @Override
             public List<UserDTO> answer() throws Throwable {
                 UserDTO userDTO = new UserDTO();
@@ -238,7 +266,7 @@ public class UserServiceTest {
 
         userService.updateUser(getUserDTO2);
 
-        List<UserDTO> userDTOS = userService.getAllUsers();
+        List<UserDTO> userDTOS = userService.getUsers();
         assertTrue("userDTO2 = " + getUserDTO2,
                 userDTOS.get(0).equals(getUserDTO2));
 
@@ -298,7 +326,7 @@ public class UserServiceTest {
             }
         });
 
-        expect(userService.getAllUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
+        expect(userService.getUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
             @Override
             public List<UserDTO> answer() throws Throwable {
                 return new ArrayList<>();
@@ -324,7 +352,7 @@ public class UserServiceTest {
         userService.deleteUser(getUserDTO1.getId());
         userService.deleteUser(getUserDTO2.getId());
 
-        List<UserDTO> usersAfterDelete = userService.getAllUsers();
+        List<UserDTO> usersAfterDelete = userService.getUsers();
         assertTrue("usersAll = " + usersAfterDelete.size(), usersAfterDelete.size() == 0);
 
         List<UserRoleDTO> userRolesAfterDelete = userService.getUserRoles();
@@ -347,7 +375,7 @@ public class UserServiceTest {
             }
         });
 
-        expect(userService.getAllUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
+        expect(userService.getUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
             @Override
             public List<UserDTO> answer() throws Throwable {
                 return new ArrayList<>();
@@ -373,7 +401,7 @@ public class UserServiceTest {
         userService.deleteUserByLogin(getUserDTO1.getLogin());
         userService.deleteUserByLogin(getUserDTO2.getLogin());
 
-        List<UserDTO> usersAfterDelete = userService.getAllUsers();
+        List<UserDTO> usersAfterDelete = userService.getUsers();
         assertTrue("usersAll = " + usersAfterDelete.size(), usersAfterDelete.size() == 0);
 
         List<UserRoleDTO> userRolesAfterDelete = userService.getUserRoles();

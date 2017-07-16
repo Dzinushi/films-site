@@ -70,7 +70,7 @@ public class BasketServiceTest {
     @Test
     public void getAllBasketsTest(){
 
-        expect(discountService.getAllDiscounts()).andStubAnswer(new IAnswer<List<DiscountDTO>>() {
+        expect(discountService.getDiscounts()).andStubAnswer(new IAnswer<List<DiscountDTO>>() {
             @Override
             public List<DiscountDTO> answer() throws Throwable {
                 List<DiscountDTO> discountDTOS = new ArrayList<>();
@@ -80,7 +80,7 @@ public class BasketServiceTest {
             }
         });
 
-        expect(filmService.getAllFilms()).andStubAnswer(new IAnswer<List<FilmDTO>>() {
+        expect(filmService.getFilms()).andStubAnswer(new IAnswer<List<FilmDTO>>() {
             @Override
             public List<FilmDTO> answer() throws Throwable {
                 List<FilmDTO> filmDTOS = new ArrayList<>();
@@ -90,7 +90,7 @@ public class BasketServiceTest {
             }
         });
 
-        expect(userService.getAllUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
+        expect(userService.getUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
             @Override
             public List<UserDTO> answer() throws Throwable {
                 List<UserDTO> userDTOS = new ArrayList<>();
@@ -100,7 +100,7 @@ public class BasketServiceTest {
             }
         });
 
-        expect(basketService.getAllBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
+        expect(basketService.getBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
             @Override
             public List<BasketDTO> answer() throws Throwable {
                 List<BasketDTO> basketDTOS = new ArrayList<>();
@@ -125,9 +125,9 @@ public class BasketServiceTest {
         userService.addUser(userDTO1, userRoleDTO1);
         userService.addUser(userDTO2, userRoleDTO2);
 
-        List<DiscountDTO> discountDTOS = discountService.getAllDiscounts();
-        List<FilmDTO> filmDTOS = filmService.getAllFilms();
-        List<UserDTO> userDTOS = userService.getAllUsers();
+        List<DiscountDTO> discountDTOS = discountService.getDiscounts();
+        List<FilmDTO> filmDTOS = filmService.getFilms();
+        List<UserDTO> userDTOS = userService.getUsers();
 
         BasketDTO basketDTO1 = new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
         BasketDTO basketDTO2 = new BasketDTO(2L, userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1));
@@ -135,7 +135,7 @@ public class BasketServiceTest {
         basketService.addBasket(basketDTO1);
         basketService.addBasket(basketDTO2);
 
-        List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+        List<BasketDTO> basketDTOS = basketService.getBaskets();
 
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
                 basketDTOS.get(0).equals(new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0))));
@@ -234,7 +234,7 @@ public class BasketServiceTest {
             }
         });
 
-        expect(basketService.getAllBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
+        expect(basketService.getBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
             @Override
             public List<BasketDTO> answer() throws Throwable {
                 List<BasketDTO> basketDTOS = new ArrayList<>();
@@ -260,7 +260,7 @@ public class BasketServiceTest {
         BasketDTO basketDTO1 = new BasketDTO(1L, userDTO, filmDTO, discountDTO);
 
         basketService.addBasket(basketDTO1);
-        List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+        List<BasketDTO> basketDTOS = basketService.getBaskets();
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
                 basketDTOS.get(0).equals(new BasketDTO(1L, userDTO, filmDTO, discountDTO)));
 
@@ -274,7 +274,7 @@ public class BasketServiceTest {
     @Test
     public void updateBasketTest(){
 
-        expect(discountService.getAllDiscounts()).andStubAnswer(new IAnswer<List<DiscountDTO>>() {
+        expect(discountService.getDiscounts()).andStubAnswer(new IAnswer<List<DiscountDTO>>() {
             @Override
             public List<DiscountDTO> answer() throws Throwable {
                 List<DiscountDTO> discountDTOS = new ArrayList<>();
@@ -284,7 +284,7 @@ public class BasketServiceTest {
             }
         });
 
-        expect(filmService.getAllFilms()).andStubAnswer(new IAnswer<List<FilmDTO>>() {
+        expect(filmService.getFilms()).andStubAnswer(new IAnswer<List<FilmDTO>>() {
             @Override
             public List<FilmDTO> answer() throws Throwable {
                 List<FilmDTO> filmDTOS = new ArrayList<>();
@@ -294,7 +294,7 @@ public class BasketServiceTest {
             }
         });
 
-        expect(userService.getAllUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
+        expect(userService.getUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
             @Override
             public List<UserDTO> answer() throws Throwable {
                 List<UserDTO> userDTOS = new ArrayList<>();
@@ -304,7 +304,7 @@ public class BasketServiceTest {
             }
         });
 
-        expect(basketService.getAllBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
+        expect(basketService.getBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
             @Override
             public List<BasketDTO> answer() throws Throwable {
                 List<BasketDTO> basketDTOS = new ArrayList<>();
@@ -338,14 +338,14 @@ public class BasketServiceTest {
         userService.addUser(userDTO1, userRoleDTO1);
         userService.addUser(userDTO2, userRoleDTO2);
 
-        List<DiscountDTO> discountDTOS = discountService.getAllDiscounts();
-        List<FilmDTO> filmDTOS = filmService.getAllFilms();
-        List<UserDTO> userDTOS = userService.getAllUsers();
+        List<DiscountDTO> discountDTOS = discountService.getDiscounts();
+        List<FilmDTO> filmDTOS = filmService.getFilms();
+        List<UserDTO> userDTOS = userService.getUsers();
 
         BasketDTO basketDTO1 = new BasketDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
         basketService.addBasket(basketDTO1);
 
-        List<BasketDTO> getBasketDTOS = basketService.getAllBaskets();
+        List<BasketDTO> getBasketDTOS = basketService.getBaskets();
         getBasketDTOS.get(0).setUserDTO(userDTOS.get(1));
         getBasketDTOS.get(0).setFilmDTO(filmDTOS.get(1));
         getBasketDTOS.get(0).setDiscountDTO(discountDTOS.get(1));
@@ -387,7 +387,7 @@ public class BasketServiceTest {
             }
         });
 
-        expect(basketService.getAllBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
+        expect(basketService.getBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
             @Override
             public List<BasketDTO> answer() throws Throwable {
                 return new ArrayList<>();
@@ -413,7 +413,7 @@ public class BasketServiceTest {
         basketService.addBasket(basketDTO1);
 
         basketService.deleteBasket(basketDTO1.getId());
-        List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+        List<BasketDTO> basketDTOS = basketService.getBaskets();
         assertTrue("count = 0", basketDTOS.size() == 0);
 
         verify(basketMapperMock);
@@ -447,7 +447,7 @@ public class BasketServiceTest {
             }
         });
 
-        expect(basketService.getAllBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
+        expect(basketService.getBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
             @Override
             public List<BasketDTO> answer() throws Throwable {
                 return new ArrayList<>();
@@ -473,7 +473,7 @@ public class BasketServiceTest {
         basketService.addBasket(basketDTO1);
 
         basketService.deleteBasketByUser(basketDTO1.getUserDTO().getId());
-        List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+        List<BasketDTO> basketDTOS = basketService.getBaskets();
         assertTrue("count = 0", basketDTOS.size() == 0);
 
         verify(basketMapperMock);
@@ -507,7 +507,7 @@ public class BasketServiceTest {
             }
         });
 
-        expect(basketService.getAllBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
+        expect(basketService.getBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
             @Override
             public List<BasketDTO> answer() throws Throwable {
                 return new ArrayList<>();
@@ -533,7 +533,7 @@ public class BasketServiceTest {
         basketService.addBasket(basketDTO1);
 
         basketService.deleteBasketByUserFilm(basketDTO1);
-        List<BasketDTO> basketDTOS = basketService.getAllBaskets();
+        List<BasketDTO> basketDTOS = basketService.getBaskets();
         assertTrue("count = 0", basketDTOS.size() == 0);
 
         verify(basketMapperMock);

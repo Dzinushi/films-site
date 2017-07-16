@@ -38,7 +38,7 @@ public class FilmServiceTest {
     @Test
     public void getAllFilmsTest(){
 
-        expect(filmService.getAllFilms()).andStubAnswer(new IAnswer<List<FilmDTO>>() {
+        expect(filmService.getFilms()).andStubAnswer(new IAnswer<List<FilmDTO>>() {
             @Override
             public List<FilmDTO> answer() throws Throwable {
                 List<FilmDTO> filmDTOS = new ArrayList<>();
@@ -53,7 +53,7 @@ public class FilmServiceTest {
         filmService.addFilm(filmDTO1);
         filmService.addFilm(filmDTO2);
 
-        List<FilmDTO> filmDTOS = filmService.getAllFilms();
+        List<FilmDTO> filmDTOS = filmService.getFilms();
 
         assertTrue("filmDTO1 = " + filmDTO1,
                 filmDTOS.get(0).equals(filmDTO1));
@@ -61,6 +61,31 @@ public class FilmServiceTest {
                 filmDTOS.get(1).equals(filmDTO2));
 
         verify(filmMapperMock);
+    }
+
+    @Test
+    public void getFilmsSortByNameTest(){
+        expect(filmService.getFilmsSortByName()).andStubAnswer(new IAnswer<List<FilmDTO>>() {
+            @Override
+            public List<FilmDTO> answer() throws Throwable {
+                List<FilmDTO> filmDTOS = new ArrayList<>();
+                filmDTOS.add(filmDTO2);
+                filmDTOS.add(filmDTO1);
+                return filmDTOS;
+            }
+        });
+
+        replay(filmMapperMock);
+
+        filmService.addFilm(filmDTO1);
+        filmService.addFilm(filmDTO2);
+
+        List<FilmDTO> filmDTOS = filmService.getFilmsSortByName();
+
+        assertTrue("filmDTO2 = " + filmDTO2.toString(),
+                filmDTOS.get(0).equals(filmDTO2));
+        assertTrue("filmDTO1 = " + filmDTO1.toString(),
+                filmDTOS.get(1).equals(filmDTO1));
     }
 
     @Test
@@ -174,7 +199,7 @@ public class FilmServiceTest {
     @Test
     public void deleteFilmByImageTest(){
 
-        expect(filmService.getAllFilms()).andStubAnswer(new IAnswer<List<FilmDTO>>() {
+        expect(filmService.getFilms()).andStubAnswer(new IAnswer<List<FilmDTO>>() {
             @Override
             public List<FilmDTO> answer() throws Throwable {
                 return new ArrayList<>();
@@ -186,7 +211,7 @@ public class FilmServiceTest {
         filmService.addFilm(filmDTO1);
 
         filmService.deleteFilmByImage(filmDTO1.getImage());
-        List<FilmDTO> filmDTOS = filmService.getAllFilms();
+        List<FilmDTO> filmDTOS = filmService.getFilms();
         assertTrue(filmDTOS.size() == 0);
 
         verify(filmMapperMock);
