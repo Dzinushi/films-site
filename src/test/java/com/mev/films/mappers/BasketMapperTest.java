@@ -62,7 +62,7 @@ public class BasketMapperTest {
     }
 
     @Test
-    public void getAllBasketsTest(){
+    public void selectAllBasketsTest(){
         discountMapper.insertDiscount(discountDTO1);
         discountMapper.insertDiscount(discountDTO2);
 
@@ -91,7 +91,7 @@ public class BasketMapperTest {
     }
 
     @Test
-    public void getBasketByUserTest() {
+    public void selectBasketByUserTest() {
         discountMapper.insertDiscount(discountDTO1);
         filmMapper.insertFilm(filmDTO1);
         userMapper.insertUser(userDTO1, userRoleDTO1);
@@ -109,7 +109,7 @@ public class BasketMapperTest {
     }
 
     @Test
-    public void addBasketTest(){
+    public void insertBasketTest(){
         discountMapper.insertDiscount(discountDTO1);
         filmMapper.insertFilm(filmDTO1);
         userMapper.insertUser(userDTO1, userRoleDTO1);
@@ -122,6 +122,8 @@ public class BasketMapperTest {
 
         basketMapper.insertBasket(basketDTO1);
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
+        assertTrue("count = 1",
+                basketDTOS.size() == 1);
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
                 basketDTOS.get(0).equals(new BasketDTO(1L, userDTO, filmDTO, discountDTO)));
     }

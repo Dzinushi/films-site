@@ -32,7 +32,7 @@ public class DiscountMapperTest {
     }
 
     @Test
-    public void getAllDiscountsTest(){
+    public void selectAllDiscountsTest(){
         discountMapper.insertDiscount(discountDTO1);
         discountMapper.insertDiscount(discountDTO2);
 
@@ -44,12 +44,14 @@ public class DiscountMapperTest {
     }
 
     @Test
-    public void addDiscountTest(){
+    public void insertDiscountTest(){
         discountMapper.insertDiscount(discountDTO1);
 
-        DiscountDTO discountDTO = discountMapper.selectDiscountByCode(discountDTO1.getCode());
+        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
+        assertTrue("count = 1",
+                discountDTOS.size() == 1);
         assertTrue("discountDTO1 = " + discountDTO1,
-                discountDTO.equals(discountDTO1));
+                discountDTOS.get(0).equals(discountDTO1));
     }
 
     @Test

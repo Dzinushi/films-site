@@ -32,7 +32,7 @@ public class FilmMapperTest {
     }
 
     @Test
-    public void getAllFilmsTest(){
+    public void selectAllFilmsTest(){
         filmMapper.insertFilm(filmDTO1);
         filmMapper.insertFilm(filmDTO2);
 
@@ -45,7 +45,20 @@ public class FilmMapperTest {
     }
 
     @Test
-    public void getFilmByNameTest(){
+    public void selectFilmsSortByName(){
+        filmMapper.insertFilm(filmDTO2);
+        filmMapper.insertFilm(filmDTO1);
+
+        List<FilmDTO> filmDTOS = filmMapper.selectFilmsSortByName();
+        assertTrue("filmDTO1 = " + filmDTO1.toString(),
+                filmDTOS.get(0).equals(filmDTO1));
+        assertTrue("filmDTO2 = " + filmDTO2.toString(),
+                filmDTOS.get(1).equals(filmDTO2));
+    }
+
+
+    @Test
+    public void selectFilmByNameTest(){
         filmMapper.insertFilm(filmDTO1);
 
         List<FilmDTO> filmDTOS = filmMapper.selectFilmsByName(filmDTO1.getName());
@@ -54,7 +67,7 @@ public class FilmMapperTest {
     }
 
     @Test
-    public void getFilmByImage(){
+    public void selectFilmByImageTest(){
         filmMapper.insertFilm(filmDTO1);
 
         FilmDTO filmDTO = filmMapper.selectFilmByImage(filmDTO1.getImage());
@@ -63,12 +76,14 @@ public class FilmMapperTest {
     }
 
     @Test
-    public void addFilmTest(){
+    public void insertFilmTest(){
         filmMapper.insertFilm(filmDTO2);
 
-        FilmDTO filmDTO = filmMapper.selectFilmByImage(filmDTO2.getImage());
+        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
+        assertTrue("count = 1",
+                filmDTOS.size() == 1);
         assertTrue("FilmDTO2 = " + filmDTO2,
-                filmDTO.equals(filmDTO2));
+                filmDTOS.get(0).equals(filmDTO2));
     }
 
     @Test

@@ -38,7 +38,7 @@ public class UserRoleServiceTest {
     }
 
     @Test
-    public void getUserRolesTest(){
+    public void selectUserRolesTest(){
 
         userMapper.insertUser(userDTO1, userRoleDTO1);
         userMapper.insertUser(userDTO2, userRoleDTO2);
@@ -52,7 +52,7 @@ public class UserRoleServiceTest {
     }
 
     @Test
-    public void getUserRoleTest(){
+    public void selectUserRoleTest(){
 
         userMapper.insertUser(userDTO1, userRoleDTO1);
         userMapper.insertUser(userDTO2, userRoleDTO2);

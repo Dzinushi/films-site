@@ -36,7 +36,7 @@ public class UserMappersTest {
     }
 
     @Test
-    public void getAllUsersTest(){
+    public void selectAllUsersTest(){
 
         userMapper.insertUser(userDTO1, userRoleDTO1);
         userMapper.insertUser(userDTO2, userRoleDTO2);
@@ -50,7 +50,40 @@ public class UserMappersTest {
     }
 
     @Test
-    public void getUserTest(){
+    public void selectUsersSortByLoginTest(){
+
+        userMapper.insertUser(userDTO2, userRoleDTO2);
+        userMapper.insertUser(userDTO1, userRoleDTO1);
+
+        List<UserDTO> userDTOS = userMapper.selectUsersSortByLogin();
+        assertTrue("userDTO2 = " + userDTO1.toString(),
+                userDTOS.get(0).equals(userDTO1));
+        assertTrue("userDTO1 = " + userDTO2.toString(),
+                userDTOS.get(1).equals(userDTO2));
+    }
+
+    @Test
+    public void selectUsersIdLogin(){
+
+        userMapper.insertUser(userDTO1, userRoleDTO1);
+        userMapper.insertUser(userDTO2, userRoleDTO2);
+
+        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
+        assertTrue("count = 2",
+                userDTOS.size() == 2);
+        assertTrue("login1 = " + userDTO1.getLogin(),
+                userDTOS.get(0).getLogin().equals(userDTO1.getLogin()));
+        assertTrue("password1 = null",
+                userDTOS.get(0).getPassword() == null);
+
+        assertTrue("login2 = " + userDTO2.getLogin(),
+                userDTOS.get(1).getLogin().equals(userDTO2.getLogin()));
+        assertTrue("password2 = null",
+                userDTOS.get(1).getPassword() == null);
+    }
+
+    @Test
+    public void selectUserTest(){
 
         userMapper.insertUser(userDTO1, userRoleDTO1);
         userMapper.insertUser(userDTO2, userRoleDTO2);
@@ -61,13 +94,13 @@ public class UserMappersTest {
     }
 
     @Test
-    public void addUserTest(){
+    public void insertUserTest(){
 
         userMapper.insertUser(userDTO1, userRoleDTO1);
 
-        UserDTO getUser3 = userMapper.selectUserByLogin(userDTO1.getLogin());
+        List<UserDTO> userDTOS = userMapper.selectUsers();
         assertTrue("UserDTO1 = " + userDTO1,
-                getUser3.equals(userDTO1));
+                userDTOS.get(0).equals(userDTO1));
     }
 
     @Test
