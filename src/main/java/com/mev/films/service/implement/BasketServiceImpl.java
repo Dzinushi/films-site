@@ -30,8 +30,8 @@ public class BasketServiceImpl implements BasketService{
     }
 
     @Override
-    public List<BasketDTO> getAllBaskets() {
-        LOG.debug("getAllBaskets");
+    public List<BasketDTO> getBaskets() {
+        LOG.debug("getBaskets");
 
         return basketMapper.selectBaskets();
     }
