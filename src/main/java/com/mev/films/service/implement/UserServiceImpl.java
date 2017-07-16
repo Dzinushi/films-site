@@ -32,10 +32,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<UserDTO> getAllUsers() {
-        LOG.debug("getAllUsers");
+    public List<UserDTO> getUsers() {
+        LOG.debug("getUsers");
 
         return userMapper.selectUsers();
+    }
+
+    @Override
+    public List<UserDTO> getUsersSortByLogin() {
+        LOG.debug("getUsersSortByLogin");
+
+        return userMapper.selectUsersSortByLogin();
     }
 
     @Override

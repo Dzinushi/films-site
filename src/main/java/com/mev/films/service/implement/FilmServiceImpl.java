@@ -28,10 +28,17 @@ public class FilmServiceImpl implements FilmService{
     }
 
     @Override
-    public List<FilmDTO> getAllFilms() {
-        LOG.debug("getAllFilms");
+    public List<FilmDTO> getFilms() {
+        LOG.debug("getFilms");
 
         return filmMapper.selectFilms();
+    }
+
+    @Override
+    public List<FilmDTO> getFilmsSortByName() {
+        LOG.debug("getFilmsSortByName");
+
+        return filmMapper.selectFilmsSortByName();
     }
 
     @Override

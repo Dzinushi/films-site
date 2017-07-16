@@ -6,7 +6,8 @@ import com.mev.films.model.FilmDTO;
 import java.util.List;
 
 public interface FilmService {
-    List<FilmDTO> getAllFilms();
+    List<FilmDTO> getFilms();
+    List<FilmDTO> getFilmsSortByName();
     List<FilmDTO> getFilmByName(String name);
     FilmDTO getFilmByImage(String image);
     void addFilm(FilmDTO filmDTO);
