@@ -35,6 +35,8 @@ public class PaymentMapperTest {
     private UserRoleDTO userRoleDTO1 = new UserRoleDTO("user1", "ROLE_USER");
     private UserRoleDTO userRoleDTO2 = new UserRoleDTO("user2", "ROLE_ADMIN");
 
+    private PaymentDTO paymentDTO1;
+    private PaymentDTO paymentDTO2;
 
     @Before
     public void setup(){
@@ -57,10 +59,7 @@ public class PaymentMapperTest {
         for (UserDTO userDTO : userDTOS){
             userMapper.deleteUser(userDTO.getId());
         }
-    }
 
-    @Test
-    public void selectPaymentsDTOTest(){
 
         discountMapper.insertDiscount(discountDTO1);
         discountMapper.insertDiscount(discountDTO2);
@@ -71,12 +70,17 @@ public class PaymentMapperTest {
         userMapper.insertUser(userDTO1, userRoleDTO1);
         userMapper.insertUser(userDTO2, userRoleDTO2);
 
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
+        discountDTOS = discountMapper.selectDiscounts();
+        filmDTOS = filmMapper.selectFilms();
+        userDTOS = userMapper.selectUsersIdLogin();
 
-        PaymentDTO paymentDTO1 = new PaymentDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), 1);
-        PaymentDTO paymentDTO2 = new PaymentDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1), 2);
+        paymentDTO1 = new PaymentDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), 1);
+        paymentDTO2 = new PaymentDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1), 2);
+
+    }
+
+    @Test
+    public void selectPaymentsDTOTest(){
 
         paymentMapper.insertPayment(paymentDTO1);
         paymentMapper.insertPayment(paymentDTO2);
@@ -91,26 +95,10 @@ public class PaymentMapperTest {
     @Test
     public void selectPaymentsDTOByUserTest(){
 
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-
-        PaymentDTO paymentDTO1 = new PaymentDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), 1);
-        PaymentDTO paymentDTO2 = new PaymentDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1), 2);
-
         paymentMapper.insertPayment(paymentDTO1);
         paymentMapper.insertPayment(paymentDTO2);
 
-        List<PaymentDTO> paymentDTOS = paymentMapper.selectPaymentsByUser(userDTOS.get(1).getId());
+        List<PaymentDTO> paymentDTOS = paymentMapper.selectPaymentsByUser(paymentDTO2.getUserDTO().getId());
 
         assertTrue("paymentDTO2 = " + paymentDTO2.toString(),
                 paymentDTOS.get(0).equals(paymentDTO2));
@@ -119,26 +107,10 @@ public class PaymentMapperTest {
     @Test
     public void selectPaymentsDTOByFilmTest(){
 
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-
-        PaymentDTO paymentDTO1 = new PaymentDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), 1);
-        PaymentDTO paymentDTO2 = new PaymentDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1), 2);
-
         paymentMapper.insertPayment(paymentDTO1);
         paymentMapper.insertPayment(paymentDTO2);
 
-        List<PaymentDTO> paymentDTOS = paymentMapper.selectPaymentsByFilm(filmDTOS.get(1).getId());
+        List<PaymentDTO> paymentDTOS = paymentMapper.selectPaymentsByFilm(paymentDTO2.getFilmDTO().getId());
 
         assertTrue("paymentDTO2 = " + paymentDTO2.toString(),
                 paymentDTOS.get(0).equals(paymentDTO2));
@@ -146,22 +118,6 @@ public class PaymentMapperTest {
 
     @Test
     public void selectPaymentDTOTest(){
-
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-
-        PaymentDTO paymentDTO1 = new PaymentDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), 1);
-        PaymentDTO paymentDTO2 = new PaymentDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1), 2);
 
         paymentMapper.insertPayment(paymentDTO1);
         paymentMapper.insertPayment(paymentDTO2);
@@ -177,20 +133,6 @@ public class PaymentMapperTest {
     @Test
     public void insertPaymentTest(){
 
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-
-        PaymentDTO paymentDTO1 = new PaymentDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), 1);
         paymentMapper.insertPayment(paymentDTO1);
 
         List<PaymentDTO> paymentDTOS = paymentMapper.selectPayments();
@@ -204,27 +146,13 @@ public class PaymentMapperTest {
     @Test
     public void updatePaymentTest(){
 
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-
-        PaymentDTO paymentDTO1 = new PaymentDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), 1);
         paymentMapper.insertPayment(paymentDTO1);
 
         List<PaymentDTO> paymentDTOS = paymentMapper.selectPayments();
-        paymentDTOS.get(0).setUserDTO(userDTOS.get(1));
-        paymentDTOS.get(0).setFilmDTO(filmDTOS.get(1));
-        paymentDTOS.get(0).setDiscountDTO(discountDTOS.get(1));
-        paymentDTOS.get(0).setCount(2);
+        paymentDTOS.get(0).setUserDTO(paymentDTO2.getUserDTO());
+        paymentDTOS.get(0).setFilmDTO(paymentDTO2.getFilmDTO());
+        paymentDTOS.get(0).setDiscountDTO(paymentDTO2.getDiscountDTO());
+        paymentDTOS.get(0).setCount(paymentDTO2.getCount());
 
         paymentMapper.updatePayment(paymentDTOS.get(0));
 
@@ -238,21 +166,6 @@ public class PaymentMapperTest {
 
     @Test
     public void deletePaymentTest(){
-
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-
-        PaymentDTO paymentDTO1 = new PaymentDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), 1);
 
         paymentMapper.insertPayment(paymentDTO1);
 
@@ -268,24 +181,9 @@ public class PaymentMapperTest {
     @Test
     public void deletePaymentByUserTest(){
 
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-
-        PaymentDTO paymentDTO1 = new PaymentDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), 1);
-
         paymentMapper.insertPayment(paymentDTO1);
 
-        paymentMapper.deletePaymentByUser(userDTOS.get(0).getId());
+        paymentMapper.deletePaymentByUser(paymentDTO1.getUserDTO().getId());
 
         List<PaymentDTO> paymentDTOS = paymentMapper.selectPayments();
 
@@ -296,24 +194,9 @@ public class PaymentMapperTest {
     @Test
     public void deletePaymentByFilmTest(){
 
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-
-        PaymentDTO paymentDTO1 = new PaymentDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), 1);
-
         paymentMapper.insertPayment(paymentDTO1);
 
-        paymentMapper.deletePaymentByFilm(filmDTOS.get(0).getId());
+        paymentMapper.deletePaymentByFilm(paymentDTO1.getFilmDTO().getId());
 
         List<PaymentDTO> paymentDTOS = paymentMapper.selectPayments();
 
