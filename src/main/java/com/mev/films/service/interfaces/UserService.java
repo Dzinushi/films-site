@@ -6,7 +6,8 @@ import com.mev.films.model.UserRoleDTO;
 import java.util.List;
 
 public interface UserService {
-    List<UserDTO> getAllUsers();
+    List<UserDTO> getUsers();
+    List<UserDTO> getUsersSortByLogin();
     UserDTO getUser(String login);
     List<UserRoleDTO> getUserRoles();
     UserRoleDTO getUserRole(Long id);
