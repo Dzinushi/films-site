@@ -18,9 +18,17 @@ public class FilmController {
 
     @RequestMapping(value = {"/api/films"}, method = RequestMethod.GET)
     public List<FilmDTO> getAllFilms(){
-        LOG.debug("getAllFilms");
+        LOG.debug("getFilms");
 
-        return filmService.getAllFilms();
+        return filmService.getFilms();
+    }
+
+
+    @RequestMapping(value = {"/api/films/sort/name"}, method = RequestMethod.GET)
+    public List<FilmDTO> getFilmsSortByName(){
+        LOG.debug("getFilmsSorByName");
+
+        return filmService.getFilmsSortByName();
     }
 
     @RequestMapping(value = {"/api/films/name"}, method = RequestMethod.GET)
