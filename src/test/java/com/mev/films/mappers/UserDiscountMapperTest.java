@@ -35,6 +35,9 @@ public class UserDiscountMapperTest {
     private DiscountDTO discountDTO1 = new DiscountDTO("code1");
     private DiscountDTO discountDTO2 = new DiscountDTO("code2");
 
+    private UserDiscountDTO userDiscountDTO1;
+    private UserDiscountDTO userDiscountDTO2;
+
     @Before
     public void setup(){
 
@@ -52,10 +55,7 @@ public class UserDiscountMapperTest {
         for (DiscountDTO discountDTO : discountDTOS){
             discountMapper.deleteDiscountByCode(discountDTO.getCode());
         }
-    }
 
-    @Test
-    public void selectUserDiscountsTest(){
 
         userMapper.insertUser(userDTO1, userRoleDTO1);
         userMapper.insertUser(userDTO2, userRoleDTO2);
@@ -63,11 +63,15 @@ public class UserDiscountMapperTest {
         discountMapper.insertDiscount(discountDTO1);
         discountMapper.insertDiscount(discountDTO2);
 
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
+        userDTOS = userMapper.selectUsersIdLogin();
+        discountDTOS = discountMapper.selectDiscounts();
 
-        UserDiscountDTO userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
-        UserDiscountDTO userDiscountDTO2 = new UserDiscountDTO(userDTOS.get(1), discountDTOS.get(1), false);
+        userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
+        userDiscountDTO2 = new UserDiscountDTO(userDTOS.get(1), discountDTOS.get(1), false);
+    }
+
+    @Test
+    public void selectUserDiscountsTest(){
 
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
         userDiscountMapper.insertUserDiscount(userDiscountDTO2);
@@ -81,18 +85,6 @@ public class UserDiscountMapperTest {
 
     @Test
     public void selectUserDiscountTest() {
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-
-        UserDiscountDTO userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
-        UserDiscountDTO userDiscountDTO2 = new UserDiscountDTO(userDTOS.get(1), discountDTOS.get(1), false);
 
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
         userDiscountMapper.insertUserDiscount(userDiscountDTO2);
@@ -108,18 +100,6 @@ public class UserDiscountMapperTest {
     @Test
     public void selectUserDiscountsByUserTest(){
 
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-
-        UserDiscountDTO userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
-        UserDiscountDTO userDiscountDTO2 = new UserDiscountDTO(userDTOS.get(1), discountDTOS.get(1), false);
-
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
         userDiscountMapper.insertUserDiscount(userDiscountDTO2);
 
@@ -133,18 +113,6 @@ public class UserDiscountMapperTest {
 
     @Test
     public void selectUserDiscountByDiscountTest(){
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-
-        UserDiscountDTO userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
-        UserDiscountDTO userDiscountDTO2 = new UserDiscountDTO(userDTOS.get(1), discountDTOS.get(1), false);
 
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
         userDiscountMapper.insertUserDiscount(userDiscountDTO2);
@@ -160,14 +128,6 @@ public class UserDiscountMapperTest {
     @Test
     public void insertUserDiscountTest(){
 
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-        discountMapper.insertDiscount(discountDTO2);
-
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-
-        UserDiscountDTO userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
-
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
 
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
@@ -180,23 +140,12 @@ public class UserDiscountMapperTest {
     @Test
     public void updateUserDiscountTest(){
 
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-
-        UserDiscountDTO userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
-
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
 
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
-        userDiscountDTOS.get(0).setUserDTO(userDTOS.get(1));
-        userDiscountDTOS.get(0).setDiscountDTO(discountDTOS.get(1));
-        userDiscountDTOS.get(0).setUsed(false);
+        userDiscountDTOS.get(0).setUserDTO(userDiscountDTO2.getUserDTO());
+        userDiscountDTOS.get(0).setDiscountDTO(userDiscountDTO2.getDiscountDTO());
+        userDiscountDTOS.get(0).setUsed(userDiscountDTO2.isUsed());
 
         userDiscountMapper.updateUserDiscount(userDiscountDTOS.get(0));
 
@@ -207,14 +156,6 @@ public class UserDiscountMapperTest {
 
     @Test
     public void deleteUserDiscountTest(){
-
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-        discountMapper.insertDiscount(discountDTO2);
-
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-
-        UserDiscountDTO userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
 
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
@@ -228,14 +169,6 @@ public class UserDiscountMapperTest {
     @Test
     public void deleteUserDiscountByDiscountTest(){
 
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-        discountMapper.insertDiscount(discountDTO2);
-
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-
-        UserDiscountDTO userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
-
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
         userDiscountMapper.deleteUserDiscountByDiscount(userDiscountDTOS.get(0).getDiscountDTO().getId());
@@ -247,14 +180,6 @@ public class UserDiscountMapperTest {
 
     @Test
     public void deleteUserDiscountByUser(){
-
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-        discountMapper.insertDiscount(discountDTO2);
-
-        List<UserDTO> userDTOS = userMapper.selectUsersIdLogin();
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-
-        UserDiscountDTO userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
 
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
