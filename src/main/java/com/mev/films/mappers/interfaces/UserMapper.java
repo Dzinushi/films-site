@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserMapper {
     List<UserDTO> selectUsers();
+    List<UserDTO> selectUsersIdLogin();
     List<UserDTO> selectUsersSortByLogin();
     UserDTO selectUserByLogin(String login);
     void insertUser(UserDTO userDTO, UserRoleDTO userRoleDTO);
