@@ -22,8 +22,6 @@
 
             u.id AS usr_id,
             u.login AS usr_login,
-            u.password AS usr_password,
-            u.enabled AS usr_enabled,
 
             f.id AS flm_id,
             f.name AS flm_name,
@@ -48,8 +46,6 @@
 
             u.id AS usr_id,
             u.login AS usr_login,
-            u.password AS usr_password,
-            u.enabled AS usr_enabled,
 
             f.id AS flm_id,
             f.name AS flm_name,

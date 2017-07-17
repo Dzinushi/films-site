@@ -55,6 +55,14 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
+    public PaymentDTO getPaymentByBasket(Long basketId) {
+        LOG.debug("getPaymentByBasket: basket_id = {}",
+                basketId);
+
+        return paymentMapper.selectPaymentByBasket(basketId);
+    }
+
+    @Override
     public PaymentDTO getPayment(Long id) {
         LOG.debug("getPayment: id = {}",
                 id);
@@ -69,7 +77,7 @@ public class PaymentServiceImpl implements PaymentService{
 
         // set code for insert payment as "used"
         UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(
-                paymentDTO.getDiscountDTO().getId());
+                paymentDTO.getBasketDTO().getDiscountDTO().getId());
 
         if (userDiscountDTO != null) {
             userDiscountDTO.setUsed(true);
@@ -85,17 +93,18 @@ public class PaymentServiceImpl implements PaymentService{
 
         PaymentDTO paymentDTOOld = paymentMapper.selectPayment(paymentDTO.getId());
 
-        if (!paymentDTO.getDiscountDTO().equals(paymentDTOOld.getDiscountDTO())) {
+        if (!paymentDTO.getBasketDTO().getDiscountDTO().equals(
+                paymentDTOOld.getBasketDTO().getDiscountDTO())) {
 
             // set old discount code as free
             UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscount(
-                    paymentDTOOld.getDiscountDTO().getId());
+                    paymentDTOOld.getBasketDTO().getDiscountDTO().getId());
             userDiscountDTO.setUsed(false);
             userDiscountMapper.updateUserDiscount(userDiscountDTO);
 
             // set new discount code as used
             userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(
-                    paymentDTO.getDiscountDTO().getId());
+                    paymentDTO.getBasketDTO().getDiscountDTO().getId());
             userDiscountDTO.setUsed(true);
 
             userDiscountMapper.updateUserDiscount(userDiscountDTO);
@@ -110,6 +119,11 @@ public class PaymentServiceImpl implements PaymentService{
                 id);
 
         paymentMapper.deletePayment(id);
+    }
+
+    @Override
+    public void deletePaymentByBasket(Long id) {
+
     }
 
     @Override

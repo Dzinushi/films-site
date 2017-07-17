@@ -75,7 +75,7 @@ public class BasketMapperTest {
 
         discountDTOS = discountMapper.selectDiscounts();
         filmDTOS = filmMapper.selectFilms();
-        userDTOS = userMapper.selectUsers();
+        userDTOS = userMapper.selectUsersIdLogin();
 
         basketDTO1 = new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
         basketDTO2 = new BasketDTO(2L, userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1));

@@ -39,6 +39,14 @@ public class PaymentController {
         return paymentService.getPaymentsByFilm(filmId);
     }
 
+    @RequestMapping(value = "/api/payment/basket", method = RequestMethod.GET)
+    public PaymentDTO getPaymentByBasket(@RequestParam Long basketId){
+        LOG.debug("getPaymentByBasket: basket_id = {}",
+                basketId);
+
+        return paymentService.getPaymentByBasket(basketId);
+    }
+
     @RequestMapping(value = "/api/payment", method = RequestMethod.GET)
     public PaymentDTO getPayment(@RequestParam Long id) {
         LOG.debug("getPayment: id = {}",
@@ -69,6 +77,14 @@ public class PaymentController {
                 id);
 
         paymentService.deletePayment(id);
+    }
+
+    @RequestMapping(value = "/api/payments/basket", method = RequestMethod.DELETE)
+    public void deletePaymentByBasket(@RequestParam Long basketId){
+        LOG.debug("deletePaymentByBasket: basket_id = {}",
+                basketId);
+
+        paymentService.deletePaymentByBasket(basketId);
     }
 
     @RequestMapping(value = "/api/payments/user", method = RequestMethod.DELETE)

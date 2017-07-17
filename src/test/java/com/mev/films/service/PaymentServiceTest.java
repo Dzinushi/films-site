@@ -40,6 +40,9 @@ public class PaymentServiceTest {
     private UserRoleDTO userRoleDTO1 = new UserRoleDTO("user1", "ROLE_USER");
     private UserRoleDTO userRoleDTO2 = new UserRoleDTO("user2", "ROLE_ADMIN");
 
+    private BasketDTO basketDTO1;
+    private BasketDTO basketDTO2;
+
     private PaymentDTO paymentDTO1;
     private PaymentDTO paymentDTO2;
 
@@ -64,8 +67,11 @@ public class PaymentServiceTest {
         filmDTO1.setId(1L);
         filmDTO2.setId(2L);
 
-        paymentDTO1 = new PaymentDTO(userDTO1, filmDTO1, discountDTO1, 1);
-        paymentDTO2 = new PaymentDTO(userDTO2, filmDTO2, discountDTO2, 2);
+        basketDTO1 = new BasketDTO(userDTO1, filmDTO1, discountDTO1);
+        basketDTO2 = new BasketDTO(userDTO2, filmDTO2, discountDTO2);
+
+        paymentDTO1 = new PaymentDTO(basketDTO1, 1);
+        paymentDTO2 = new PaymentDTO(basketDTO2, 2);
 
         paymentDTO1.setId(1L);
         paymentDTO2.setId(2L);
@@ -105,7 +111,7 @@ public class PaymentServiceTest {
     @Test
     public void getPaymentsByUserTest(){
 
-        expect(paymentService.getPaymentsByUser(paymentDTO2.getUserDTO().getId())).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
+        expect(paymentService.getPaymentsByUser(paymentDTO2.getBasketDTO().getUserDTO().getId())).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
             @Override
             public List<PaymentDTO> answer() throws Throwable {
                 List<PaymentDTO> paymentDTOS = new ArrayList<>();
@@ -120,7 +126,7 @@ public class PaymentServiceTest {
         paymentService.addPayment(paymentDTO1);
         paymentService.addPayment(paymentDTO2);
 
-        List<PaymentDTO> paymentDTOS = paymentService.getPaymentsByUser(paymentDTO2.getUserDTO().getId());
+        List<PaymentDTO> paymentDTOS = paymentService.getPaymentsByUser(paymentDTO2.getBasketDTO().getUserDTO().getId());
 
         assertTrue("paymentDTO2 = " + paymentDTO2.toString(),
                 paymentDTOS.get(0).equals(paymentDTO2));
@@ -132,7 +138,7 @@ public class PaymentServiceTest {
     @Test
     public void getPaymentsByFilmTest(){
 
-        expect(paymentService.getPaymentsByFilm(paymentDTO2.getFilmDTO().getId())).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
+        expect(paymentService.getPaymentsByFilm(paymentDTO2.getBasketDTO().getFilmDTO().getId())).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
             @Override
             public List<PaymentDTO> answer() throws Throwable {
                 List<PaymentDTO> paymentDTOS = new ArrayList<>();
@@ -147,10 +153,34 @@ public class PaymentServiceTest {
         paymentService.addPayment(paymentDTO1);
         paymentService.addPayment(paymentDTO2);
 
-        List<PaymentDTO> paymentDTOS = paymentService.getPaymentsByFilm(paymentDTO2.getFilmDTO().getId());
+        List<PaymentDTO> paymentDTOS = paymentService.getPaymentsByFilm(paymentDTO2.getBasketDTO().getFilmDTO().getId());
 
         assertTrue("paymentDTO2 = " + paymentDTO2.toString(),
                 paymentDTOS.get(0).equals(paymentDTO2));
+
+        verify(paymentMapperMock);
+        verify(userDiscountMapperMock);
+    }
+
+    @Test
+    public void getPaymentByBasketTest(){
+
+        expect(paymentService.getPaymentByBasket(paymentDTO1.getBasketDTO().getId())).andStubAnswer(new IAnswer<PaymentDTO>() {
+            @Override
+            public PaymentDTO answer() throws Throwable {
+                return paymentDTO1;
+            }
+        });
+
+        replay(paymentMapperMock);
+
+        paymentService.addPayment(paymentDTO1);
+        paymentService.addPayment(paymentDTO2);
+
+        PaymentDTO paymentDTO = paymentService.getPaymentByBasket(paymentDTO1.getBasketDTO().getId());
+
+        assertTrue("paymentDTO1 = " + paymentDTO1.toString(),
+                paymentDTO.equals(paymentDTO1));
 
         verify(paymentMapperMock);
         verify(userDiscountMapperMock);
@@ -234,9 +264,7 @@ public class PaymentServiceTest {
         paymentService.addPayment(paymentDTO1);
 
         List<PaymentDTO> paymentDTOS = paymentMapperMock.selectPayments();
-        paymentDTOS.get(0).setUserDTO(paymentDTO2.getUserDTO());
-        paymentDTOS.get(0).setFilmDTO(paymentDTO2.getFilmDTO());
-        paymentDTOS.get(0).setDiscountDTO(paymentDTO2.getDiscountDTO());
+        paymentDTOS.get(0).setBasketDTO(paymentDTO2.getBasketDTO());
         paymentDTOS.get(0).setCount(paymentDTO2.getCount());
 
         paymentService.updatePayment(paymentDTOS.get(0));
@@ -307,7 +335,7 @@ public class PaymentServiceTest {
         paymentService.addPayment(paymentDTO1);
 
         PaymentDTO paymentDTO = paymentService.getPayment(paymentDTO1.getId());
-        paymentService.deletePaymentByUser(paymentDTO.getUserDTO().getId());
+        paymentService.deletePaymentByUser(paymentDTO.getBasketDTO().getUserDTO().getId());
 
         List<PaymentDTO> paymentDTOS = paymentService.getPayments();
 
@@ -340,7 +368,7 @@ public class PaymentServiceTest {
         paymentService.addPayment(paymentDTO1);
 
         PaymentDTO paymentDTO = paymentService.getPayment(paymentDTO1.getId());
-        paymentService.deletePaymentByFilm(paymentDTO.getFilmDTO().getId());
+        paymentService.deletePaymentByFilm(paymentDTO.getBasketDTO().getFilmDTO().getId());
 
         List<PaymentDTO> paymentDTOS = paymentService.getPayments();
 

@@ -5,9 +5,7 @@ import java.sql.Timestamp;
 
 public class PaymentDTO {
     private Long id;
-    private UserDTO userDTO;
-    private FilmDTO filmDTO;
-    private DiscountDTO discountDTO;
+    private BasketDTO basketDTO;
     private int count;
     private Timestamp time;
 
@@ -16,10 +14,8 @@ public class PaymentDTO {
 
     }
 
-    public PaymentDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, int count){
-        this.userDTO = userDTO;
-        this.filmDTO = filmDTO;
-        this.discountDTO = discountDTO;
+    public PaymentDTO(BasketDTO basketDTO, int count){
+        this.basketDTO = basketDTO;
         this.count = count;
     }
 
@@ -31,28 +27,12 @@ public class PaymentDTO {
         this.id = id;
     }
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    public BasketDTO getBasketDTO() {
+        return basketDTO;
     }
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
-    }
-
-    public FilmDTO getFilmDTO() {
-        return filmDTO;
-    }
-
-    public void setFilmDTO(FilmDTO filmDTO) {
-        this.filmDTO = filmDTO;
-    }
-
-    public DiscountDTO getDiscountDTO() {
-        return discountDTO;
-    }
-
-    public void setDiscountDTO(DiscountDTO discountDTO) {
-        this.discountDTO = discountDTO;
+    public void setBasketDTO(BasketDTO basketDTO) {
+        this.basketDTO = basketDTO;
     }
 
     public int getCount() {
@@ -67,8 +47,14 @@ public class PaymentDTO {
         return time;
     }
 
-    public void setTime(Timestamp time) {
-        this.time = time;
+    @Override
+    public String toString() {
+        return "PaymentDTO{" +
+                "id=" + id +
+                ", basketDTO=" + basketDTO +
+                ", count=" + count +
+                ", time=" + time +
+                '}';
     }
 
     @Override
@@ -79,30 +65,13 @@ public class PaymentDTO {
         PaymentDTO that = (PaymentDTO) o;
 
         if (getCount() != that.getCount()) return false;
-        if (getUserDTO() != null ? !getUserDTO().equals(that.getUserDTO()) : that.getUserDTO() != null) return false;
-        if (getFilmDTO() != null ? !getFilmDTO().equals(that.getFilmDTO()) : that.getFilmDTO() != null) return false;
-        return getDiscountDTO() != null ? getDiscountDTO().equals(that.getDiscountDTO()) : that.getDiscountDTO() == null;
+        return getBasketDTO() != null ? getBasketDTO().equals(that.getBasketDTO()) : that.getBasketDTO() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getUserDTO() != null ? getUserDTO().hashCode() : 0);
-        result = 31 * result + (getFilmDTO() != null ? getFilmDTO().hashCode() : 0);
-        result = 31 * result + (getDiscountDTO() != null ? getDiscountDTO().hashCode() : 0);
+        int result = getBasketDTO() != null ? getBasketDTO().hashCode() : 0;
         result = 31 * result + getCount();
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "PaymentDTO{" +
-                "id=" + id +
-                ", userDTO=" + userDTO +
-                ", filmDTO=" + filmDTO +
-                ", discountDTO=" + discountDTO +
-                ", count=" + count +
-                ", time='" + time + '\'' +
-                '}';
     }
 }

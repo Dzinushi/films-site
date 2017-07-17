@@ -57,9 +57,7 @@ CREATE TABLE user_discounts(
 CREATE SEQUENCE payments_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
 CREATE TABLE payments(
   id BIGINT PRIMARY KEY DEFAULT nextval('payments_id_seq'::regclass),
-  user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
-  film_id BIGINT REFERENCES films(id) ON DELETE SET NULL,
-  discount_id BIGINT REFERENCES discounts(id) ON DELETE SET NULL,
+  basket_id BIGINT,
   count INT,
   time TIMESTAMP
 );
