@@ -2,9 +2,11 @@ package com.mev.films.service.implement;
 
 
 import com.mev.films.mappers.interfaces.BasketMapper;
+import com.mev.films.mappers.interfaces.UserDiscountMapper;
 import com.mev.films.mappers.interfaces.UserMapper;
 import com.mev.films.model.BasketDTO;
 import com.mev.films.model.UserDTO;
+import com.mev.films.model.UserDiscountDTO;
 import com.mev.films.service.interfaces.BasketService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,12 +23,14 @@ public class BasketServiceImpl implements BasketService{
     private static Logger LOG = LogManager.getLogger();
 
     @Autowired private BasketMapper basketMapper;
+    @Autowired private UserDiscountMapper userDiscountMapper;
 
     public BasketServiceImpl(){
     }
 
-    public BasketServiceImpl(BasketMapper basketMapper){
+    public BasketServiceImpl(BasketMapper basketMapper, UserDiscountMapper userDiscountMapper){
         this.basketMapper = basketMapper;
+        this.userDiscountMapper = userDiscountMapper;
     }
 
     @Override
@@ -34,6 +38,14 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("getBaskets");
 
         return basketMapper.selectBaskets();
+    }
+
+    @Override
+    public BasketDTO getBasket(Long id) {
+        LOG.debug("getBasket: id = {}",
+                id);
+
+        return basketMapper.selectBasket(id);
     }
 
     @Override
@@ -49,6 +61,14 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("addBasket: basketDTO = {}",
                 basketDTO);
 
+        if (basketDTO.getDiscountDTO() != null){
+            UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(basketDTO.getDiscountDTO().getId());
+
+            if (userDiscountDTO == null) {
+                userDiscountMapper.insertUserDiscount(new UserDiscountDTO(basketDTO.getUserDTO(), basketDTO.getDiscountDTO(), false));
+            }
+        }
+
         basketMapper.insertBasket(basketDTO);
     }
 
@@ -56,6 +76,18 @@ public class BasketServiceImpl implements BasketService{
     public void updateBasket(BasketDTO basketDTO) {
         LOG.debug("updateBasket: basketDTO = {}",
                 basketDTO);
+
+        if (basketDTO.getDiscountDTO() != null){
+            BasketDTO basketDTOOld = basketMapper.selectBasket(basketDTO.getId());
+
+            if (basketDTOOld != null) {
+                UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(basketDTOOld.getDiscountDTO().getId());
+
+                if (userDiscountDTO != null) {
+                    userDiscountMapper.updateUserDiscount(new UserDiscountDTO(basketDTO.getUserDTO(), basketDTO.getDiscountDTO(), false));
+                }
+            }
+        }
 
         basketMapper.updateBasket(basketDTO);
     }

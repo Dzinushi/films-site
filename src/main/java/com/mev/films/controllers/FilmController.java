@@ -17,12 +17,19 @@ public class FilmController {
     @Autowired private FilmService filmService;
 
     @RequestMapping(value = {"/api/films"}, method = RequestMethod.GET)
-    public List<FilmDTO> getAllFilms(){
+    public List<FilmDTO> getFilms(){
         LOG.debug("getFilms");
 
         return filmService.getFilms();
     }
 
+    @RequestMapping(value = "/api/film", method = RequestMethod.GET)
+    public FilmDTO getFilm(@RequestParam Long id){
+        LOG.debug("getFilm: id = {}",
+                id);
+
+        return filmService.getFilm(id);
+    }
 
     @RequestMapping(value = {"/api/films/sort/name"}, method = RequestMethod.GET)
     public List<FilmDTO> getFilmsSortByName(){

@@ -16,10 +16,18 @@ public class BasketController {
     @Autowired private BasketService basketService;
 
     @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.GET)
-    public List<BasketDTO> getAllBaskets() {
+    public List<BasketDTO> getBaskets() {
         LOG.debug("getBaskets");
 
         return basketService.getBaskets();
+    }
+
+    @RequestMapping(value = {"/api/basket"}, method = RequestMethod.GET)
+    public BasketDTO getBasket(@RequestParam Long id){
+        LOG.debug("getBasket: id = {}",
+                id);
+
+        return basketService.getBasket(id);
     }
 
     @RequestMapping(value = {"/api/baskets/user"}, method = RequestMethod.GET)

@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface DiscountMapper {
     List<DiscountDTO> selectDiscounts();
+    DiscountDTO selectDiscount(Long id);
     DiscountDTO selectDiscountByCode(String code);
     void insertDiscount(DiscountDTO discountDTO);
     void updateDiscount(DiscountDTO discountDTO);

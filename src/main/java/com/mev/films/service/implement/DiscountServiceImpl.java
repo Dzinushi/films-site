@@ -35,6 +35,14 @@ public class DiscountServiceImpl implements DiscountService{
     }
 
     @Override
+    public DiscountDTO getDiscount(Long id) {
+        LOG.debug("getDiscount: id = {}",
+                id);
+
+        return discountMapper.selectDiscount(id);
+    }
+
+    @Override
     public DiscountDTO getDiscountByCode(String code) {
         LOG.debug("getDiscountByCode: code = {}",
                 code);

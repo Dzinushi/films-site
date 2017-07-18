@@ -82,7 +82,7 @@ public class BasketMapperTest {
     }
 
     @Test
-    public void selectAllBasketsTest(){
+    public void selectBasketsTest(){
 
         basketMapper.insertBasket(basketDTO1);
         basketMapper.insertBasket(basketDTO2);
@@ -93,6 +93,17 @@ public class BasketMapperTest {
                 basketDTOS.get(0).equals(basketDTO1));
         assertTrue("basketDTO2 = " + basketDTO2.toString(),
                 basketDTOS.get(1).equals(basketDTO2));
+    }
+
+    @Test
+    public void selectBasketTest(){
+        basketMapper.insertBasket(basketDTO1);
+        basketMapper.insertBasket(basketDTO2);
+
+        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
+        BasketDTO basketDTO = basketMapper.selectBasket(basketDTOS.get(1).getId());
+        assertTrue("basketDTO2 = " + basketDTO2.toString(),
+                basketDTO.equals(basketDTOS.get(1)));
     }
 
     @Test

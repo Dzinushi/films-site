@@ -34,10 +34,13 @@ public class DiscountServiceTest {
     public void setup(){
         discountMapperMock = createNiceMock(DiscountMapper.class);
         discountService = new DiscountServiceImpl(discountMapperMock);
+
+        discountDTO1.setId(1L);
+        discountDTO2.setId(2L);
     }
 
     @Test
-    public void getAllDiscountsTest(){
+    public void getDiscountsTest(){
 
         expect(discountService.getDiscounts()).andStubAnswer(new IAnswer<List<DiscountDTO>>() {
             @Override
@@ -59,6 +62,28 @@ public class DiscountServiceTest {
                 discountDTOS.get(0).equals(discountDTO1));
         assertTrue("discountDTO2 = " + discountDTO2,
                 discountDTOS.get(1).equals(discountDTO2));
+
+        verify(discountMapperMock);
+    }
+
+    @Test
+    public void getDiscount(){
+
+        expect(discountService.getDiscount(discountDTO2.getId())).andStubAnswer(new IAnswer<DiscountDTO>() {
+            @Override
+            public DiscountDTO answer() throws Throwable {
+                return discountDTO2;
+            }
+        });
+
+        replay(discountMapperMock);
+
+        discountService.addDiscount(discountDTO1);
+        discountService.addDiscount(discountDTO2);
+
+        DiscountDTO discountDTO = discountService.getDiscount(discountDTO2.getId());
+        assertTrue("discountDTO2 = " + discountDTO2,
+                discountDTO.equals(discountDTO2));
 
         verify(discountMapperMock);
     }

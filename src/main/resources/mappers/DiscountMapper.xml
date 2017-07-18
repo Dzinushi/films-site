@@ -15,6 +15,13 @@
             discounts
     </select>
 
+    <select id="selectDiscount" parameterType="map" resultMap="discountDTO">
+        SELECT * FROM
+            discounts
+        WHERE
+            id = #{0}
+    </select>
+
     <select id="selectDiscountByCode" parameterType="map" resultMap="discountDTO">
         SELECT * FROM
             discounts

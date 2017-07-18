@@ -7,8 +7,9 @@ import java.util.List;
 
 public interface UserService {
     List<UserDTO> getUsers();
+    UserDTO getUser(Long id);
     List<UserDTO> getUsersSortByLogin();
-    UserDTO getUser(String login);
+    UserDTO getUserByLogin(String login);
     List<UserRoleDTO> getUserRoles();
     UserRoleDTO getUserRole(Long id);
     UserRoleDTO getUserRoleByLogin(String login);

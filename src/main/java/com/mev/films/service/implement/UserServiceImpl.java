@@ -39,6 +39,14 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public UserDTO getUser(Long id) {
+        LOG.debug("getUser: id = {}",
+                id);
+
+        return userMapper.selectUser(id);
+    }
+
+    @Override
     public List<UserDTO> getUsersSortByLogin() {
         LOG.debug("getUsersSortByLogin");
 
@@ -46,8 +54,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserDTO getUser(String login) {
-        LOG.debug("getUser: login = {}",
+    public UserDTO getUserByLogin(String login) {
+        LOG.debug("getUserByLogin: login = {}",
                 login);
 
         return userMapper.selectUserByLogin(login);

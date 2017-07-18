@@ -18,6 +18,13 @@
         SELECT * FROM films;
     </select>
 
+    <select id="selectFilm" parameterType="map" resultMap="filmDTO">
+        SELECT * FROM
+            films
+        WHERE
+            id = #{0}
+    </select>
+
     <select id="selectFilmsSortByName" parameterType="map" resultMap="filmDTO">
         SELECT * FROM films ORDER BY name;
     </select>

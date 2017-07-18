@@ -33,10 +33,13 @@ public class FilmServiceTest {
     public void setup(){
         filmMapperMock = createNiceMock(FilmMapper.class);
         filmService = new FilmServiceImpl(filmMapperMock);
+
+        filmDTO1.setId(1L);
+        filmDTO1.setId(2L);
     }
 
     @Test
-    public void getAllFilmsTest(){
+    public void getFilmsTest(){
 
         expect(filmService.getFilms()).andStubAnswer(new IAnswer<List<FilmDTO>>() {
             @Override
@@ -59,6 +62,29 @@ public class FilmServiceTest {
                 filmDTOS.get(0).equals(filmDTO1));
         assertTrue("filmDTO2 = " + filmDTO2,
                 filmDTOS.get(1).equals(filmDTO2));
+
+        verify(filmMapperMock);
+    }
+
+    @Test
+    public void getFilmTest(){
+
+        expect(filmService.getFilm(filmDTO2.getId())).andStubAnswer(new IAnswer<FilmDTO>() {
+            @Override
+            public FilmDTO answer() throws Throwable {
+                return filmDTO2;
+            }
+        });
+
+        replay(filmMapperMock);
+
+        filmService.addFilm(filmDTO1);
+        filmService.addFilm(filmDTO2);
+
+        FilmDTO filmDTO = filmService.getFilm(filmDTO2.getId());
+
+        assertTrue("filmDTO2 = " + filmDTO2,
+                filmDTO.equals(filmDTO2));
 
         verify(filmMapperMock);
     }

@@ -36,7 +36,7 @@ public class UserMappersTest {
     }
 
     @Test
-    public void selectAllUsersTest(){
+    public void selectUsersTest(){
 
         userMapper.insertUser(userDTO1, userRoleDTO1);
         userMapper.insertUser(userDTO2, userRoleDTO2);
@@ -47,6 +47,19 @@ public class UserMappersTest {
                 users.get(0).equals(userDTO1));
         assertTrue("UserDTO2 = " + users.get(1),
                 users.get(1).equals(userDTO2));
+    }
+
+    @Test
+    public void selectUserTest(){
+
+        userMapper.insertUser(userDTO1, userRoleDTO1);
+        userMapper.insertUser(userDTO2, userRoleDTO2);
+
+        List<UserDTO> users = userMapper.selectUsers();
+        UserDTO userDTO = userMapper.selectUser(users.get(1).getId());
+
+        assertTrue("UserDTO2 = " + users.get(1),
+                userDTO.equals(users.get(1)));
     }
 
     @Test
@@ -83,7 +96,7 @@ public class UserMappersTest {
     }
 
     @Test
-    public void selectUserTest(){
+    public void selectUserByLoginTest(){
 
         userMapper.insertUser(userDTO1, userRoleDTO1);
         userMapper.insertUser(userDTO2, userRoleDTO2);

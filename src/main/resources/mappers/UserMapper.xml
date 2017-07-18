@@ -16,6 +16,13 @@
         SELECT * FROM users;
     </select>
 
+    <select id="selectUser" parameterType="map" resultMap="userDTO">
+        SELECT * FROM
+            users
+        WHERE
+            id = #{0}
+    </select>
+
     <select id="selectUsersIdLogin" resultMap="userDTO">
         SELECT id,login FROM users;
     </select>

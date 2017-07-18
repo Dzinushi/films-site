@@ -40,6 +40,32 @@
             LEFT JOIN discounts AS d ON b.discount_id = d.id
     </select>
 
+    <select id="selectBasket" parameterType="map" resultMap="basketDTO">
+        SELECT
+            b.id AS id,
+
+            u.id AS usr_id,
+            u.login AS usr_login,
+
+            f.id AS flm_id,
+            f.name AS flm_name,
+            f.genre AS flm_genre,
+            f.price AS flm_price,
+            f.duration AS flm_duration,
+            f.image AS flm_image,
+
+            d.id AS dsc_id,
+            d.code AS dsc_code
+
+        FROM
+            baskets AS b
+            INNER JOIN users AS u ON b.user_id = u.id
+            INNER JOIN films AS f ON b.film_id = f.id
+            LEFT JOIN discounts AS d ON b.discount_id = d.id
+        WHERE
+            b.id = #{0}
+    </select>
+
     <select id="selectBasketByUser" parameterType="map" resultMap="basketDTO">
         SELECT
             b.id AS id,

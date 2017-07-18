@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface BasketService {
     List<BasketDTO> getBaskets();
+    BasketDTO getBasket(Long id);
     List<BasketDTO> getBasketByUser(Long id);
     void addBasket(BasketDTO basketDTO);
     void updateBasket(BasketDTO basketDTO);

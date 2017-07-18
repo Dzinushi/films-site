@@ -26,10 +26,18 @@ public class DiscountController {
     @Autowired private DiscountService discountService;
 
     @RequestMapping(value = {"/api/discounts"}, method = RequestMethod.GET)
-    public List<DiscountDTO> getAllDiscounts() {
+    public List<DiscountDTO> getDiscounts() {
         LOG.debug("getDiscounts");
 
         return discountService.getDiscounts();
+    }
+
+    @RequestMapping(value = "/api/discount", method = RequestMethod.GET)
+    public DiscountDTO getDiscount(@RequestParam Long id){
+        LOG.debug("getDiscount: id = {}",
+                id);
+
+        return discountService.getDiscount(id);
     }
 
     @RequestMapping(value = {"/api/discounts/code"}, method = RequestMethod.GET)

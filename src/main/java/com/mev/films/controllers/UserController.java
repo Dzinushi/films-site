@@ -7,7 +7,6 @@ import com.mev.films.service.interfaces.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,18 +18,26 @@ public class UserController {
     @Autowired private UserService userService;
 
     @RequestMapping(value = {"/api/users"}, method = RequestMethod.GET)
-    public List<UserDTO> getAllUsers() {
+    public List<UserDTO> getUsers() {
         LOG.debug("getUsers");
 
         return userService.getUsers();
     }
 
+    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
+    public UserDTO getUser(Long id){
+        LOG.debug("getUser: id = {}",
+                id);
+
+        return userService.getUser(id);
+    }
+
     @RequestMapping(value = {"/api/users/login"}, method = RequestMethod.GET)
-    public UserDTO getUser(@RequestParam String login) {
-        LOG.debug("getUser: login = {}",
+    public UserDTO getUserByLogin(@RequestParam String login) {
+        LOG.debug("getUserByLogin: login = {}",
                 login);
 
-        return userService.getUser(login);
+        return userService.getUserByLogin(login);
     }
 
     @RequestMapping(value = {"/api/users/roles"}, method = RequestMethod.GET)

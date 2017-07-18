@@ -41,10 +41,15 @@ public class UserServiceTest {
         userMapperMock = createNiceMock(UserMapper.class);
         userRoleMapperMock = createNiceMock(UserRoleMapper.class);
         userService = new UserServiceImpl(userMapperMock, userRoleMapperMock);
+
+        userDTO1.setId(1L);
+        userDTO2.setId(2L);
+        userRoleDTO1.setId(1L);
+        userRoleDTO2.setId(2L);
     }
 
     @Test
-    public void getAllUsersTest(){
+    public void getUsersTest(){
 
         expect(userService.getUsers()).andStubAnswer(new IAnswer<List<UserDTO>>() {
             @Override
@@ -67,6 +72,30 @@ public class UserServiceTest {
                 userDTOS.get(0).equals(userDTO1));
         assertTrue("UserDTO2 = " + userDTO2,
                 userDTOS.get(1).equals(userDTO2));
+
+        verify(userMapperMock);
+        verify(userRoleMapperMock);
+    }
+
+    @Test
+    public void getUserTest(){
+
+        expect(userService.getUser(userDTO2.getId())).andStubAnswer(new IAnswer<UserDTO>() {
+            @Override
+            public UserDTO answer() throws Throwable {
+                return userDTO2;
+            }
+        });
+
+        replay(userMapperMock);
+        replay(userRoleMapperMock);
+
+        userService.addUser(userDTO1, userRoleDTO1);
+        userService.addUser(userDTO2, userRoleDTO2);
+
+        UserDTO userDTO = userService.getUser(userDTO2.getId());
+        assertTrue("UserDTO2 = " + userDTO2,
+                userDTO.equals(userDTO2));
 
         verify(userMapperMock);
         verify(userRoleMapperMock);
@@ -102,9 +131,9 @@ public class UserServiceTest {
     }
 
     @Test
-    public void getUserTest(){
+    public void getUserByLoginTest(){
 
-        expect(userService.getUser(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+        expect(userService.getUserByLogin(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO2;
@@ -116,7 +145,7 @@ public class UserServiceTest {
 
         userService.addUser(userDTO2, userRoleDTO2);
 
-        UserDTO userDTO = userService.getUser(userDTO2.getLogin());
+        UserDTO userDTO = userService.getUserByLogin(userDTO2.getLogin());
         assertTrue("UserDTO2 = " + userDTO2,
                 userDTO.equals(userDTO2));
 
@@ -203,7 +232,7 @@ public class UserServiceTest {
     @Test
     public void addUserTest(){
 
-        expect(userService.getUser(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+        expect(userService.getUserByLogin(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO2;
@@ -223,7 +252,7 @@ public class UserServiceTest {
         userService.addUser(userDTO2, userRoleDTO2);
 
 
-        UserDTO userDTO = userService.getUser(userDTO2.getLogin());
+        UserDTO userDTO = userService.getUserByLogin(userDTO2.getLogin());
         assertTrue("userDTO2 = " + userDTO2,
                 userDTO.equals(userDTO2));
 
@@ -235,7 +264,7 @@ public class UserServiceTest {
     @Test
     public void updateUserTest(){
 
-        expect(userService.getUser(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+        expect(userService.getUserByLogin(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO2;
@@ -260,7 +289,7 @@ public class UserServiceTest {
 
         userService.addUser(userDTO2, userRoleDTO2);
 
-        UserDTO getUserDTO2 = userService.getUser(userDTO2.getLogin());
+        UserDTO getUserDTO2 = userService.getUserByLogin(userDTO2.getLogin());
         getUserDTO2.setPassword("user22");
         getUserDTO2.setEnabled((short) 2);
 
@@ -312,14 +341,14 @@ public class UserServiceTest {
     @Test
     public void deleteUserTest(){
 
-        expect(userService.getUser(userDTO1.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+        expect(userService.getUserByLogin(userDTO1.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO1;
             }
         });
 
-        expect(userService.getUser(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+        expect(userService.getUserByLogin(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO2;
@@ -346,8 +375,8 @@ public class UserServiceTest {
         userService.addUser(userDTO1, userRoleDTO1);
         userService.addUser(userDTO2, userRoleDTO2);
 
-        UserDTO getUserDTO1 = userService.getUser(userDTO1.getLogin());
-        UserDTO getUserDTO2 = userService.getUser(userDTO2.getLogin());
+        UserDTO getUserDTO1 = userService.getUserByLogin(userDTO1.getLogin());
+        UserDTO getUserDTO2 = userService.getUserByLogin(userDTO2.getLogin());
 
         userService.deleteUser(getUserDTO1.getId());
         userService.deleteUser(getUserDTO2.getId());
@@ -361,14 +390,14 @@ public class UserServiceTest {
 
     @Test
     public void deleteUserByLogin(){
-        expect(userService.getUser(userDTO1.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+        expect(userService.getUserByLogin(userDTO1.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO1;
             }
         });
 
-        expect(userService.getUser(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+        expect(userService.getUserByLogin(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO2;
@@ -395,8 +424,8 @@ public class UserServiceTest {
         userService.addUser(userDTO1, userRoleDTO1);
         userService.addUser(userDTO2, userRoleDTO2);
 
-        UserDTO getUserDTO1 = userService.getUser(userDTO1.getLogin());
-        UserDTO getUserDTO2 = userService.getUser(userDTO2.getLogin());
+        UserDTO getUserDTO1 = userService.getUserByLogin(userDTO1.getLogin());
+        UserDTO getUserDTO2 = userService.getUserByLogin(userDTO2.getLogin());
 
         userService.deleteUserByLogin(getUserDTO1.getLogin());
         userService.deleteUserByLogin(getUserDTO2.getLogin());

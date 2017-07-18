@@ -6,6 +6,7 @@ import java.util.List;
 
 public interface BasketMapper {
     List<BasketDTO> selectBaskets();
+    BasketDTO selectBasket(Long id);
     List<BasketDTO> selectBasketByUser(Long id);
     void insertBasket(BasketDTO basketDTO);
     void updateBasket(BasketDTO basketDTO);

@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface DiscountService {
     List<DiscountDTO> getDiscounts();
+    DiscountDTO getDiscount(Long id);
     DiscountDTO getDiscountByCode(String code);
     void addDiscount(DiscountDTO discountDTO);
     void updateDiscount(DiscountDTO discountDTO);

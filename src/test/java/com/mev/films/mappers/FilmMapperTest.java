@@ -32,7 +32,7 @@ public class FilmMapperTest {
     }
 
     @Test
-    public void selectAllFilmsTest(){
+    public void selectFilmsTest(){
         filmMapper.insertFilm(filmDTO1);
         filmMapper.insertFilm(filmDTO2);
 
@@ -42,6 +42,18 @@ public class FilmMapperTest {
                 filmDTOS.get(0).equals(filmDTO1));
         assertTrue("FilmDTO2 = " + filmDTO2,
                 filmDTOS.get(1).equals(filmDTO2));
+    }
+
+    @Test
+    public void selectFilmTest(){
+        filmMapper.insertFilm(filmDTO1);
+        filmMapper.insertFilm(filmDTO2);
+
+        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
+        FilmDTO filmDTO = filmMapper.selectFilm(filmDTOS.get(1).getId());
+
+        assertTrue("filmDTO2 = " + filmDTOS.get(1).toString(),
+                filmDTO.equals(filmDTOS.get(1)));
     }
 
     @Test

@@ -39,6 +39,7 @@ public class BasketServiceTest {
     @Autowired private UserRoleMapper userRoleMapperMock;
     @Autowired private FilmMapper filmMapperMock;
     @Autowired private DiscountMapper discountMapperMock;
+    @Autowired private UserDiscountMapper userDiscountMapperMock;
 
     private static UserDTO userDTO1 = new UserDTO("user1", "user1", (short) 1);
     private static UserDTO userDTO2 = new UserDTO("user2", "user2", (short) 1);
@@ -62,8 +63,9 @@ public class BasketServiceTest {
         userRoleMapperMock = createNiceMock(UserRoleMapper.class);
         filmMapperMock = createNiceMock(FilmMapper.class);
         discountMapperMock = createNiceMock(DiscountMapper.class);
+        userDiscountMapperMock = createNiceMock(UserDiscountMapper.class);
 
-        basketService = new BasketServiceImpl(basketMapperMock);
+        basketService = new BasketServiceImpl(basketMapperMock, userDiscountMapperMock);
         userService = new UserServiceImpl(userMapperMock, userRoleMapperMock);
         filmService = new FilmServiceImpl(filmMapperMock);
         discountService = new DiscountServiceImpl(discountMapperMock);
@@ -103,6 +105,7 @@ public class BasketServiceTest {
         replay(filmMapperMock);
         replay(userMapperMock);
         replay(userRoleMapperMock);
+        replay(userDiscountMapperMock);
 
         discountService.addDiscount(discountDTO1);
         discountService.addDiscount(discountDTO2);
@@ -122,7 +125,7 @@ public class BasketServiceTest {
     }
 
     @Test
-    public void getAllBasketsTest(){
+    public void getBasketsTest(){
 
         expect(basketService.getBaskets()).andStubAnswer(new IAnswer<List<BasketDTO>>() {
             @Override
@@ -145,6 +148,30 @@ public class BasketServiceTest {
                 basketDTOS.get(0).equals(basketDTO1));
         assertTrue("basketDTO2 = " + basketDTO2.toString(),
                 basketDTOS.get(1).equals(basketDTO2));
+
+        verify(basketMapperMock);
+        verify(discountMapperMock);
+        verify(filmMapperMock);
+        verify(userMapperMock);
+        verify(userRoleMapperMock);
+    }
+
+    @Test
+    public void getBasketTest(){
+
+        expect(basketService.getBasket(basketDTO2.getId())).andStubAnswer(new IAnswer<BasketDTO>() {
+            @Override
+            public BasketDTO answer() throws Throwable {
+                return basketDTO2;
+            }
+        });
+
+        replay(basketMapperMock);
+
+        basketService.addBasket(basketDTO1);
+        BasketDTO basketDTO = basketService.getBasket(basketDTO2.getId());
+        assertTrue("basketDTO2 = " + basketDTO2.toString(),
+                basketDTO.equals(basketDTO2));
 
         verify(basketMapperMock);
         verify(discountMapperMock);

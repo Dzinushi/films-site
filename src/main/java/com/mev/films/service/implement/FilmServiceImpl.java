@@ -2,6 +2,7 @@ package com.mev.films.service.implement;
 
 import com.mev.films.mappers.interfaces.FilmMapper;
 import com.mev.films.model.FilmDTO;
+import com.mev.films.model.UserDTO;
 import com.mev.films.service.interfaces.FilmService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,6 +33,14 @@ public class FilmServiceImpl implements FilmService{
         LOG.debug("getFilms");
 
         return filmMapper.selectFilms();
+    }
+
+    @Override
+    public FilmDTO getFilm(Long id) {
+        LOG.debug("getFilm: id = {}",
+                id);
+
+        return filmMapper.selectFilm(id);
     }
 
     @Override
