@@ -35,7 +35,13 @@ public class PaymentServiceImpl implements PaymentService{
     public List<PaymentDTO> getPayments() {
         LOG.debug("getPayments");
 
-        return paymentMapper.selectPayments();
+        List<PaymentDTO> paymentDTOS = paymentMapper.selectPayments();
+        if (paymentDTOS != null) {
+            for (PaymentDTO paymentDTO : paymentDTOS) {
+                BasketServiceImpl.priceByDiscount(paymentDTO.getBasketDTO());
+            }
+        }
+        return paymentDTOS;
     }
 
     @Override
@@ -43,7 +49,14 @@ public class PaymentServiceImpl implements PaymentService{
         LOG.debug("getPaymentsByUser: user_id = {}",
                 userId);
 
-        return paymentMapper.selectPaymentsByUser(userId);
+        List<PaymentDTO> paymentDTOS = paymentMapper.selectPaymentsByUser(userId);
+        if (paymentDTOS != null) {
+            for (PaymentDTO paymentDTO : paymentDTOS) {
+                BasketServiceImpl.priceByDiscount(paymentDTO.getBasketDTO());
+            }
+        }
+
+        return paymentDTOS;
     }
 
     @Override
@@ -51,7 +64,14 @@ public class PaymentServiceImpl implements PaymentService{
         LOG.debug("getPaymentsByFilm: film_id = {}",
                 filmId);
 
-        return paymentMapper.selectPaymentsByFilm(filmId);
+        List<PaymentDTO> paymentDTOS = paymentMapper.selectPaymentsByFilm(filmId);
+        if (paymentDTOS != null) {
+            for (PaymentDTO paymentDTO : paymentDTOS) {
+                BasketServiceImpl.priceByDiscount(paymentDTO.getBasketDTO());
+            }
+        }
+
+        return paymentDTOS;
     }
 
     @Override
@@ -59,7 +79,12 @@ public class PaymentServiceImpl implements PaymentService{
         LOG.debug("getPaymentByBasket: basket_id = {}",
                 basketId);
 
-        return paymentMapper.selectPaymentByBasket(basketId);
+        PaymentDTO paymentDTO = paymentMapper.selectPaymentByBasket(basketId);
+        if (paymentDTO != null) {
+            BasketServiceImpl.priceByDiscount(paymentDTO.getBasketDTO());
+        }
+
+        return paymentDTO;
     }
 
     @Override
@@ -67,7 +92,12 @@ public class PaymentServiceImpl implements PaymentService{
         LOG.debug("getPayment: id = {}",
                 id);
 
-        return paymentMapper.selectPayment(id);
+        PaymentDTO paymentDTO = paymentMapper.selectPaymentByBasket(id);
+        if (paymentDTO != null) {
+            BasketServiceImpl.priceByDiscount(paymentDTO.getBasketDTO());
+        }
+
+        return paymentDTO;
     }
 
     @Override
@@ -93,7 +123,8 @@ public class PaymentServiceImpl implements PaymentService{
 
         PaymentDTO paymentDTOOld = paymentMapper.selectPayment(paymentDTO.getId());
 
-        if (!paymentDTO.getBasketDTO().getDiscountDTO().equals(
+        if (paymentDTOOld != null &&
+                !paymentDTO.getBasketDTO().getDiscountDTO().equals(
                 paymentDTOOld.getBasketDTO().getDiscountDTO())) {
 
             // set old discount code as free

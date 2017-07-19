@@ -3,6 +3,7 @@ package com.mev.films.service;
 
 import com.mev.films.mappers.interfaces.*;
 import com.mev.films.model.*;
+import com.mev.films.service.implement.BasketServiceImpl;
 import com.mev.films.service.implement.PaymentServiceImpl;
 import com.mev.films.service.interfaces.*;
 import org.easymock.IAnswer;
@@ -28,11 +29,11 @@ public class PaymentServiceTest {
 
     @Autowired private PaymentService paymentService;
 
-    private DiscountDTO discountDTO1 = new DiscountDTO("code1");
-    private DiscountDTO discountDTO2 = new DiscountDTO("code2");
+    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
+    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
 
-    private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 100, 10, "url1");
-    private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 200, 20, "url2");
+    private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 100, 100, "url1");
+    private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 200, 200, "url2");
 
     private UserDTO userDTO1 = new UserDTO("user1", "password1", (short) 1);
     private UserDTO userDTO2 = new UserDTO("user2", "password2", (short) 2);
@@ -69,6 +70,9 @@ public class PaymentServiceTest {
 
         basketDTO1 = new BasketDTO(userDTO1, filmDTO1, discountDTO1);
         basketDTO2 = new BasketDTO(userDTO2, filmDTO2, discountDTO2);
+
+        BasketServiceImpl.priceByDiscount(basketDTO1);
+        BasketServiceImpl.priceByDiscount(basketDTO2);
 
         paymentDTO1 = new PaymentDTO(basketDTO1, 1);
         paymentDTO2 = new PaymentDTO(basketDTO2, 2);

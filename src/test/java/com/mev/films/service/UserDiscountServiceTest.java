@@ -35,8 +35,8 @@ public class UserDiscountServiceTest {
     private UserRoleDTO userRoleDTO1 = new UserRoleDTO("login1", "ROLE_ADMIN");
     private UserRoleDTO userRoleDTO2 = new UserRoleDTO("login2", "ROLE_USER");
 
-    private DiscountDTO discountDTO1 = new DiscountDTO("code1");
-    private DiscountDTO discountDTO2 = new DiscountDTO("code2");
+    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
+    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
 
     private UserDiscountDTO userDiscountDTO1;
     private UserDiscountDTO userDiscountDTO2;

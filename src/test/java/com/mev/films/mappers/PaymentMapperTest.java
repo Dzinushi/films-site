@@ -24,8 +24,8 @@ public class PaymentMapperTest {
     @Autowired private FilmMapper filmMapper;
     @Autowired private UserMapper userMapper;
 
-    private DiscountDTO discountDTO1 = new DiscountDTO("code1");
-    private DiscountDTO discountDTO2 = new DiscountDTO("code2");
+    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
+    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
 
     private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 100, 10, "url1");
     private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 200, 20, "url2");

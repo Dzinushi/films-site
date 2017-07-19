@@ -27,8 +27,8 @@ public class DiscountServiceTest {
     @Autowired private DiscountService discountService;
     @Autowired private DiscountMapper discountMapperMock;
 
-    private DiscountDTO discountDTO1 = new DiscountDTO("code1");
-    private DiscountDTO discountDTO2 = new DiscountDTO("code2");
+    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
+    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
 
     @Before
     public void setup(){
@@ -122,7 +122,7 @@ public class DiscountServiceTest {
         expect(discountService.getDiscountByCode("code22")).andStubAnswer(new IAnswer<DiscountDTO>() {
             @Override
             public DiscountDTO answer() throws Throwable {
-                return new DiscountDTO("code22");
+                return new DiscountDTO("code22", 0.2F);
             }
         });
 

@@ -20,8 +20,8 @@ public class DiscountMapperTest {
 
     @Autowired private DiscountMapper discountMapper;
 
-    private DiscountDTO discountDTO1 = new DiscountDTO("code1");
-    private DiscountDTO discountDTO2 = new DiscountDTO("code2");
+    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
+    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
 
     @Before
     public void setup(){

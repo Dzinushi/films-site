@@ -32,8 +32,8 @@ public class UserDiscountMapperTest {
     private UserRoleDTO userRoleDTO1 = new UserRoleDTO("user1", "ROLE_USER");
     private UserRoleDTO userRoleDTO2 = new UserRoleDTO("user2", "ROLE_ADMIN");
 
-    private DiscountDTO discountDTO1 = new DiscountDTO("code1");
-    private DiscountDTO discountDTO2 = new DiscountDTO("code2");
+    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
+    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
 
     private UserDiscountDTO userDiscountDTO1;
     private UserDiscountDTO userDiscountDTO2;

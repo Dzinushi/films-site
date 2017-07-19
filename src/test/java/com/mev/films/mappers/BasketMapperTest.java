@@ -34,8 +34,8 @@ public class BasketMapperTest {
     private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 100, 1, "imageUrl1");
     private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 200, 2, "imageUrl2");
 
-    private DiscountDTO discountDTO1 = new DiscountDTO("code1");
-    private DiscountDTO discountDTO2 = new DiscountDTO("code2");
+    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
+    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
 
     private BasketDTO basketDTO1;
     private BasketDTO basketDTO2;

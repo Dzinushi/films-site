@@ -11,4 +11,4 @@ INSERT INTO user_roles (login, role)
     VALUES ('ChEbUrEcHeCk', 'ROLE_BANNED');
 
 INSERT INTO user_roles (login, role)
-    VALUES ('Бурбонька', 'ROLE_USER');
+    VALUES ('Burbonka', 'ROLE_USER');

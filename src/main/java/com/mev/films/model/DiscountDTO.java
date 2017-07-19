@@ -3,12 +3,14 @@ package com.mev.films.model;
 public class DiscountDTO {
     private Long id;
     private String code;
+    private float value;
 
     public DiscountDTO(){
     }
 
-    public DiscountDTO(String code){
-        setCode(code);
+    public DiscountDTO(String code, float value){
+        this.code = code;
+        this.value = value;
     }
 
     public Long getId() {
@@ -25,6 +27,14 @@ public class DiscountDTO {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public float getValue() {
+        return value;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
     }
 
     @Override
@@ -49,6 +59,7 @@ public class DiscountDTO {
         return "DiscountDTO{" +
                 "id=" + id +
                 ", code='" + code + '\'' +
+                ", value=" + value +
                 '}';
     }
 }

@@ -47,11 +47,11 @@ public class BasketServiceTest {
     private static UserRoleDTO userRoleDTO1 = new UserRoleDTO("user1", "ROLE_USER");
     private static UserRoleDTO userRoleDTO2 = new UserRoleDTO("user2", "ROLE_ADMIN");
 
-    private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 100, 1, "imageUrl1");
-    private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 200, 2, "imageUrl2");
+    private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 100, 100, "imageUrl1");
+    private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 200, 200, "imageUrl2");
 
-    private DiscountDTO discountDTO1 = new DiscountDTO("code1");
-    private DiscountDTO discountDTO2 = new DiscountDTO("code2");
+    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
+    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
 
     private BasketDTO basketDTO1;
     private BasketDTO basketDTO2;
@@ -122,6 +122,9 @@ public class BasketServiceTest {
 
         basketDTO1 = new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
         basketDTO2 = new BasketDTO(2L, userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1));
+
+        BasketServiceImpl.priceByDiscount(basketDTO1);
+        BasketServiceImpl.priceByDiscount(basketDTO2);
     }
 
     @Test

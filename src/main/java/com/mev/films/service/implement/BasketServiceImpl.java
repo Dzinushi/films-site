@@ -3,9 +3,8 @@ package com.mev.films.service.implement;
 
 import com.mev.films.mappers.interfaces.BasketMapper;
 import com.mev.films.mappers.interfaces.UserDiscountMapper;
-import com.mev.films.mappers.interfaces.UserMapper;
 import com.mev.films.model.BasketDTO;
-import com.mev.films.model.UserDTO;
+import com.mev.films.model.FilmDTO;
 import com.mev.films.model.UserDiscountDTO;
 import com.mev.films.service.interfaces.BasketService;
 import org.apache.logging.log4j.LogManager;
@@ -33,11 +32,26 @@ public class BasketServiceImpl implements BasketService{
         this.userDiscountMapper = userDiscountMapper;
     }
 
+    public static void priceByDiscount(BasketDTO basketDTO){
+        if (basketDTO.getDiscountDTO() != null){
+            FilmDTO filmDTO = basketDTO.getFilmDTO();
+            float price_discount = filmDTO.getPrice() - ( filmDTO.getPrice() * basketDTO.getDiscountDTO().getValue() );
+            filmDTO.setPrice(Math.round(price_discount));
+        }
+    }
+
     @Override
     public List<BasketDTO> getBaskets() {
         LOG.debug("getBaskets");
 
-        return basketMapper.selectBaskets();
+        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
+        if (basketDTOS != null) {
+            for (BasketDTO basketDTO : basketDTOS) {
+                priceByDiscount(basketDTO);
+            }
+        }
+
+        return basketDTOS;
     }
 
     @Override
@@ -45,7 +59,12 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("getBasket: id = {}",
                 id);
 
-        return basketMapper.selectBasket(id);
+        BasketDTO basketDTO = basketMapper.selectBasket(id);
+        if (basketDTO != null) {
+            priceByDiscount(basketDTO);
+        }
+
+        return basketDTO;
     }
 
     @Override
@@ -53,7 +72,14 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("getBasketByUser: user_id = {}",
                 userId);
 
-        return basketMapper.selectBasketByUser(userId);
+        List<BasketDTO> basketDTOS = basketMapper.selectBasketByUser(userId);
+        if (basketDTOS != null) {
+            for (BasketDTO basketDTO : basketDTOS) {
+                priceByDiscount(basketDTO);
+            }
+        }
+
+        return basketDTOS;
     }
 
     @Override
