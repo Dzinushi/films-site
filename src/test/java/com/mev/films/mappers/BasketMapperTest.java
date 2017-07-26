@@ -1,9 +1,6 @@
 package com.mev.films.mappers;
 
-import com.mev.films.mappers.interfaces.BasketMapper;
-import com.mev.films.mappers.interfaces.DiscountMapper;
-import com.mev.films.mappers.interfaces.FilmMapper;
-import com.mev.films.mappers.interfaces.UserMapper;
+import com.mev.films.mappers.interfaces.*;
 import com.mev.films.model.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,20 +19,13 @@ public class BasketMapperTest {
 
     @Autowired private BasketMapper basketMapper;
     @Autowired private UserMapper userMapper;
-    @Autowired private FilmMapper filmMapper;
-    @Autowired private DiscountMapper discountMapper;
+    @Autowired private UserRoleMapper userRoleMapper;
 
     private static UserDTO userDTO1 = new UserDTO("user1", "user1", (short) 1);
     private static UserDTO userDTO2 = new UserDTO("user2", "user2", (short) 1);
 
     private static UserRoleDTO userRoleDTO1 = new UserRoleDTO("user1", "ROLE_USER");
     private static UserRoleDTO userRoleDTO2 = new UserRoleDTO("user2", "ROLE_ADMIN");
-
-    private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 100, 1, "imageUrl1");
-    private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 200, 2, "imageUrl2");
-
-    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
-    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
 
     private BasketDTO basketDTO1;
     private BasketDTO basketDTO2;
@@ -45,17 +35,7 @@ public class BasketMapperTest {
 
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
         for (BasketDTO basketDTO : basketDTOS){
-            basketMapper.deleteBasketByUserFilm(basketDTO);
-        }
-
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        for (DiscountDTO discountDTO : discountDTOS){
-            discountMapper.deleteDiscountByCode(discountDTO.getCode());
-        }
-
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
-        for (FilmDTO filmDTO : filmDTOS){
-            filmMapper.deleteFilmByImage(filmDTO.getImage());
+            basketMapper.deleteBasket(basketDTO.getId());
         }
 
         List<UserDTO> userDTOS = userMapper.selectUsers();
@@ -63,22 +43,16 @@ public class BasketMapperTest {
             userMapper.deleteUser(userDTO.getId());
         }
 
+        userMapper.insertUser(userDTO1);
+        userMapper.insertUser(userDTO2);
 
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
+        userRoleMapper.insertUserRole(userRoleDTO1);
+        userRoleMapper.insertUserRole(userRoleDTO2);
 
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
-
-        discountDTOS = discountMapper.selectDiscounts();
-        filmDTOS = filmMapper.selectFilms();
         userDTOS = userMapper.selectUsersIdLogin();
 
-        basketDTO1 = new BasketDTO(1L, userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0));
-        basketDTO2 = new BasketDTO(2L, userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1));
+        basketDTO1 = new BasketDTO(userDTOS.get(0));
+        basketDTO2 = new BasketDTO(userDTOS.get(1));
     }
 
     @Test
@@ -88,7 +62,8 @@ public class BasketMapperTest {
         basketMapper.insertBasket(basketDTO2);
 
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
-
+        assertTrue("count = 2",
+                basketDTOS.size() == 2);
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
                 basketDTOS.get(0).equals(basketDTO1));
         assertTrue("basketDTO2 = " + basketDTO2.toString(),
@@ -110,74 +85,111 @@ public class BasketMapperTest {
     public void selectBasketByUserTest() {
 
         basketMapper.insertBasket(basketDTO1);
+        basketMapper.insertBasket(basketDTO2);
 
-        List<BasketDTO> basketDTOS = basketMapper.selectBasketByUser(basketDTO1.getUserDTO().getId());
+        BasketDTO basketDTO = basketMapper.selectBasketByUser(basketDTO1.getUserDTO().getId());
 
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
-                basketDTOS.get(0).equals(basketDTO1));
+                basketDTO.equals(basketDTO1));
     }
 
     @Test
     public void insertBasketTest(){
 
         basketMapper.insertBasket(basketDTO1);
+
         List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
         assertTrue("count = 1",
                 basketDTOS.size() == 1);
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
                 basketDTOS.get(0).equals(basketDTO1));
-    }
 
-    @Test
-    public void updateBasketTest(){
+        basketMapper.insertBasket(basketDTO2);
 
-        basketMapper.insertBasket(basketDTO1);
-
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
-        basketDTOS.get(0).setUserDTO(basketDTO2.getUserDTO());
-        basketDTOS.get(0).setFilmDTO(basketDTO2.getFilmDTO());
-        basketDTOS.get(0).setDiscountDTO(basketDTO2.getDiscountDTO());
-
-        basketMapper.updateBasket(basketDTOS.get(0));
         basketDTOS = basketMapper.selectBaskets();
-
+        assertTrue("count = 2",
+                basketDTOS.size() == 2);
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
-                basketDTOS.get(0).equals(basketDTO2));
+                basketDTOS.get(0).equals(basketDTO1));
+        assertTrue("basketDTO2 = " + basketDTO2.toString(),
+                basketDTOS.get(1).equals(basketDTO2));
     }
 
     @Test
     public void deleteBasketTest(){
 
+        // insert 1 delete 1
         basketMapper.insertBasket(basketDTO1);
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
-        assertTrue("count = 1", basketDTOS.size() == 1);
 
+        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
         basketMapper.deleteBasket(basketDTOS.get(0).getId());
+
         basketDTOS = basketMapper.selectBaskets();
-        assertTrue("count = 0", basketDTOS.size() == 0);
+        assertTrue("count = 0",
+                basketDTOS.size() == 0);
+
+        // insert 2 delete 2
+        basketMapper.insertBasket(basketDTO1);
+        basketMapper.insertBasket(basketDTO2);
+
+        basketDTOS = basketMapper.selectBaskets();
+        basketMapper.deleteBasket(basketDTOS.get(0).getId());
+        basketMapper.deleteBasket(basketDTOS.get(1).getId());
+
+        basketDTOS = basketMapper.selectBaskets();
+        assertTrue("count = 0",
+                basketDTOS.size() == 0);
+
+        // insert 2 delete 1
+        basketMapper.insertBasket(basketDTO1);
+        basketMapper.insertBasket(basketDTO2);
+
+        basketDTOS = basketMapper.selectBaskets();
+        basketMapper.deleteBasket(basketDTOS.get(0).getId());
+
+        basketDTOS = basketMapper.selectBaskets();
+        assertTrue("count = 1",
+                basketDTOS.size() == 1);
+        assertTrue("basketDTO2 = " + basketDTO2.toString(),
+                basketDTOS.get(0).equals(basketDTO2));
     }
 
     @Test
     public void deleteBasketByUserTest(){
 
+        // insert 1 delete 1
         basketMapper.insertBasket(basketDTO1);
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
-        assertTrue("count = 1", basketDTOS.size() == 1);
 
+        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
         basketMapper.deleteBasketByUser(basketDTOS.get(0).getUserDTO().getId());
+
         basketDTOS = basketMapper.selectBaskets();
-        assertTrue("count = 0", basketDTOS.size() == 0);
-    }
+        assertTrue("count = 0",
+                basketDTOS.size() == 0);
 
-    @Test
-    public void deleteBasketByUserFilmTest(){
-
+        // insert 2 delete 2
         basketMapper.insertBasket(basketDTO1);
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
-        assertTrue("count = 1", basketDTOS.size() == 1);
+        basketMapper.insertBasket(basketDTO2);
 
-        basketMapper.deleteBasketByUserFilm(basketDTOS.get(0));
         basketDTOS = basketMapper.selectBaskets();
-        assertTrue("count = 0", basketDTOS.size() == 0);
+        basketMapper.deleteBasketByUser(basketDTOS.get(0).getUserDTO().getId());
+        basketMapper.deleteBasketByUser(basketDTOS.get(1).getUserDTO().getId());
+
+        basketDTOS = basketMapper.selectBaskets();
+        assertTrue("count = 0",
+                basketDTOS.size() == 0);
+
+        // insert 2 delete 1
+        basketMapper.insertBasket(basketDTO1);
+        basketMapper.insertBasket(basketDTO2);
+
+        basketDTOS = basketMapper.selectBaskets();
+        basketMapper.deleteBasketByUser(basketDTOS.get(0).getUserDTO().getId());
+
+        basketDTOS = basketMapper.selectBaskets();
+        assertTrue("count = 1",
+                basketDTOS.size() == 1);
+        assertTrue("basketDTO2 = " + basketDTO2.toString(),
+                basketDTOS.get(0).equals(basketDTO2));
     }
 }

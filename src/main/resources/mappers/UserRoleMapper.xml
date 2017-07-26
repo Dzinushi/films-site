@@ -9,6 +9,7 @@
         <id property="id" column="id"/>
         <result property="login" column="login"/>
         <result property="role" column="role"/>
+        <result property="time" column="time"/>
     </resultMap>
 
     <select id="selectUserRoles" resultMap="userRoleDTO">
@@ -18,21 +19,29 @@
 
     <select id="selectUserRole" parameterType="map" resultMap="userRoleDTO">
         SELECT * FROM
-        user_roles
+            user_roles
         WHERE id = #{0}
     </select>
 
     <select id="selectUserRoleByLogin" parameterType="map" resultMap="userRoleDTO">
         SELECT * FROM
             user_roles
-        WHERE login = #{0}
+        WHERE
+            login = #{0}
     </select>
+
+    <insert id="insertUserRole" parameterType="com.mev.films.model.UserRoleDTO">
+        INSERT INTO
+            user_roles (login, role, time)
+                VALUES (#{login}, #{role}, clock_timestamp())
+    </insert>
 
     <update id="updateUserRole" parameterType="com.mev.films.model.UserRoleDTO">
         UPDATE
             user_roles
         SET
-            role = #{role}
+            role = #{role},
+            time = clock_timestamp()
         WHERE
             id = #{id}
     </update>

@@ -3,5 +3,6 @@ CREATE TABLE users (
   id BIGINT PRIMARY KEY NOT NULL DEFAULT nextval('users_id_seq'::regclass),
   login VARCHAR(16) UNIQUE NOT NULL,
   password VARCHAR(64) NOT NULL,
-  enabled SMALLINT NOT NULL DEFAULT 1
+  enabled SMALLINT NOT NULL DEFAULT 1,
+  time TIMESTAMP
 );

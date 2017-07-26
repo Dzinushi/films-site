@@ -11,4 +11,5 @@ public interface DiscountMapper {
     void insertDiscount(DiscountDTO discountDTO);
     void updateDiscount(DiscountDTO discountDTO);
     void deleteDiscountByCode(String code);
+    void deleteDiscount(Long id);
 }

@@ -1,16 +1,19 @@
 package com.mev.films.model;
 
+import java.sql.Timestamp;
+
 public class UserDiscountDTO {
     private Long id;
     private UserDTO userDTO;
     private DiscountDTO discountDTO;
-    private boolean used;
+    private Boolean used;
+    private Timestamp time;
 
     public UserDiscountDTO(){
 
     }
 
-    public UserDiscountDTO(UserDTO userDTO, DiscountDTO discountDTO, boolean used){
+    public UserDiscountDTO(UserDTO userDTO, DiscountDTO discountDTO, Boolean used){
         setUserDTO(userDTO);
         setDiscountDTO(discountDTO);
         setUsed(used);
@@ -40,11 +43,11 @@ public class UserDiscountDTO {
         this.discountDTO = discountDTO;
     }
 
-    public boolean isUsed() {
+    public Boolean isUsed() {
         return used;
     }
 
-    public void setUsed(boolean used) {
+    public void setUsed(Boolean used) {
         this.used = used;
     }
 

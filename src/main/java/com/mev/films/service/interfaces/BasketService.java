@@ -8,10 +8,8 @@ import java.util.List;
 public interface BasketService {
     List<BasketDTO> getBaskets();
     BasketDTO getBasket(Long id);
-    List<BasketDTO> getBasketByUser(Long id);
+    BasketDTO getBasketByUser(Long userId);
     void addBasket(BasketDTO basketDTO);
-    void updateBasket(BasketDTO basketDTO);
     void deleteBasket(Long id);
     void deleteBasketByUser(Long id);
-    void deleteBasketByUserFilm(BasketDTO basketDTO);
 }

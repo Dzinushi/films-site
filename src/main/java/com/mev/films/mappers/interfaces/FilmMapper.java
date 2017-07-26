@@ -12,5 +12,6 @@ public interface FilmMapper {
     FilmDTO selectFilmByImage(String image);
     void insertFilm(FilmDTO filmDTO);
     void updateFilm(FilmDTO filmDTO);
+    void deleteFilm(Long id);
     void deleteFilmByImage(String image);
 }

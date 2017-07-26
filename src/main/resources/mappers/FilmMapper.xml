@@ -12,6 +12,7 @@
         <result property="duration" column="duration"/>
         <result property="price" column="price"/>
         <result property="image" column="image"/>
+        <result property="time" column="time"/>
     </resultMap>
 
     <select id="selectFilms" resultMap="filmDTO">
@@ -38,13 +39,14 @@
     <select id="selectFilmByImage" parameterType="map" resultMap="filmDTO">
         SELECT * FROM
             films
-        WHERE image = #{0}
+        WHERE
+            image = #{0}
     </select>
 
     <insert id="insertFilm" parameterType="com.mev.films.model.FilmDTO">
         INSERT INTO
-            films (name, genre, duration, price, image)
-        VALUES (#{name}, #{genre}, #{duration}, #{price}, #{image})
+            films (name, genre, duration, price, image, time)
+        VALUES (#{name}, #{genre}, #{duration}, #{price}, #{image}, clock_timestamp())
     </insert>
 
     <update id="updateFilm" parameterType="com.mev.films.model.FilmDTO">
@@ -55,10 +57,18 @@
             genre = #{genre},
             duration = #{duration},
             price = #{price},
-            image = #{image}
+            image = #{image},
+            time = clock_timestamp()
         WHERE
             id = #{id}
     </update>
+
+    <delete id="deleteFilm" parameterMap="map">
+        DELETE FROM
+            films
+        WHERE
+            id = #{0}
+    </delete>
 
     <delete id="deleteFilmByImage" parameterType="map">
         DELETE FROM

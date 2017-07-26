@@ -8,6 +8,7 @@
     <resultMap id="userDiscountDTO" type="com.mev.films.model.UserDiscountDTO">
         <id property="id" column="id"/>
         <result property="used" column="used"/>
+        <result property="time" column="time"/>
         <association property="userDTO" resultMap="com.mev.films.mappers.interfaces.UserMapper.userDTO" columnPrefix="usr_"/>
         <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO" columnPrefix="dsc_"/>
     </resultMap>
@@ -88,8 +89,8 @@
 
     <insert id="insertUserDiscount" parameterType="com.mev.films.model.UserDiscountDTO">
         INSERT INTO
-            user_discounts (user_id, discount_id, used)
-        VALUES (#{userDTO.id}, #{discountDTO.id}, #{used})
+            user_discounts (user_id, discount_id, used, time)
+        VALUES (#{userDTO.id}, #{discountDTO.id}, #{used}, clock_timestamp())
     </insert>
 
     <update id="updateUserDiscount" parameterType="com.mev.films.model.UserDiscountDTO">
@@ -98,7 +99,8 @@
         SET
             used = #{used},
             user_id = #{userDTO.id},
-            discount_id = #{discountDTO.id}
+            discount_id = #{discountDTO.id},
+            time = clock_timestamp()
     </update>
 
     <delete id="deleteUserDiscount" parameterType="map">

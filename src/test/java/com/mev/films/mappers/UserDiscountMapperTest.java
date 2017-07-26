@@ -3,6 +3,7 @@ package com.mev.films.mappers;
 import com.mev.films.mappers.interfaces.DiscountMapper;
 import com.mev.films.mappers.interfaces.UserDiscountMapper;
 import com.mev.films.mappers.interfaces.UserMapper;
+import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.DiscountDTO;
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserDiscountDTO;
@@ -29,14 +30,13 @@ public class UserDiscountMapperTest {
     private UserDTO userDTO1 = new UserDTO("user1", "password1", (short) 0);
     private UserDTO userDTO2 = new UserDTO("user2", "password2", (short) 1);
 
-    private UserRoleDTO userRoleDTO1 = new UserRoleDTO("user1", "ROLE_USER");
-    private UserRoleDTO userRoleDTO2 = new UserRoleDTO("user2", "ROLE_ADMIN");
-
     private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
     private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
+    private DiscountDTO discountDTO3 = new DiscountDTO("code3", 0.18F);
 
     private UserDiscountDTO userDiscountDTO1;
     private UserDiscountDTO userDiscountDTO2;
+    private UserDiscountDTO userDiscountDTO3;
 
     @Before
     public void setup(){
@@ -57,8 +57,8 @@ public class UserDiscountMapperTest {
         }
 
 
-        userMapper.insertUser(userDTO1, userRoleDTO1);
-        userMapper.insertUser(userDTO2, userRoleDTO2);
+        userMapper.insertUser(userDTO1);
+        userMapper.insertUser(userDTO2);
 
         discountMapper.insertDiscount(discountDTO1);
         discountMapper.insertDiscount(discountDTO2);
@@ -68,6 +68,7 @@ public class UserDiscountMapperTest {
 
         userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
         userDiscountDTO2 = new UserDiscountDTO(userDTOS.get(1), discountDTOS.get(1), false);
+        userDiscountDTO3 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(2), false);
     }
 
     @Test
@@ -77,6 +78,8 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insertUserDiscount(userDiscountDTO2);
 
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        assertTrue("count = 2",
+                userDiscountDTOS.size() == 2);
         assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
                 userDiscountDTOS.get(0).equals(userDiscountDTO1));
         assertTrue("userDiscountDTO2 = " + userDiscountDTO2.toString(),
@@ -90,7 +93,6 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insertUserDiscount(userDiscountDTO2);
 
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
-
         UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscount(userDiscountDTOS.get(0).getId());
 
         assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
@@ -106,9 +108,12 @@ public class UserDiscountMapperTest {
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
 
         userDiscountDTOS = userDiscountMapper.selectUserDiscountsByUser(userDiscountDTOS.get(0).getUserDTO().getId());
-
+        assertTrue("count = 2",
+                userDiscountDTOS.size() == 2);
         assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
                 userDiscountDTOS.get(0).equals(userDiscountDTO1));
+        assertTrue("userDiscountDTO2 = " + userDiscountDTO3.toString(),
+                userDiscountDTOS.get(1).equals(userDiscountDTO3));
     }
 
     @Test
@@ -135,6 +140,16 @@ public class UserDiscountMapperTest {
                 userDiscountDTOS.size() == 1);
         assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
                 userDiscountDTOS.get(0).equals(userDiscountDTO1));
+
+        userDiscountMapper.insertUserDiscount(userDiscountDTO2);
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        assertTrue("count = 2",
+                userDiscountDTOS.size() == 2);
+        assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
+                userDiscountDTOS.get(0).equals(userDiscountDTO1));
+        assertTrue("userDiscountDTO2 = " + userDiscountDTO2.toString(),
+                userDiscountDTOS.get(1).equals(userDiscountDTO2));
     }
 
     @Test
@@ -157,36 +172,117 @@ public class UserDiscountMapperTest {
     @Test
     public void deleteUserDiscountTest(){
 
+        // insert 1 delete 1
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
+
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
         userDiscountMapper.deleteUserDiscount(userDiscountDTOS.get(0).getId());
 
         userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
         assertTrue("count = 0",
                 userDiscountDTOS.size() == 0);
+
+        // insert 2 delete 2
+        userDiscountMapper.insertUserDiscount(userDiscountDTO1);
+        userDiscountMapper.insertUserDiscount(userDiscountDTO2);
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        userDiscountMapper.deleteUserDiscount(userDiscountDTOS.get(0).getId());
+        userDiscountMapper.deleteUserDiscount(userDiscountDTOS.get(1).getId());
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        assertTrue("count = 0",
+                userDiscountDTOS.size() == 0);
+
+        // insert 2 delete 1
+        userDiscountMapper.insertUserDiscount(userDiscountDTO1);
+        userDiscountMapper.insertUserDiscount(userDiscountDTO2);
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        userDiscountMapper.deleteUserDiscount(userDiscountDTOS.get(0).getId());
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        assertTrue("count = 1",
+                userDiscountDTOS.size() == 1);
+        assertTrue("userDiscountDTO2 = " + userDiscountDTO2.toString(),
+                userDiscountDTOS.get(0).equals(userDiscountDTO2));
     }
 
     @Test
     public void deleteUserDiscountByDiscountTest(){
 
+        // insert 1 delete 1
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
+
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
         userDiscountMapper.deleteUserDiscountByDiscount(userDiscountDTOS.get(0).getDiscountDTO().getId());
 
         userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
         assertTrue("count = 0",
                 userDiscountDTOS.size() == 0);
+
+        // insert 2 delete 2
+        userDiscountMapper.insertUserDiscount(userDiscountDTO1);
+        userDiscountMapper.insertUserDiscount(userDiscountDTO2);
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        userDiscountMapper.deleteUserDiscountByDiscount(userDiscountDTOS.get(0).getDiscountDTO().getId());
+        userDiscountMapper.deleteUserDiscountByDiscount(userDiscountDTOS.get(1).getDiscountDTO().getId());
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        assertTrue("count = 0",
+                userDiscountDTOS.size() == 0);
+
+        // insert 2 delete 1
+        userDiscountMapper.insertUserDiscount(userDiscountDTO1);
+        userDiscountMapper.insertUserDiscount(userDiscountDTO2);
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        userDiscountMapper.deleteUserDiscountByDiscount(userDiscountDTOS.get(0).getDiscountDTO().getId());
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        assertTrue("count = 1",
+                userDiscountDTOS.size() == 1);
+        assertTrue("userDiscountDTO2 = " + userDiscountDTO2.toString(),
+                userDiscountDTOS.get(0).equals(userDiscountDTO2));
     }
 
     @Test
     public void deleteUserDiscountByUser(){
 
+        // insert 1 delete 1
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
+
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
         userDiscountMapper.deleteUserDiscountByUser(userDiscountDTOS.get(0).getUserDTO().getId());
 
         userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
         assertTrue("count = 0",
                 userDiscountDTOS.size() == 0);
+
+        // insert 2 delete 2
+        userDiscountMapper.insertUserDiscount(userDiscountDTO1);
+        userDiscountMapper.insertUserDiscount(userDiscountDTO2);
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        userDiscountMapper.deleteUserDiscountByUser(userDiscountDTOS.get(0).getUserDTO().getId());
+        userDiscountMapper.deleteUserDiscountByUser(userDiscountDTOS.get(1).getUserDTO().getId());
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        assertTrue("count = 0",
+                userDiscountDTOS.size() == 0);
+
+        // insert 2 delete 1
+        userDiscountMapper.insertUserDiscount(userDiscountDTO1);
+        userDiscountMapper.insertUserDiscount(userDiscountDTO2);
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        userDiscountMapper.deleteUserDiscountByUser(userDiscountDTOS.get(0).getUserDTO().getId());
+
+        userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
+        assertTrue("count = 1",
+                userDiscountDTOS.size() == 1);
+        assertTrue("userDiscountDTO2 = " + userDiscountDTO2.toString(),
+                userDiscountDTOS.get(0).equals(userDiscountDTO2));
     }
 }

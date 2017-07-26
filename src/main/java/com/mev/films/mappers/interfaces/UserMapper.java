@@ -11,7 +11,7 @@ public interface UserMapper {
     List<UserDTO> selectUsersIdLogin();
     List<UserDTO> selectUsersSortByLogin();
     UserDTO selectUserByLogin(String login);
-    void insertUser(UserDTO userDTO, UserRoleDTO userRoleDTO);
+    void insertUser(UserDTO userDTO);
     void updateUser(UserDTO userDTO);
     void deleteUser(Long id);
     void deleteUserByLogin(String login);

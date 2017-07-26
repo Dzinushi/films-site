@@ -3,6 +3,7 @@ CREATE TABLE user_roles (
   id    BIGINT NOT NULL DEFAULT nextval('user_roles_id_seq'::regclass),
   login VARCHAR(45) NOT NULL,
   role  VARCHAR(45) NOT NULL,
+  time TIMESTAMP,
   UNIQUE (login, role)
 );
 

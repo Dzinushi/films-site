@@ -10,6 +10,7 @@
         <result property="login" column="login"/>
         <result property="password" column="password"/>
         <result property="enabled" column="enabled"/>
+        <result property="time" column="time"/>
     </resultMap>
 
     <select id="selectUsers" resultMap="userDTO">
@@ -39,11 +40,8 @@
 
     <insert id="insertUser" parameterType="map">
         INSERT INTO
-            users (login, password, enabled)
-        VALUES (#{0.login}, #{0.password}, #{0.enabled});
-        INSERT INTO
-            user_roles (login, role)
-        VALUES (#{1.login}, #{1.role})
+            users (login, password, enabled, time)
+        VALUES (#{0.login}, #{0.password}, #{0.enabled}, clock_timestamp());
     </insert>
 
     <update id="updateUser" parameterType="com.mev.films.model.UserDTO">
@@ -51,7 +49,8 @@
             users
         SET
             password = #{password},
-            enabled = #{enabled}
+            enabled = #{enabled},
+            time = clock_timestamp()
         WHERE
             id = #{id};
     </update>

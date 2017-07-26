@@ -3,7 +3,8 @@ CREATE TABLE users (
   id BIGINT PRIMARY KEY NOT NULL DEFAULT nextval('users_id_seq'::regclass),
   login VARCHAR(16) UNIQUE NOT NULL,
   password VARCHAR(64) NOT NULL,
-  enabled SMALLINT NOT NULL DEFAULT 1
+  enabled SMALLINT NOT NULL DEFAULT 1,
+  time TIMESTAMP
 );
 
 
@@ -12,6 +13,7 @@ CREATE TABLE user_roles (
   id    BIGINT NOT NULL DEFAULT nextval('user_roles_id_seq'::regclass),
   login VARCHAR(45) NOT NULL,
   role  VARCHAR(45) NOT NULL,
+  time TIMESTAMP,
   UNIQUE (login, role)
 );
 ALTER TABLE user_roles ADD FOREIGN KEY(login) REFERENCES users(login);
@@ -24,7 +26,8 @@ CREATE TABLE films (
   genre VARCHAR(128),
   duration SMALLINT,
   price INT,
-  image VARCHAR(256) UNIQUE
+  image VARCHAR(256) UNIQUE,
+  time TIMESTAMP
 );
 
 
@@ -32,17 +35,28 @@ CREATE SEQUENCE discounts_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 922337203685477
 CREATE TABLE discounts(
   id BIGINT PRIMARY KEY DEFAULT nextval('discounts_id_seq'::regclass),
   code VARCHAR(16) UNIQUE,
-  value REAL
+  value REAL,
+  time TIMESTAMP
+);
+
+
+CREATE SEQUENCE orders_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+CREATE TABLE orders(
+  id BIGINT PRIMARY KEY DEFAULT nextval('orders_id_seq'::regclass),
+  user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+  film_id BIGINT REFERENCES films(id) ON DELETE SET NULL,
+  discount_id BIGINT REFERENCES discounts(id) ON DELETE SET NULL,
+  mark BOOLEAN,
+  time TIMESTAMP,
+  UNIQUE (user_id, film_id)
 );
 
 
 CREATE SEQUENCE baskets_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
-CREATE TABLE baskets(
-  id BIGINT PRIMARY KEY DEFAULT nextval('baskets_id_seq'::regclass),
-  user_id BIGINT,
-  film_id BIGINT,
-  discount_id BIGINT,
-  UNIQUE (user_id, film_id)
+CREATE TABLE baskets (
+  id BIGINT PRIMARY KEY DEFAULT nextval('baskets_id_seq' :: REGCLASS),
+  user_id BIGINT UNIQUE REFERENCES users(id) ON DELETE SET NULL,
+  time TIMESTAMP
 );
 
 
@@ -51,14 +65,16 @@ CREATE TABLE user_discounts(
   id BIGINT PRIMARY KEY DEFAULT nextval('user_discounts_id_seq'::regclass),
   user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
   discount_id BIGINT REFERENCES discounts(id) ON DELETE SET NULL,
-  used BOOLEAN
+  used BOOLEAN,
+  time TIMESTAMP
 );
 
 
 CREATE SEQUENCE payments_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
 CREATE TABLE payments(
   id BIGINT PRIMARY KEY DEFAULT nextval('payments_id_seq'::regclass),
-  basket_id BIGINT,
-  count INT,
+  user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+  film_id BIGINT REFERENCES films(id) ON DELETE SET NULL,
+  discount_id BIGINT REFERENCES discounts(id) ON DELETE SET NULL,
   time TIMESTAMP
 );

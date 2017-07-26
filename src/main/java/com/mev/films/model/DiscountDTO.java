@@ -1,14 +1,17 @@
 package com.mev.films.model;
 
+import java.sql.Timestamp;
+
 public class DiscountDTO {
     private Long id;
     private String code;
-    private float value;
+    private Float value;
+    private Timestamp time;
 
     public DiscountDTO(){
     }
 
-    public DiscountDTO(String code, float value){
+    public DiscountDTO(String code, Float value){
         this.code = code;
         this.value = value;
     }
@@ -29,11 +32,11 @@ public class DiscountDTO {
         this.code = code;
     }
 
-    public float getValue() {
+    public Float getValue() {
         return value;
     }
 
-    public void setValue(float value) {
+    public void setValue(Float value) {
         this.value = value;
     }
 

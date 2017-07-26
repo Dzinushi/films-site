@@ -1,9 +1,12 @@
 package com.mev.films.model;
 
+import java.sql.Timestamp;
+
 public class UserRoleDTO {
     private Long id;
     private String login;
     private String role;
+    private Timestamp time;
 
     public UserRoleDTO(){
 
@@ -36,6 +39,10 @@ public class UserRoleDTO {
 
     public void setRole(String role) {
         this.role = role;
+    }
+
+    public Timestamp getTime() {
+        return time;
     }
 
     @Override

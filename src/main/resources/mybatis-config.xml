@@ -11,5 +11,6 @@
         <mapper resource="mappers/BasketMapper.xml"/>
         <mapper resource="mappers/UserDiscountMapper.xml"/>
         <mapper resource="mappers/PaymentMapper.xml"/>
+        <mapper resource="mappers/OrderMapper.xml"/>
     </mappers>
 </configuration>

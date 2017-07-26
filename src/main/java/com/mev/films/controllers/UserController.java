@@ -3,6 +3,7 @@ package com.mev.films.controllers;
 
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserRoleDTO;
+import com.mev.films.service.interfaces.UserRoleService;
 import com.mev.films.service.interfaces.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,6 +17,7 @@ public class UserController {
     private static final Logger LOG = LogManager.getLogger();
 
     @Autowired private UserService userService;
+    @Autowired private UserRoleService userRoleService;
 
     @RequestMapping(value = {"/api/users"}, method = RequestMethod.GET)
     public List<UserDTO> getUsers() {
@@ -44,7 +46,7 @@ public class UserController {
     public List<UserRoleDTO> getUserRoles() {
         LOG.debug("getUserRoles");
 
-        return userService.getUserRoles();
+        return userRoleService.getUserRoles();
     }
 
     @RequestMapping(value = {"/api/users/role"}, method = RequestMethod.GET)
@@ -52,7 +54,7 @@ public class UserController {
         LOG.debug("getUserRole: id = {}",
                 id);
 
-        return userService.getUserRole(id);
+        return userRoleService.getUserRole(id);
     }
 
     @RequestMapping(value = {"/api/users/roles/login"}, method = RequestMethod.GET)
@@ -60,7 +62,7 @@ public class UserController {
         LOG.debug("getUserRole: login = {}",
                 login);
 
-        return userService.getUserRoleByLogin(login);
+        return userRoleService.getUserRoleByLogin(login);
     }
 
     @RequestMapping(value = {"/api/users"}, method = RequestMethod.POST)
@@ -69,7 +71,8 @@ public class UserController {
         LOG.debug("addUser: userDTO = {}, userRoleDTO = {}",
                 userDTO, userRoleDTO);
 
-        userService.addUser(userDTO, userRoleDTO);
+        userService.addUser(userDTO);
+        userRoleService.addUserRole(userRoleDTO);
     }
 
     @RequestMapping(value = {"/api/users"}, method = RequestMethod.PUT)
@@ -85,7 +88,7 @@ public class UserController {
         LOG.debug("updateRole: userDTO = {}, userRoleDTO = {}",
                 userRoleDTO, userRoleDTO);
 
-        userService.updateUserRole(userRoleDTO);
+        userRoleService.updateUserRole(userRoleDTO);
     }
 
     @RequestMapping(value = {"/api/users"}, method = RequestMethod.DELETE)

@@ -4,221 +4,131 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.mev.films.mappers.interfaces.PaymentMapper">
+
     <resultMap id="paymentDTO" type="com.mev.films.model.PaymentDTO">
         <id property="id" column="id"/>
-        <result property="count" column="count"/>
         <result property="time" column="time"/>
-        <association property="basketDTO" resultMap="com.mev.films.mappers.interfaces.BasketMapper.basketDTO" columnPrefix="bsk_"/>
+        <association property="userDTO" resultMap="com.mev.films.mappers.interfaces.UserMapper.userDTO" columnPrefix="usr_"/>
+        <association property="filmDTO" resultMap="com.mev.films.mappers.interfaces.FilmMapper.filmDTO" columnPrefix="flm_"/>
+        <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO" columnPrefix="dsc_"/>
     </resultMap>
 
     <select id="selectPayments" resultMap="paymentDTO">
         SELECT
             p.id as id,
-            p.count as count,
             p.time as time,
 
-            b.id AS bsk_id,
+            p.user_id AS usr_id,
+            u.login AS usr_login,
 
-            b.user_id AS bsk_usr_id,
-            u.login AS bsk_usr_login,
+            p.film_id AS flm_id,
+            f.name AS flm_name,
+            f.genre AS flm_genre,
+            f.duration AS flm_duration,
+            f.price AS flm_price,
+            f.image AS flm_image,
 
-            b.film_id AS bsk_flm_id,
-            f.name AS bsk_flm_name,
-            f.genre AS bsk_flm_genre,
-            f.duration AS bsk_flm_duration,
-            f.price AS bsk_flm_price,
-            f.image AS bsk_flm_image,
-
-            b.discount_id AS bsk_dsc_id,
-            d.code AS bsk_dsc_code
-
+            p.discount_id AS dsc_id,
+            d.code AS dsc_code,
+            d.value AS dsc_value
         FROM
             payments AS p
-            INNER JOIN baskets AS b ON p.basket_id = b.id
-            INNER JOIN users AS u ON b.user_id = u.id
-            INNER JOIN films AS f ON b.film_id = f.id
-            LEFT JOIN discounts AS d ON b.discount_id = d.id
+            INNER JOIN users AS u ON p.user_id = u.id
+            INNER JOIN films AS f ON p.film_id = f.id
+            LEFT JOIN discounts AS d ON p.discount_id = d.id
     </select>
 
     <select id="selectPaymentsByUser" parameterType="map" resultMap="paymentDTO">
         SELECT
             p.id as id,
-            p.count as count,
             p.time as time,
 
-            b.id AS bsk_id,
+            p.user_id AS usr_id,
+            u.login AS usr_login,
 
-            b.user_id AS bsk_usr_id,
-            u.login AS bsk_usr_login,
+            p.film_id AS flm_id,
+            f.name AS flm_name,
+            f.genre AS flm_genre,
+            f.duration AS flm_duration,
+            f.price AS flm_price,
+            f.image AS flm_image,
 
-            b.film_id AS bsk_flm_id,
-            f.name AS bsk_flm_name,
-            f.genre AS bsk_flm_genre,
-            f.duration AS bsk_flm_duration,
-            f.price AS bsk_flm_price,
-            f.image AS bsk_flm_image,
-
-            b.discount_id AS bsk_dsc_id,
-            d.code AS bsk_dsc_code
-
+            p.discount_id AS dsc_id,
+            d.code AS dsc_code,
+            d.value AS dsc_value
         FROM
             payments AS p
-            INNER JOIN baskets AS b ON p.basket_id = b.id
-            INNER JOIN users AS u ON b.user_id = u.id
-            INNER JOIN films AS f ON b.film_id = f.id
-            LEFT JOIN discounts AS d ON b.discount_id = d.id
+            INNER JOIN users AS u ON p.user_id = u.id
+            INNER JOIN films AS f ON p.film_id = f.id
+            LEFT JOIN discounts AS d ON p.discount_id = d.id
         WHERE
-            b.user_id = #{0}
+            p.user_id = #{0}
     </select>
 
     <select id="selectPaymentsByFilm" parameterType="map" resultMap="paymentDTO">
         SELECT
             p.id as id,
-            p.count as count,
             p.time as time,
 
-            b.id AS bsk_id,
+            p.user_id AS usr_id,
+            u.login AS usr_login,
 
-            b.user_id AS bsk_usr_id,
-            u.login AS bsk_usr_login,
+            p.film_id AS flm_id,
+            f.name AS flm_name,
+            f.genre AS flm_genre,
+            f.duration AS flm_duration,
+            f.price AS flm_price,
+            f.image AS flm_image,
 
-            b.film_id AS bsk_flm_id,
-            f.name AS bsk_flm_name,
-            f.genre AS bsk_flm_genre,
-            f.duration AS bsk_flm_duration,
-            f.price AS bsk_flm_price,
-            f.image AS bsk_flm_image,
-
-            b.discount_id AS bsk_dsc_id,
-            d.code AS bsk_dsc_code
-
+            p.discount_id AS dsc_id,
+            d.code AS dsc_code,
+            d.value AS dsc_value
         FROM
             payments AS p
-            INNER JOIN baskets AS b ON p.basket_id = b.id
-            INNER JOIN users AS u ON b.user_id = u.id
-            INNER JOIN films AS f ON b.film_id = f.id
-            LEFT JOIN discounts AS d ON b.discount_id = d.id
+            INNER JOIN users AS u ON p.user_id = u.id
+            INNER JOIN films AS f ON p.film_id = f.id
+            LEFT JOIN discounts AS d ON p.discount_id = d.id
         WHERE
-            b.film_id = #{0}
+            p.film_id = #{0}
     </select>
 
     <select id="selectPayment" parameterType="map" resultMap="paymentDTO">
         SELECT
             p.id as id,
-            p.count as count,
             p.time as time,
 
-            b.id AS bsk_id,
+            p.user_id AS usr_id,
+            u.login AS usr_login,
 
-            b.user_id AS bsk_usr_id,
-            u.login AS bsk_usr_login,
+            p.film_id AS flm_id,
+            f.name AS flm_name,
+            f.genre AS flm_genre,
+            f.duration AS flm_duration,
+            f.price AS flm_price,
+            f.image AS flm_image,
 
-            b.film_id AS bsk_flm_id,
-            f.name AS bsk_flm_name,
-            f.genre AS bsk_flm_genre,
-            f.duration AS bsk_flm_duration,
-            f.price AS bsk_flm_price,
-            f.image AS bsk_flm_image,
-
-            b.discount_id AS bsk_dsc_id,
-            d.code AS bsk_dsc_code
-
+            p.discount_id AS dsc_id,
+            d.code AS dsc_code,
+            d.value AS dsc_value
         FROM
             payments AS p
-            INNER JOIN baskets AS b ON p.basket_id = b.id
-            INNER JOIN users AS u ON b.user_id = u.id
-            INNER JOIN films AS f ON b.film_id = f.id
-            LEFT JOIN discounts AS d ON b.discount_id = d.id
+            INNER JOIN users AS u ON p.user_id = u.id
+            INNER JOIN films AS f ON p.film_id = f.id
+            LEFT JOIN discounts AS d ON p.discount_id = d.id
         WHERE
             p.id = #{0}
     </select>
 
-    <select id="selectPaymentByBasket" parameterType="map" resultMap="paymentDTO">
-        SELECT
-            p.id as id,
-            p.count as count,
-            p.time as time,
-
-            b.id AS bsk_id,
-
-            b.user_id AS bsk_usr_id,
-            u.login AS bsk_usr_login,
-
-            b.film_id AS bsk_flm_id,
-            f.name AS bsk_flm_name,
-            f.genre AS bsk_flm_genre,
-            f.duration AS bsk_flm_duration,
-            f.price AS bsk_flm_price,
-            f.image AS bsk_flm_image,
-
-            b.discount_id AS bsk_dsc_id,
-            d.code AS bsk_dsc_code
-
-        FROM
-            payments AS p
-            INNER JOIN baskets AS b ON p.basket_id = b.id
-            INNER JOIN users AS u ON b.user_id = u.id
-            INNER JOIN films AS f ON b.film_id = f.id
-            LEFT JOIN discounts AS d ON b.discount_id = d.id
-        WHERE
-            b.id = #{0}
-    </select>
-
     <insert id="insertPayment" parameterType="com.mev.films.model.PaymentDTO">
         INSERT INTO
-            payments (basket_id, count, time)
-        VALUES (#{basketDTO.id}, #{count}, clock_timestamp());
+            payments (user_id, film_id, discount_id, time)
+        VALUES (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, clock_timestamp());
     </insert>
 
-    <update id="updatePayment" parameterType="com.mev.films.model.PaymentDTO">
-        UPDATE
-            payments
-        SET
-            id = #{id},
-            count = #{count},
-            time = clock_timestamp(),
-            basket_id = #{basketDTO.id}
-    </update>
-
-    <delete id="deletePayment" parameterType="map">
+    <delete id="deletePayment" parameterMap="map">
         DELETE FROM
-            payments
+            "postgres-test".public.payments
         WHERE
             id = #{0}
-    </delete>
-
-    <delete id="deletePaymentByBasket" parameterType="map">
-        DELETE FROM
-            payments
-        WHERE
-            basket_id = #{0}
-    </delete>
-
-    <delete id="deletePaymentByUser" parameterType="map">
-          DELETE FROM
-              payments
-          WHERE id IN
-              (SELECT
-                   p.id
-               FROM
-                   payments AS p
-                   INNER JOIN baskets AS b ON b.id = p.basket_id
-                   INNER JOIN users AS u ON b.user_id = u.id
-              WHERE
-                  b.user_id = #{0})
-    </delete>
-
-    <delete id="deletePaymentByFilm" parameterType="map">
-        DELETE FROM
-            payments
-        WHERE id IN
-              (SELECT
-                   p.id
-               FROM
-                   payments AS p
-                   INNER JOIN baskets AS b ON b.id = p.basket_id
-                   INNER JOIN films AS f ON b.film_id = f.id
-               WHERE
-                   b.film_id = #{0})
     </delete>
 </mapper>

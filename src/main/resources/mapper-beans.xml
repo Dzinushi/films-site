@@ -31,4 +31,8 @@
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
         <property name="mapperInterface" value="com.mev.films.mappers.interfaces.PaymentMapper"/>
     </bean>
+    <bean id="orderMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <property name="mapperInterface" value="com.mev.films.mappers.interfaces.OrderMapper"/>
+    </bean>
 </beans>

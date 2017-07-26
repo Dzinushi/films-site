@@ -31,7 +31,7 @@ public class BasketController {
     }
 
     @RequestMapping(value = {"/api/baskets/user"}, method = RequestMethod.GET)
-    public List<BasketDTO> getBasketByUser(@RequestParam Long userId) {
+    public BasketDTO getBasketByUser(@RequestParam Long userId) {
         LOG.debug("getBasketByUser: user_id = {}",
                 userId);
 
@@ -44,14 +44,6 @@ public class BasketController {
                 basketDTO);
 
         basketService.addBasket(basketDTO);
-    }
-
-    @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.PUT)
-    public void updateBasket(@RequestParam BasketDTO basketDTO) {
-        LOG.debug("updateBasket: basketDTO = {}",
-                basketDTO);
-
-        basketService.updateBasket(basketDTO);
     }
 
     @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.DELETE)
@@ -68,13 +60,5 @@ public class BasketController {
                 userId);
 
         basketService.deleteBasketByUser(userId);
-    }
-
-    @RequestMapping(value = {"/api/baskets/user/film"}, method = RequestMethod.DELETE)
-    public void deleteBasketByUserFilm(@RequestBody BasketDTO basketDTO) {
-        LOG.debug("deleteBasketByUserFilm: basketDTO = {}",
-                basketDTO);
-
-        basketService.deleteBasketByUserFilm(basketDTO);
     }
 }

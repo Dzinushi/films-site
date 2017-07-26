@@ -1,15 +1,19 @@
 package com.mev.films.model;
 
+import java.sql.Timestamp;
+import java.util.Objects;
+
 public class UserDTO {
     private Long id;
     private String login;
     private String password;
-    private short enabled;
+    private Short enabled;
+    private Timestamp time;
 
     public UserDTO(){
     }
 
-    public UserDTO(String login, String password, short enabled){
+    public UserDTO(String login, String password, Short enabled){
         setLogin(login);
         setPassword(password);
         setEnabled(enabled);
@@ -39,12 +43,16 @@ public class UserDTO {
         this.password = password;
     }
 
-    public short getEnabled() {
+    public Short getEnabled() {
         return enabled;
     }
 
     public void setEnabled(short enabled) {
         this.enabled = enabled;
+    }
+
+    public Timestamp getTime() {
+        return time;
     }
 
     @Override
@@ -64,7 +72,7 @@ public class UserDTO {
 
         UserDTO userDTO = (UserDTO) o;
 
-        if (getEnabled() != userDTO.getEnabled()) return false;
+        if (!Objects.equals(getEnabled(), userDTO.getEnabled())) return false;
         if (getLogin() != null ? !getLogin().equals(userDTO.getLogin()) : userDTO.getLogin() != null) return false;
         return getPassword() != null ? getPassword().equals(userDTO.getPassword()) : userDTO.getPassword() == null;
     }

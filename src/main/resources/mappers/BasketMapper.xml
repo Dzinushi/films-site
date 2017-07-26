@@ -7,61 +7,32 @@
 
     <resultMap id="basketDTO" type="com.mev.films.model.BasketDTO">
         <id property="id" column="id"/>
-    
-        <association property="userDTO" resultMap="com.mev.films.mappers.interfaces.UserMapper.userDTO"
-                     columnPrefix="usr_" />
-        <association property="filmDTO" resultMap="com.mev.films.mappers.interfaces.FilmMapper.filmDTO"
-                     columnPrefix="flm_" />
-        <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO"
-                     columnPrefix="dsc_" />
+        <result property="time" column="time"/>
+        <association property="userDTO" resultMap="com.mev.films.mappers.interfaces.UserMapper.userDTO" columnPrefix="usr_"/>
     </resultMap>
     
     <select id="selectBaskets" resultMap="basketDTO">
         SELECT
             b.id AS id,
+            b.time AS time,
 
             u.id AS usr_id,
-            u.login AS usr_login,
-
-            f.id AS flm_id,
-            f.name AS flm_name,
-            f.genre AS flm_genre,
-            f.price AS flm_price,
-            f.duration AS flm_duration,
-            f.image AS flm_image,
-
-            d.id AS dsc_id,
-            d.code AS dsc_code
-
+            u.login AS usr_login
         FROM
             baskets AS b
             INNER JOIN users AS u ON b.user_id = u.id
-            INNER JOIN films AS f ON b.film_id = f.id
-            LEFT JOIN discounts AS d ON b.discount_id = d.id
     </select>
 
     <select id="selectBasket" parameterType="map" resultMap="basketDTO">
         SELECT
             b.id AS id,
+            b.time AS time,
 
             u.id AS usr_id,
-            u.login AS usr_login,
-
-            f.id AS flm_id,
-            f.name AS flm_name,
-            f.genre AS flm_genre,
-            f.price AS flm_price,
-            f.duration AS flm_duration,
-            f.image AS flm_image,
-
-            d.id AS dsc_id,
-            d.code AS dsc_code
-
+            u.login AS usr_login
         FROM
             baskets AS b
             INNER JOIN users AS u ON b.user_id = u.id
-            INNER JOIN films AS f ON b.film_id = f.id
-            LEFT JOIN discounts AS d ON b.discount_id = d.id
         WHERE
             b.id = #{0}
     </select>
@@ -69,46 +40,23 @@
     <select id="selectBasketByUser" parameterType="map" resultMap="basketDTO">
         SELECT
             b.id AS id,
+            b.time AS time,
 
             u.id AS usr_id,
-            u.login AS usr_login,
-
-            f.id AS flm_id,
-            f.name AS flm_name,
-            f.genre AS flm_genre,
-            f.price AS flm_price,
-            f.duration AS flm_duration,
-            f.image AS flm_image,
-
-            d.id AS dsc_id,
-            d.code AS dsc_code
-
+            u.login AS usr_login
         FROM
             baskets AS b
             INNER JOIN users AS u ON b.user_id = u.id
-            INNER JOIN films AS f ON b.film_id = f.id
-            LEFT JOIN discounts AS d ON b.discount_id = d.id
         WHERE
             u.id = #{0}
     </select>
 
     <insert id="insertBasket" parameterType="com.mev.films.model.BasketDTO">
         INSERT INTO
-            baskets (user_id, film_id, discount_id)
+            baskets (user_id, time)
         VALUES
-            (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id})
+            (#{userDTO.id}, clock_timestamp())
     </insert>
-
-    <update id="updateBasket" parameterType="com.mev.films.model.BasketDTO">
-        UPDATE
-            baskets
-        SET
-            user_id = #{userDTO.id},
-            film_id = #{filmDTO.id},
-            discount_id = #{discountDTO.id}
-        WHERE
-            id = #{id}
-    </update>
 
     <delete id="deleteBasket" parameterType="map">
         DELETE FROM
@@ -124,11 +72,4 @@
             user_id = #{0}
     </delete>
 
-    <delete id="deleteBasketByUserFilm" parameterType="com.mev.films.model.BasketDTO">
-        DELETE FROM
-            baskets
-        WHERE
-            user_id = #{userDTO.id} AND
-            film_id = #{filmDTO.id}
-    </delete>
 </mapper>

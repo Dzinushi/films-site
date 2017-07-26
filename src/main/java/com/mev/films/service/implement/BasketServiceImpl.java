@@ -2,11 +2,13 @@ package com.mev.films.service.implement;
 
 
 import com.mev.films.mappers.interfaces.BasketMapper;
+import com.mev.films.mappers.interfaces.OrderMapper;
 import com.mev.films.mappers.interfaces.UserDiscountMapper;
-import com.mev.films.model.BasketDTO;
-import com.mev.films.model.FilmDTO;
-import com.mev.films.model.UserDiscountDTO;
+import com.mev.films.model.*;
 import com.mev.films.service.interfaces.BasketService;
+import com.mev.films.service.interfaces.OrderService;
+import com.mev.films.service.interfaces.UserDiscountService;
+import com.mev.films.service.interfaces.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,36 +24,22 @@ public class BasketServiceImpl implements BasketService{
     private static Logger LOG = LogManager.getLogger();
 
     @Autowired private BasketMapper basketMapper;
-    @Autowired private UserDiscountMapper userDiscountMapper;
+
+    @Autowired private OrderService orderService;
 
     public BasketServiceImpl(){
     }
 
-    public BasketServiceImpl(BasketMapper basketMapper, UserDiscountMapper userDiscountMapper){
+    public BasketServiceImpl(BasketMapper basketMapper, OrderService orderService){
         this.basketMapper = basketMapper;
-        this.userDiscountMapper = userDiscountMapper;
-    }
-
-    public static void priceByDiscount(BasketDTO basketDTO){
-        if (basketDTO.getDiscountDTO() != null){
-            FilmDTO filmDTO = basketDTO.getFilmDTO();
-            float price_discount = filmDTO.getPrice() - ( filmDTO.getPrice() * basketDTO.getDiscountDTO().getValue() );
-            filmDTO.setPrice(Math.round(price_discount));
-        }
+        this.orderService = orderService;
     }
 
     @Override
     public List<BasketDTO> getBaskets() {
         LOG.debug("getBaskets");
 
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
-        if (basketDTOS != null) {
-            for (BasketDTO basketDTO : basketDTOS) {
-                priceByDiscount(basketDTO);
-            }
-        }
-
-        return basketDTOS;
+        return basketMapper.selectBaskets();
     }
 
     @Override
@@ -59,27 +47,33 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("getBasket: id = {}",
                 id);
 
-        BasketDTO basketDTO = basketMapper.selectBasket(id);
-        if (basketDTO != null) {
-            priceByDiscount(basketDTO);
+        BasketDTO basketDTO = null;
+        if (id != null && id >= 0) {
+            basketDTO = basketMapper.selectBasket(id);
+        }
+        else {
+            LOG.debug("Error in 'getBasket'! 'id' is not validate: id = {}",
+                    id);
         }
 
         return basketDTO;
     }
 
     @Override
-    public List<BasketDTO> getBasketByUser(Long userId) {
+    public BasketDTO getBasketByUser(Long userId) {
         LOG.debug("getBasketByUser: user_id = {}",
                 userId);
 
-        List<BasketDTO> basketDTOS = basketMapper.selectBasketByUser(userId);
-        if (basketDTOS != null) {
-            for (BasketDTO basketDTO : basketDTOS) {
-                priceByDiscount(basketDTO);
-            }
+        BasketDTO basketDTO = null;
+        if (userId != null && userId >= 0){
+            basketDTO = basketMapper.selectBasketByUser(userId);
+        }
+        else {
+            LOG.debug("Error in 'getBasketByUser'! 'user_id' is not validate: user_id = {}",
+                    userId);
         }
 
-        return basketDTOS;
+        return basketDTO;
     }
 
     @Override
@@ -87,35 +81,21 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("addBasket: basketDTO = {}",
                 basketDTO);
 
-        if (basketDTO.getDiscountDTO() != null){
-            UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(basketDTO.getDiscountDTO().getId());
+        if (basketDTO != null){
+            if (basketDTO.getUserDTO() != null){
+                List<OrderDTO> orderDTOS = orderService.getOrderByUser(basketDTO.getUserDTO().getId());
+                if (orderDTOS != null){
 
-            if (userDiscountDTO == null) {
-                userDiscountMapper.insertUserDiscount(new UserDiscountDTO(basketDTO.getUserDTO(), basketDTO.getDiscountDTO(), false));
-            }
-        }
+                    basketMapper.insertBasket(basketDTO);
 
-        basketMapper.insertBasket(basketDTO);
-    }
-
-    @Override
-    public void updateBasket(BasketDTO basketDTO) {
-        LOG.debug("updateBasket: basketDTO = {}",
-                basketDTO);
-
-        if (basketDTO.getDiscountDTO() != null){
-            BasketDTO basketDTOOld = basketMapper.selectBasket(basketDTO.getId());
-
-            if (basketDTOOld != null) {
-                UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(basketDTOOld.getDiscountDTO().getId());
-
-                if (userDiscountDTO != null) {
-                    userDiscountMapper.updateUserDiscount(new UserDiscountDTO(basketDTO.getUserDTO(), basketDTO.getDiscountDTO(), false));
                 }
+                LOG.debug("Error in 'addBasket'! Orders not found");
             }
+            LOG.debug("Error in 'addBasket'! 'userDTO' is null");
         }
-
-        basketMapper.updateBasket(basketDTO);
+        else {
+            LOG.debug("Error in 'addBasket'! 'basketDTO' is null");
+        }
     }
 
     @Override
@@ -123,7 +103,13 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("deleteBasket: id = {}",
                 id);
 
-        basketMapper.deleteBasket(id);
+        if (id != null && id >= 0){
+            basketMapper.deleteBasket(id);
+        }
+        else {
+            LOG.debug("Error in 'deleteBasket'! 'id' is not validate: id = {}",
+                    id);
+        }
     }
 
     @Override
@@ -131,14 +117,13 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("deleteBasket: userId = {}",
                 userId);
 
-        basketMapper.deleteBasketByUser(userId);
-    }
 
-    @Override
-    public void deleteBasketByUserFilm(BasketDTO basketDTO) {
-        LOG.debug("deleteBasketByUserFilm: basketDTO = {}",
-                basketDTO);
-
-        basketMapper.deleteBasketByUserFilm(basketDTO);
+        if (userId != null && userId >= 0){
+            basketMapper.deleteBasketByUser(userId);
+        }
+        else {
+            LOG.debug("Error in 'deleteBasket'! 'user_id' is not validate: user_id = {}",
+                    userId);
+        }
     }
 }

@@ -4,6 +4,7 @@ import com.mev.films.mappers.interfaces.UserMapper;
 import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserRoleDTO;
+import com.mev.films.service.interfaces.UserRoleService;
 import com.mev.films.service.interfaces.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,14 +22,12 @@ public class UserServiceImpl implements UserService{
     private static final Logger LOG = LogManager.getLogger();
 
     @Autowired private UserMapper userMapper;
-    @Autowired private UserRoleMapper userRoleMapper;
 
     public UserServiceImpl(){
     }
 
-    public UserServiceImpl(UserMapper userMapper, UserRoleMapper userRoleMapper){
+    public UserServiceImpl(UserMapper userMapper){
         this.userMapper = userMapper;
-        this.userRoleMapper = userRoleMapper;
     }
 
     @Override
@@ -43,7 +42,16 @@ public class UserServiceImpl implements UserService{
         LOG.debug("getUser: id = {}",
                 id);
 
-        return userMapper.selectUser(id);
+        UserDTO userDTO = null;
+        if (id != null && id >=0){
+             userDTO = userMapper.selectUser(id);
+        }
+        else {
+            LOG.debug("Error in 'getUser'! 'id' is not validate: id = {}",
+                    id);
+        }
+
+        return userDTO;
     }
 
     @Override
@@ -58,38 +66,44 @@ public class UserServiceImpl implements UserService{
         LOG.debug("getUserByLogin: login = {}",
                 login);
 
-        return userMapper.selectUserByLogin(login);
+        UserDTO userDTO = null;
+        if (login != null){
+            userDTO = userMapper.selectUserByLogin(login);
+        }
+        else {
+            LOG.debug("Error in 'getUserByLogin'! 'login' is null");
+        }
+
+        return userDTO;
     }
 
     @Override
-    public List<UserRoleDTO> getUserRoles() {
-        LOG.debug("getUserRoles");
+    public void addUser(UserDTO userDTO) {
+        LOG.debug("addUser: {}",
+                userDTO);
 
-        return userRoleMapper.selectUserRoles();
-    }
+        if (userDTO != null){
+            if (userDTO.getLogin() != null){
+                if (userDTO.getPassword() != null){
+                    if (userDTO.getEnabled() >= 0){
 
-    @Override
-    public UserRoleDTO getUserRole(Long id){
-        LOG.debug("getUserRole: id = {}",
-                id);
-
-        return userRoleMapper.selectUserRole(id);
-    }
-
-    @Override
-    public UserRoleDTO getUserRoleByLogin(String login) {
-        LOG.debug("getUserRole: login = {}",
-                login);
-
-        return userRoleMapper.selectUserRoleByLogin(login);
-    }
-
-    @Override
-    public void addUser(UserDTO userDTO, UserRoleDTO userRoleDTO) {
-        LOG.debug("addUser: userDTO = {}, userRoleDTO = {}",
-                userDTO, userRoleDTO);
-
-        userMapper.insertUser(userDTO, userRoleDTO);
+                        userMapper.insertUser(userDTO);
+                    }
+                    else {
+                        LOG.debug("Error in 'addUser'! 'enabled' < 0 ({})");
+                    }
+                }
+                else {
+                    LOG.debug("Error in 'addUser'! 'password is null");
+                }
+            }
+            else {
+                LOG.debug("Error in 'addUser'! 'login' is null");
+            }
+        }
+        else {
+            LOG.debug("Error in 'addUser'! 'userDTO' is null");
+        }
     }
 
     @Override
@@ -97,15 +111,32 @@ public class UserServiceImpl implements UserService{
         LOG.debug("updateUser: userDTO = {}",
                 userDTO);
 
-        userMapper.updateUser(userDTO);
-    }
+        if (userDTO != null){
+            if (userDTO.getId() != null && userDTO.getId() >= 0) {
+                if (userDTO.getLogin() != null) {
+                    if (userDTO.getPassword() != null) {
+                        if (userDTO.getEnabled() >= 0) {
 
-    @Override
-    public void updateUserRole(UserRoleDTO userRoleDTO) {
-        LOG.debug("updateRole: userRoleDTO = {}",
-                userRoleDTO);
+                            userMapper.updateUser(userDTO);
 
-        userRoleMapper.updateUserRole(userRoleDTO);
+                        } else {
+                            LOG.debug("Error in 'updateUser'! 'enabled' < 0 ({})");
+                        }
+                    } else {
+                        LOG.debug("Error in 'updateUser'! 'password is null");
+                    }
+                } else {
+                    LOG.debug("Error in 'updateUser'! 'login' is null");
+                }
+            }
+            else {
+                LOG.debug("Error in 'updateUser'! 'id' is not validate: id = {}",
+                        userDTO.getId());
+            }
+        }
+        else {
+            LOG.debug("Error in 'updateUser'! 'userDTO' is null");
+        }
     }
 
     @Override
@@ -113,7 +144,13 @@ public class UserServiceImpl implements UserService{
         LOG.debug("deleteUser: id = {}",
                 id);
 
-        userMapper.deleteUser(id);
+        if (id != null && id >= 0){
+            userMapper.deleteUser(id);
+        }
+        else {
+            LOG.debug("Error in 'deleteUser'! 'id' is not validate: id = {}",
+                    id);
+        }
     }
 
     @Override
@@ -121,6 +158,11 @@ public class UserServiceImpl implements UserService{
         LOG.debug("deleteUserByLogin: login = {}",
                 login);
 
-        userMapper.deleteUserByLogin(login);
+        if (login != null){
+            userMapper.deleteUserByLogin(login);
+        }
+        else {
+            LOG.debug("Error in 'deleteUserByLogin'! 'login' is null");
+        }
     }
 }

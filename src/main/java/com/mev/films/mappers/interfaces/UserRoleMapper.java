@@ -9,5 +9,6 @@ public interface UserRoleMapper {
     List<UserRoleDTO> selectUserRoles();
     UserRoleDTO selectUserRole(Long id);
     UserRoleDTO selectUserRoleByLogin(String login);
+    void insertUserRole(UserRoleDTO userRoleDTO);
     void updateUserRole(UserRoleDTO userRoleDTO);
 }

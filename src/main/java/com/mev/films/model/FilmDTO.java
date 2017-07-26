@@ -1,14 +1,16 @@
 package com.mev.films.model;
 
-import java.sql.Time;
+import java.sql.Timestamp;
+import java.util.Objects;
 
 public class FilmDTO {
     private Long id;
     private String name;
     private String genre;
-    private short duration;
-    private int price;
+    private Short duration;
+    private Integer price;
     private String image;
+    private Timestamp time;
 
     public FilmDTO(){
     }
@@ -45,19 +47,19 @@ public class FilmDTO {
         this.genre = genre;
     }
 
-    public short getDuration() {
+    public Short getDuration() {
         return duration;
     }
 
-    public void setDuration(short duration) {
+    public void setDuration(Short duration) {
         this.duration = duration;
     }
 
-    public int getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Integer price) {
         this.price = price;
     }
 
@@ -88,8 +90,8 @@ public class FilmDTO {
 
         FilmDTO filmDTO = (FilmDTO) o;
 
-        if (getDuration() != filmDTO.getDuration()) return false;
-        if (getPrice() != filmDTO.getPrice()) return false;
+        if (!Objects.equals(getDuration(), filmDTO.getDuration())) return false;
+        if (!Objects.equals(getPrice(), filmDTO.getPrice())) return false;
         if (getName() != null ? !getName().equals(filmDTO.getName()) : filmDTO.getName() != null) return false;
         if (getGenre() != null ? !getGenre().equals(filmDTO.getGenre()) : filmDTO.getGenre() != null) return false;
         return getImage() != null ? getImage().equals(filmDTO.getImage()) : filmDTO.getImage() == null;

@@ -13,17 +13,16 @@ import java.util.List;
 @RestController
 public class DiscountController {
 
-    public DiscountController(){
+    private static final Logger LOG = LogManager.getLogger();
 
+    @Autowired private DiscountService discountService;
+
+    public DiscountController(){
     }
 
     public DiscountController(DiscountService discountService){
         this.discountService = discountService;
     }
-
-    private static final Logger LOG = LogManager.getLogger();
-
-    @Autowired private DiscountService discountService;
 
     @RequestMapping(value = {"/api/discounts"}, method = RequestMethod.GET)
     public List<DiscountDTO> getDiscounts() {
@@ -62,6 +61,14 @@ public class DiscountController {
                 discountDTO);
 
         discountService.updateDiscount(discountDTO);
+    }
+
+    @RequestMapping(value = "/api/discount", method = RequestMethod.DELETE)
+    public void deleteDiscount(@RequestParam Long id){
+        LOG.debug("deleteDiscount: id = {}",
+                id);
+
+        discountService.deleteDiscount(id);
     }
 
     @RequestMapping(value = {"/api/discounts/code"}, method = RequestMethod.DELETE)

@@ -14,5 +14,6 @@ public interface FilmService {
     FilmDTO getFilmByImage(String image);
     void addFilm(FilmDTO filmDTO);
     void updateFilm(FilmDTO filmDTO);
+    void deleteFilm(Long id);
     void deleteFilmByImage(String image);
 }

@@ -1,22 +1,24 @@
 package com.mev.films.model;
 
-
 import java.sql.Timestamp;
 
-public class PaymentDTO {
+public class OrderDTO {
+
     private Long id;
     private UserDTO userDTO;
     private FilmDTO filmDTO;
     private DiscountDTO discountDTO;
+    private Boolean mark;
     private Timestamp time;
 
-    public PaymentDTO(){
+    public OrderDTO(){
     }
 
-    public PaymentDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO){
+    public OrderDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, Boolean mark){
         this.userDTO = userDTO;
         this.filmDTO = filmDTO;
         this.discountDTO = discountDTO;
+        this.mark = mark;
     }
 
     public Long getId() {
@@ -51,6 +53,14 @@ public class PaymentDTO {
         this.discountDTO = discountDTO;
     }
 
+    public Boolean isMark() {
+        return mark;
+    }
+
+    public void setMark(Boolean mark) {
+        this.mark = mark;
+    }
+
     public Timestamp getTime() {
         return time;
     }
@@ -58,13 +68,16 @@ public class PaymentDTO {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PaymentDTO)) return false;
+        if (!(o instanceof OrderDTO)) return false;
 
-        PaymentDTO that = (PaymentDTO) o;
+        OrderDTO orderDTO = (OrderDTO) o;
 
-        if (getUserDTO() != null ? !getUserDTO().equals(that.getUserDTO()) : that.getUserDTO() != null) return false;
-        if (getFilmDTO() != null ? !getFilmDTO().equals(that.getFilmDTO()) : that.getFilmDTO() != null) return false;
-        return getDiscountDTO() != null ? getDiscountDTO().equals(that.getDiscountDTO()) : that.getDiscountDTO() == null;
+        if (isMark() != orderDTO.isMark()) return false;
+        if (getUserDTO() != null ? !getUserDTO().equals(orderDTO.getUserDTO()) : orderDTO.getUserDTO() != null)
+            return false;
+        if (getFilmDTO() != null ? !getFilmDTO().equals(orderDTO.getFilmDTO()) : orderDTO.getFilmDTO() != null)
+            return false;
+        return getDiscountDTO() != null ? getDiscountDTO().equals(orderDTO.getDiscountDTO()) : orderDTO.getDiscountDTO() == null;
     }
 
     @Override
@@ -72,16 +85,18 @@ public class PaymentDTO {
         int result = getUserDTO() != null ? getUserDTO().hashCode() : 0;
         result = 31 * result + (getFilmDTO() != null ? getFilmDTO().hashCode() : 0);
         result = 31 * result + (getDiscountDTO() != null ? getDiscountDTO().hashCode() : 0);
+        result = 31 * result + (isMark() ? 1 : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "PaymentDTO{" +
+        return "OrderDTO{" +
                 "id=" + id +
                 ", userDTO=" + userDTO +
                 ", filmDTO=" + filmDTO +
                 ", discountDTO=" + discountDTO +
+                ", mark=" + mark +
                 ", time=" + time +
                 '}';
     }

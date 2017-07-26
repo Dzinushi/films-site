@@ -22,40 +22,63 @@ public class DiscountMapperTest {
 
     private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
     private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.2F);
+    private DiscountDTO discountDTO3 = new DiscountDTO("code3", 0.18F);
 
     @Before
     public void setup(){
+
         List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
         for (DiscountDTO discountDTO : discountDTOS){
-            discountMapper.deleteDiscountByCode(discountDTO.getCode());
+            discountMapper.deleteDiscount(discountDTO.getId());
         }
     }
 
     @Test
     public void selectDiscountsTest(){
+
         discountMapper.insertDiscount(discountDTO1);
         discountMapper.insertDiscount(discountDTO2);
+        discountMapper.insertDiscount(discountDTO3);
 
         List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
+        assertTrue("count = 3",
+                discountDTOS.size() == 3);
         assertTrue("discountDTO1 = " + discountDTO1,
                 discountDTOS.get(0).equals(discountDTO1));
         assertTrue("discountDTO2 = " + discountDTO2,
                 discountDTOS.get(1).equals(discountDTO2));
+        assertTrue("discountDTO3 = " + discountDTO3,
+                discountDTOS.get(2).equals(discountDTO3));
     }
 
     @Test
     public void selectDiscountTest(){
+
         discountMapper.insertDiscount(discountDTO1);
+        discountMapper.insertDiscount(discountDTO3);
         discountMapper.insertDiscount(discountDTO2);
 
         List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        DiscountDTO discountDTO = discountMapper.selectDiscount(discountDTOS.get(1).getId())   ;
-        assertTrue("discountDTO2 = " + discountDTOS.get(1).toString(),
-                discountDTO.equals(discountDTOS.get(1)));
+        DiscountDTO discountDTO = discountMapper.selectDiscount(discountDTOS.get(1).getId());
+        assertTrue("discountDTO3 = " + discountDTO3.toString(),
+                discountDTO.equals(discountDTO3));
+    }
+
+    @Test
+    public void selectDiscountByCodeTest(){
+
+        discountMapper.insertDiscount(discountDTO1);
+        discountMapper.insertDiscount(discountDTO3);
+        discountMapper.insertDiscount(discountDTO2);
+
+        DiscountDTO discountDTO = discountMapper.selectDiscountByCode(discountDTO3.getCode());
+        assertTrue("discountDTO3 = " + discountDTO3.toString(),
+                discountDTO.equals(discountDTO3));
     }
 
     @Test
     public void insertDiscountTest(){
+
         discountMapper.insertDiscount(discountDTO1);
 
         List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
@@ -63,10 +86,21 @@ public class DiscountMapperTest {
                 discountDTOS.size() == 1);
         assertTrue("discountDTO1 = " + discountDTO1,
                 discountDTOS.get(0).equals(discountDTO1));
+
+        discountMapper.insertDiscount(discountDTO2);
+
+        discountDTOS = discountMapper.selectDiscounts();
+        assertTrue("count = 2",
+                discountDTOS.size() == 2);
+        assertTrue("discountDTO1 = " + discountDTO1,
+                discountDTOS.get(0).equals(discountDTO1));
+        assertTrue("discountDTO2 = " + discountDTO2,
+                discountDTOS.get(1).equals(discountDTO2));
     }
 
     @Test
     public void updateDiscount(){
+
         discountMapper.insertDiscount(discountDTO1);
 
         DiscountDTO getDiscountDTO = discountMapper.selectDiscountByCode(discountDTO1.getCode());
@@ -80,17 +114,71 @@ public class DiscountMapperTest {
     }
 
     @Test
-    public void deleteDiscountByCodeTest(){
+    public void deleteDiscountTest(){
+
+        // insert 1 delete 1
         discountMapper.insertDiscount(discountDTO1);
 
         List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
-        assertTrue("list count = 1",
-                discountDTOS.size() == 1);
+        discountMapper.deleteDiscount(discountDTOS.get(0).getId());
+        discountDTOS = discountMapper.selectDiscounts();
+        assertTrue("count = 0",
+                discountDTOS.size() == 0);
 
-        discountMapper.deleteDiscountByCode(discountDTO1.getCode());
+        // insert 2 delete 2
+        discountMapper.insertDiscount(discountDTO2);
+        discountMapper.insertDiscount(discountDTO1);
 
         discountDTOS = discountMapper.selectDiscounts();
-        assertTrue("list count = 1",
+        discountMapper.deleteDiscount(discountDTOS.get(0).getId());
+        discountMapper.deleteDiscount(discountDTOS.get(1).getId());
+        discountDTOS = discountMapper.selectDiscounts();
+        assertTrue("count = 0",
                 discountDTOS.size() == 0);
+
+        // insert 2 delete 1
+        discountMapper.insertDiscount(discountDTO2);
+        discountMapper.insertDiscount(discountDTO1);
+
+        discountDTOS = discountMapper.selectDiscounts();
+        discountMapper.deleteDiscount(discountDTOS.get(0).getId());
+        discountDTOS = discountMapper.selectDiscounts();
+        assertTrue("count = 1",
+                discountDTOS.size() == 1);
+        assertTrue("discountDTO1 = " + discountDTO1.toString(),
+                discountDTOS.get(0).equals(discountDTO1));
+    }
+
+    @Test
+    public void deleteDiscountByCodeTest(){
+
+        // insert 1 delete 1
+        discountMapper.insertDiscount(discountDTO1);
+
+        discountMapper.deleteDiscountByCode(discountDTO1.getCode());
+        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
+        assertTrue("count = 0",
+                discountDTOS.size() == 0);
+
+        // insert 2 delete 2
+        discountMapper.insertDiscount(discountDTO2);
+        discountMapper.insertDiscount(discountDTO1);
+
+        discountMapper.deleteDiscountByCode(discountDTO1.getCode());
+        discountMapper.deleteDiscountByCode(discountDTO2.getCode());
+        discountDTOS = discountMapper.selectDiscounts();
+        assertTrue("count = 0",
+                discountDTOS.size() == 0);
+
+        // insert 2 delete 1
+        discountMapper.insertDiscount(discountDTO2);
+        discountMapper.insertDiscount(discountDTO1);
+
+        discountMapper.deleteDiscountByCode(discountDTO2.getCode());
+        discountDTOS = discountMapper.selectDiscounts();
+        assertTrue("count = 1",
+                discountDTOS.size() == 1);
+        assertTrue("discountDTO1 = " + discountDTO1.toString(),
+                discountDTOS.get(0).equals(discountDTO1));
     }
 }
