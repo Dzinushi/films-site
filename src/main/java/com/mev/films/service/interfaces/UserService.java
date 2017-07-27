@@ -10,6 +10,7 @@ public interface UserService {
     UserDTO getUser(Long id);
     List<UserDTO> getUsersSortByLogin();
     UserDTO getUserByLogin(String login);
+    List<UserDTO> getUsersIdLogin();
     void addUser(UserDTO userDTO);
     void updateUser(UserDTO userDTO);
 //    void deleteUser(Long id);

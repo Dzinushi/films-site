@@ -25,7 +25,11 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         USER_ROLE_ERROR_WRONG_ROLE,
 
         // Users
-        USER_ERROR_NULL_POINTER_EXCEPTION
+        USER_ERROR_NULL_POINTER_EXCEPTION,
+        USER_ERROR_WRONG_ID_PROVIDED,
+        USER_ERROR_WRONG_LOGIN_PROVIDED,
+        USER_ERROR_WRONG_PASSWORD_PROVIDED,
+        USER_ERROR_WRONG_ENABLE_PROVIDED
     }
 
     public ExceptionServiceImpl(){
@@ -52,7 +56,7 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
     @Override
     public void checkUserRoleLogin(String login) {
-        LOG.debug("checkUserRoleLogin: login = {}",
+        LOG.debug("checkUserRoleLogin: user_role_login = {}",
                 login);
 
         if (login == null){
@@ -100,5 +104,57 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         }
     }
 
+    @Override
+    public void checkUserId(Long id) {
+        LOG.debug("checkUserId: user_id = {}",
+                id);
 
+        if (id == null || id < 0){
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkUserLogin(String login) {
+        LOG.debug("checkUserLogin: user_login = {}",
+                login);
+
+        if (login == null){
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_LOGIN_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkUserWithoutId(UserDTO userDTO) {
+        LOG.debug("checkUserWithoutId: {}",
+                userDTO);
+
+        if (userDTO == null) {
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_NULL_POINTER_EXCEPTION);
+        } else if (userDTO.getLogin() == null) {
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_LOGIN_PROVIDED);
+        } else if (userDTO.getPassword() == null){
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_PASSWORD_PROVIDED);
+        } else if (userDTO.getEnabled() == null || userDTO.getEnabled() < 0){
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_ENABLE_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkUser(UserDTO userDTO) {
+        LOG.debug("checkUser: {}",
+                userDTO);
+
+        if (userDTO == null) {
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_NULL_POINTER_EXCEPTION);
+        } else if (userDTO.getId() == null || userDTO.getId() < 0){
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_ID_PROVIDED);
+        } else if (userDTO.getLogin() == null) {
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_LOGIN_PROVIDED);
+        } else if (userDTO.getPassword() == null){
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_PASSWORD_PROVIDED);
+        } else if (userDTO.getEnabled() == null || userDTO.getEnabled() < 0){
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_ENABLE_PROVIDED);
+        }
+    }
 }

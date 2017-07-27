@@ -42,16 +42,9 @@ public class UserServiceImpl implements UserService{
         LOG.debug("getUser: id = {}",
                 id);
 
-        UserDTO userDTO = null;
-        if (id != null && id >=0){
-             userDTO = userMapper.selectUser(id);
-        }
-        else {
-            LOG.debug("Error in 'getUser'! 'id' is not validate: id = {}",
-                    id);
-        }
+        exceptionService.checkUserId(id);
 
-        return userDTO;
+        return userMapper.selectUser(id);
     }
 
     @Override
@@ -66,15 +59,16 @@ public class UserServiceImpl implements UserService{
         LOG.debug("getUserByLogin: login = {}",
                 login);
 
-        UserDTO userDTO = null;
-        if (login != null){
-            userDTO = userMapper.selectUserByLogin(login);
-        }
-        else {
-            LOG.debug("Error in 'getUserByLogin'! 'login' is null");
-        }
+        exceptionService.checkUserLogin(login);
 
-        return userDTO;
+        return userMapper.selectUserByLogin(login);
+    }
+
+    @Override
+    public List<UserDTO> getUsersIdLogin() {
+        LOG.debug("getUsersIdLogin");
+
+        return userMapper.selectUsersIdLogin();
     }
 
     @Override
@@ -82,28 +76,9 @@ public class UserServiceImpl implements UserService{
         LOG.debug("addUser: {}",
                 userDTO);
 
-        if (userDTO != null){
-            if (userDTO.getLogin() != null){
-                if (userDTO.getPassword() != null){
-                    if (userDTO.getEnabled() >= 0){
+        exceptionService.checkUserWithoutId(userDTO);
 
-                        userMapper.insertUser(userDTO);
-                    }
-                    else {
-                        LOG.debug("Error in 'addUser'! 'enabled' < 0 ({})");
-                    }
-                }
-                else {
-                    LOG.debug("Error in 'addUser'! 'password is null");
-                }
-            }
-            else {
-                LOG.debug("Error in 'addUser'! 'login' is null");
-            }
-        }
-        else {
-            LOG.debug("Error in 'addUser'! 'userDTO' is null");
-        }
+        userMapper.insertUser(userDTO);
     }
 
     @Override
@@ -111,32 +86,9 @@ public class UserServiceImpl implements UserService{
         LOG.debug("updateUser: userDTO = {}",
                 userDTO);
 
-        if (userDTO != null){
-            if (userDTO.getId() != null && userDTO.getId() >= 0) {
-                if (userDTO.getLogin() != null) {
-                    if (userDTO.getPassword() != null) {
-                        if (userDTO.getEnabled() >= 0) {
+        exceptionService.checkUser(userDTO);
 
-                            userMapper.updateUser(userDTO);
-
-                        } else {
-                            LOG.debug("Error in 'updateUser'! 'enabled' < 0 ({})");
-                        }
-                    } else {
-                        LOG.debug("Error in 'updateUser'! 'password is null");
-                    }
-                } else {
-                    LOG.debug("Error in 'updateUser'! 'login' is null");
-                }
-            }
-            else {
-                LOG.debug("Error in 'updateUser'! 'id' is not validate: id = {}",
-                        userDTO.getId());
-            }
-        }
-        else {
-            LOG.debug("Error in 'updateUser'! 'userDTO' is null");
-        }
+        userMapper.updateUser(userDTO);
     }
 
 //    @Override
@@ -158,11 +110,8 @@ public class UserServiceImpl implements UserService{
         LOG.debug("deleteUserByLogin: login = {}",
                 login);
 
-        if (login != null){
-            userMapper.deleteUserByLogin(login);
-        }
-        else {
-            LOG.debug("Error in 'deleteUserByLogin'! 'login' is null");
-        }
+        exceptionService.checkUserLogin(login);
+
+        userMapper.deleteUserByLogin(login);
     }
 }
