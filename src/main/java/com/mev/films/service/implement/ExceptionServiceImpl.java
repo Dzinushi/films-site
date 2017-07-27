@@ -1,6 +1,8 @@
 package com.mev.films.service.implement;
 
+import com.mev.films.mappers.interfaces.DiscountMapper;
 import com.mev.films.mappers.interfaces.UserMapper;
+import com.mev.films.model.DiscountDTO;
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserRoleDTO;
 import com.mev.films.service.interfaces.ExceptionService;
@@ -13,23 +15,31 @@ import org.springframework.stereotype.Service;
 public class ExceptionServiceImpl extends RuntimeException implements ExceptionService {
 
     @Autowired private UserMapper userMapper;
+    @Autowired private DiscountMapper discountMapper;
 
     private Logger LOG = LogManager.getLogger();
 
     public enum Errors{
 
-        // UserRoles
+        // UserRoleService
         USER_ROLE_ERROR_NULL_POINTER_EXCEPTION,
         USER_ROLE_ERROR_WRONG_ID_PROVIDED,
         USER_ROLE_ERROR_WRONG_LOGIN_PROVIDED,
         USER_ROLE_ERROR_WRONG_ROLE,
 
-        // Users
+        // UserService
         USER_ERROR_NULL_POINTER_EXCEPTION,
         USER_ERROR_WRONG_ID_PROVIDED,
         USER_ERROR_WRONG_LOGIN_PROVIDED,
         USER_ERROR_WRONG_PASSWORD_PROVIDED,
-        USER_ERROR_WRONG_ENABLE_PROVIDED
+        USER_ERROR_WRONG_ENABLE_PROVIDED,
+
+        // DiscountService
+        DISCOUNT_ERROR_NULL_POINTER_EXCEPTION,
+        DISCOUNT_ERROR_WRONG_ID_PROVIDED,
+        DISCOUNT_ERROR_WRONG_CODE_PROVIDED,
+        DISCOUNT_ERROR_WRONG_VALUE_PROVIDED
+
     }
 
     public ExceptionServiceImpl(){
@@ -42,6 +52,10 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
     public ExceptionServiceImpl(UserMapper userMapper){
         this.userMapper = userMapper;
+    }
+
+    public ExceptionServiceImpl(DiscountMapper discountMapper){
+        this.discountMapper = discountMapper;
     }
 
     @Override
@@ -157,4 +171,60 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
             throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_ENABLE_PROVIDED);
         }
     }
+
+    @Override
+    public void checkDiscountId(Long id) {
+        LOG.debug("checkDiscountId: discount_id = {}",
+                id);
+
+        if (id == null || id < 0){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkDiscountCode(String code) {
+        LOG.debug("checkDiscountCode: discount_code = {}",
+                code);
+
+        if (code == null){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_CODE_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkDiscountWithoutId(DiscountDTO discountDTO) {
+        LOG.debug("checkDiscountWithoutId: {}",
+                discountDTO);
+
+        if (discountDTO == null){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_NULL_POINTER_EXCEPTION);
+        } else if (discountDTO.getCode() == null){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_CODE_PROVIDED);
+        } else if (discountDTO.getValue() == null){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_VALUE_PROVIDED);
+        } else if (discountDTO.getValue() < 0.05F || discountDTO.getValue() > 0.75F){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_VALUE_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkDiscount(DiscountDTO discountDTO) {
+        LOG.debug("checkDiscount: {}",
+                discountDTO);
+
+        if (discountDTO == null){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_NULL_POINTER_EXCEPTION);
+        } else if (discountDTO.getId() == null || discountDTO.getId() < 0){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_ID_PROVIDED);
+        } else if (discountDTO.getCode() == null){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_CODE_PROVIDED);
+        } else if (discountDTO.getValue() == null){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_VALUE_PROVIDED);
+        } else if (discountDTO.getValue() < 0.05F || discountDTO.getValue() > 0.75F){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_VALUE_PROVIDED);
+        }
+    }
+
+
 }
