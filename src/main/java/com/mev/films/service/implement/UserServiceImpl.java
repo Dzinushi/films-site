@@ -139,19 +139,19 @@ public class UserServiceImpl implements UserService{
         }
     }
 
-    @Override
-    public void deleteUser(Long id) {
-        LOG.debug("deleteUser: id = {}",
-                id);
-
-        if (id != null && id >= 0){
-            userMapper.deleteUser(id);
-        }
-        else {
-            LOG.debug("Error in 'deleteUser'! 'id' is not validate: id = {}",
-                    id);
-        }
-    }
+//    @Override
+//    public void deleteUser(Long id) {
+//        LOG.debug("deleteUser: id = {}",
+//                id);
+//
+//        if (id != null && id >= 0){
+//            userMapper.deleteUser(id);
+//        }
+//        else {
+//            LOG.debug("Error in 'deleteUser'! 'id' is not validate: id = {}",
+//                    id);
+//        }
+//    }
 
     @Override
     public void deleteUserByLogin(String login) {

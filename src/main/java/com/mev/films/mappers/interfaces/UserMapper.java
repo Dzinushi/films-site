@@ -1,7 +1,6 @@
 package com.mev.films.mappers.interfaces;
 
 import com.mev.films.model.UserDTO;
-import com.mev.films.model.UserRoleDTO;
 
 import java.util.List;
 
@@ -13,6 +12,5 @@ public interface UserMapper {
     UserDTO selectUserByLogin(String login);
     void insertUser(UserDTO userDTO);
     void updateUser(UserDTO userDTO);
-    void deleteUser(Long id);
     void deleteUserByLogin(String login);
 }

@@ -19,8 +19,8 @@ import static junit.framework.TestCase.assertTrue;
 
 import static org.easymock.EasyMock.*;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath*:test-dispatcher.xml")
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = "classpath*:test-dispatcher.xml")
 public class FilmServiceTest {
 //
 //    @Autowired private FilmService filmService;

@@ -67,7 +67,7 @@ public class PaymentMapperTest {
 
         List<UserDTO> userDTOS = userMapper.selectUsers();
         for (UserDTO userDTO : userDTOS){
-            userMapper.deleteUser(userDTO.getId());
+            userMapper.deleteUserByLogin(userDTO.getLogin());
         }
 
 
@@ -149,7 +149,7 @@ public class PaymentMapperTest {
 
         List<PaymentDTO> payments = paymentMapper.selectPaymentsByUser(paymentDTOS.get(1).getUserDTO().getId());
         assertTrue("count = 2",
-                paymentDTOS.size() == 2);
+                payments.size() == 2);
         assertTrue("paymentDTO1 = " + paymentDTOS.get(1).toString(),
                 payments.get(0).equals(paymentDTOS.get(1)));
         assertTrue("paymentDTO2 = " + paymentDTOS.get(2).toString(),
@@ -164,10 +164,14 @@ public class PaymentMapperTest {
         }
 
         List<PaymentDTO> payments = paymentMapper.selectPaymentsByFilm(paymentDTOS.get(0).getFilmDTO().getId());
+
+        System.out.println(paymentDTOS.get(0));
+        System.out.println(payments.get(0));
+
         assertTrue("count = 2",
                 payments.size() == 2);
         assertTrue("paymentDTO1 = " + paymentDTOS.get(0).toString(),
-                payments.get(1).equals(paymentDTOS.get(0)));
+                payments.get(0).equals(paymentDTOS.get(0)));
         assertTrue("paymentDTO2 = " + paymentDTOS.get(1).toString(),
                 payments.get(1).equals(paymentDTOS.get(1)));
     }
@@ -179,6 +183,7 @@ public class PaymentMapperTest {
             paymentMapper.insertPayment(paymentDTO);
         }
 
+        List<PaymentDTO> paymentDTOS = paymentMapper.selectPayments();
         PaymentDTO paymentDTO = paymentMapper.selectPayment(paymentDTOS.get(2).getId());
         assertTrue("paymentDTO1 = " + paymentDTOS.get(2).toString(),
                 paymentDTO.equals(paymentDTOS.get(2)));
@@ -228,7 +233,7 @@ public class PaymentMapperTest {
 
         payments = paymentMapper.selectPayments();
         assertTrue("count = 0",
-                payments.size() == 1);
+                payments.size() == 0);
 
         // add 2 delete 1
         paymentMapper.insertPayment(paymentDTOS.get(0));

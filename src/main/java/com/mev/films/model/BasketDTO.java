@@ -34,4 +34,28 @@ public class BasketDTO {
     public Timestamp getTime() {
         return time;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BasketDTO)) return false;
+
+        BasketDTO basketDTO = (BasketDTO) o;
+
+        return getUserDTO() != null ? getUserDTO().equals(basketDTO.getUserDTO()) : basketDTO.getUserDTO() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return getUserDTO() != null ? getUserDTO().hashCode() : 0;
+    }
+
+    @Override
+    public String toString() {
+        return "BasketDTO{" +
+                "id=" + id +
+                ", userDTO=" + userDTO +
+                ", time=" + time +
+                '}';
+    }
 }

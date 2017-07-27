@@ -3,9 +3,9 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.mev.films.mappers.interfaces.PaymentMapper">
+<mapper namespace="com.mev.films.mappers.interfaces.OrderMapper">
 
-    <resultMap id="paymentDTO" type="com.mev.films.model.PaymentDTO">
+    <resultMap id="orderDTO" type="com.mev.films.model.OrderDTO">
         <id property="id" column="id"/>
         <result property="mark" column="mark"/>
         <result property="time" column="time"/>

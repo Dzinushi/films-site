@@ -20,10 +20,6 @@ public class DiscountController {
     public DiscountController(){
     }
 
-    public DiscountController(DiscountService discountService){
-        this.discountService = discountService;
-    }
-
     @RequestMapping(value = {"/api/discounts"}, method = RequestMethod.GET)
     public List<DiscountDTO> getDiscounts() {
         LOG.debug("getDiscounts");

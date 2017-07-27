@@ -26,14 +26,15 @@
             id = #{0}
     </select>
 
-    <select id="selectFilmsSortByName" parameterType="map" resultMap="filmDTO">
+    <select id="selectFilmsSortByName" resultMap="filmDTO">
         SELECT * FROM films ORDER BY name;
     </select>
 
     <select id="selectFilmsByName" parameterType="map" resultMap="filmDTO">
         SELECT * FROM
             films
-        WHERE name = #{0}
+        WHERE
+            name = #{0}
     </select>
 
     <select id="selectFilmByImage" parameterType="map" resultMap="filmDTO">
@@ -63,7 +64,7 @@
             id = #{id}
     </update>
 
-    <delete id="deleteFilm" parameterMap="map">
+    <delete id="deleteFilm" parameterType="map">
         DELETE FROM
             films
         WHERE

@@ -33,15 +33,15 @@ public class UserRoleMapperTest {
 
         List<UserDTO> userDTOS = userMapper.selectUsers();
         for (UserDTO userDTO : userDTOS) {
-            userMapper.deleteUser(userDTO.getId());
+            userMapper.deleteUserByLogin(userDTO.getLogin());
         }
-
-        userMapper.insertUser(userDTO1);
-        userMapper.insertUser(userDTO2);
     }
 
     @Test
     public void selectUserRoles(){
+
+        userMapper.insertUser(userDTO1);
+        userMapper.insertUser(userDTO2);
 
         userRoleMapper.insertUserRole(userRoleDTO1);
         userRoleMapper.insertUserRole(userRoleDTO2);
@@ -58,6 +58,9 @@ public class UserRoleMapperTest {
     @Test
     public void selectUserRole(){
 
+        userMapper.insertUser(userDTO2);
+        userMapper.insertUser(userDTO1);
+
         userRoleMapper.insertUserRole(userRoleDTO2);
         userRoleMapper.insertUserRole(userRoleDTO1);
 
@@ -70,17 +73,21 @@ public class UserRoleMapperTest {
     @Test
     public void selectUserRoleByLogin(){
 
+        userMapper.insertUser(userDTO2);
+        userMapper.insertUser(userDTO1);
+
         userRoleMapper.insertUserRole(userRoleDTO2);
         userRoleMapper.insertUserRole(userRoleDTO1);
 
         UserRoleDTO userRoleDTO = userRoleMapper.selectUserRoleByLogin(userRoleDTO1.getLogin());
-        assertTrue("userRoleDTO1 = " + userRoleDTO2.toString(),
+        assertTrue("userRoleDTO1 = " + userRoleDTO1.toString(),
                 userRoleDTO.equals(userRoleDTO1));
     }
 
     @Test
     public void insertUserRole(){
 
+        userMapper.insertUser(userDTO2);
         userRoleMapper.insertUserRole(userRoleDTO2);
 
         List<UserRoleDTO> userRoleDTOS = userRoleMapper.selectUserRoles();
@@ -89,6 +96,7 @@ public class UserRoleMapperTest {
         assertTrue("userRoleDTO2 = " + userRoleDTO2.toString(),
                 userRoleDTOS.get(0).equals(userRoleDTO2));
 
+        userMapper.insertUser(userDTO1);
         userRoleMapper.insertUserRole(userRoleDTO1);
 
         userRoleDTOS = userRoleMapper.selectUserRoles();
@@ -103,8 +111,8 @@ public class UserRoleMapperTest {
     @Test
     public void updateUserRole(){
 
+        userMapper.insertUser(userDTO2);
         userRoleMapper.insertUserRole(userRoleDTO2);
-        userRoleMapper.insertUserRole(userRoleDTO1);
 
         List<UserRoleDTO> userRoleDTOS = userRoleMapper.selectUserRoles();
         UserRoleDTO userRoleDTO = userRoleDTOS.get(0);

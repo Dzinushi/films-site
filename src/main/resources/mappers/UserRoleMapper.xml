@@ -20,7 +20,8 @@
     <select id="selectUserRole" parameterType="map" resultMap="userRoleDTO">
         SELECT * FROM
             user_roles
-        WHERE id = #{0}
+        WHERE
+            id = #{0}
     </select>
 
     <select id="selectUserRoleByLogin" parameterType="map" resultMap="userRoleDTO">

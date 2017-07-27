@@ -53,7 +53,7 @@
             code = #{0}
     </delete>
 
-    <delete id="deleteDiscount" parameterMap="map">
+    <delete id="deleteDiscount" parameterType="map">
         DELETE FROM
             discounts
         WHERE

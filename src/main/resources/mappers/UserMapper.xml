@@ -25,23 +25,30 @@
     </select>
 
     <select id="selectUsersIdLogin" resultMap="userDTO">
-        SELECT id,login FROM users;
+        SELECT
+            id,login
+        FROM
+            users;
     </select>
 
     <select id="selectUsersSortByLogin" resultMap="userDTO">
-        SELECT * FROM users ORDER BY login;
+        SELECT * FROM
+            users
+        ORDER BY
+            login;
     </select>
 
     <select id="selectUserByLogin" parameterType="map" resultMap="userDTO">
-        SELECT * FROM users
+        SELECT * FROM
+            users
         WHERE
-            users.login=#{0};
+            login = #{0};
     </select>
 
-    <insert id="insertUser" parameterType="map">
+    <insert id="insertUser" parameterType="com.mev.films.model.UserDTO">
         INSERT INTO
             users (login, password, enabled, time)
-        VALUES (#{0.login}, #{0.password}, #{0.enabled}, clock_timestamp());
+        VALUES (#{login}, #{password}, #{enabled}, clock_timestamp());
     </insert>
 
     <update id="updateUser" parameterType="com.mev.films.model.UserDTO">
@@ -55,26 +62,17 @@
             id = #{id};
     </update>
 
-    <delete id="deleteUser" parameterType="map">
+    <delete id="deleteUserByLogin" parameterType="map">
         DELETE FROM
-            user_roles
+            user_roles ur
+        USING users u
         WHERE
-            id = #{0};
+            ur.login = u.login
+            AND u.login = #{0};
         DELETE FROM
-            users
+            users u
         WHERE
-            id = #{0}
-    </delete>
-
-    <delete id="deleteUserByName" parameterType="map">
-        DELETE FROM
-            user_roles
-        WHERE
-            login = #{0};
-        DELETE FROM
-            users
-        WHERE
-            login = #{0}
+            u.login = #{0}
     </delete>
 
 </mapper>

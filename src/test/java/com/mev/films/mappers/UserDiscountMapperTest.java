@@ -48,7 +48,7 @@ public class UserDiscountMapperTest {
 
         List<UserDTO> userDTOS = userMapper.selectUsers();
         for (UserDTO userDTO : userDTOS){
-            userMapper.deleteUser(userDTO.getId());
+            userMapper.deleteUserByLogin(userDTO.getLogin());
         }
 
         List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
@@ -62,6 +62,7 @@ public class UserDiscountMapperTest {
 
         discountMapper.insertDiscount(discountDTO1);
         discountMapper.insertDiscount(discountDTO2);
+        discountMapper.insertDiscount(discountDTO3);
 
         userDTOS = userMapper.selectUsersIdLogin();
         discountDTOS = discountMapper.selectDiscounts();
@@ -104,6 +105,7 @@ public class UserDiscountMapperTest {
 
         userDiscountMapper.insertUserDiscount(userDiscountDTO1);
         userDiscountMapper.insertUserDiscount(userDiscountDTO2);
+        userDiscountMapper.insertUserDiscount(userDiscountDTO3);
 
         List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectUserDiscounts();
 

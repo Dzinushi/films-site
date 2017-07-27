@@ -91,13 +91,13 @@ public class UserController {
         userRoleService.updateUserRole(userRoleDTO);
     }
 
-    @RequestMapping(value = {"/api/users"}, method = RequestMethod.DELETE)
-    public void deleteUser(@RequestParam Long id) {
-        LOG.debug("deleteUser: id = {}",
-                id);
-
-        userService.deleteUser(id);
-    }
+//    @RequestMapping(value = {"/api/users"}, method = RequestMethod.DELETE)
+//    public void deleteUser(@RequestParam Long id) {
+//        LOG.debug("deleteUser: id = {}",
+//                id);
+//
+//        userService.deleteUser(id);
+//    }
 
     @RequestMapping(value = {"/api/users/login"}, method = RequestMethod.DELETE)
     public void deleteUserByLogin(@RequestParam String login) {

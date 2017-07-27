@@ -125,7 +125,7 @@
         VALUES (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, clock_timestamp());
     </insert>
 
-    <delete id="deletePayment" parameterMap="map">
+    <delete id="deletePayment" parameterType="map">
         DELETE FROM
             "postgres-test".public.payments
         WHERE

@@ -12,6 +12,6 @@ public interface UserService {
     UserDTO getUserByLogin(String login);
     void addUser(UserDTO userDTO);
     void updateUser(UserDTO userDTO);
-    void deleteUser(Long id);
+//    void deleteUser(Long id);
     void deleteUserByLogin(String login);
 }

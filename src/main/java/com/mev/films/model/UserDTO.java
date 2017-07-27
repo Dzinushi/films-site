@@ -14,9 +14,9 @@ public class UserDTO {
     }
 
     public UserDTO(String login, String password, Short enabled){
-        setLogin(login);
-        setPassword(password);
-        setEnabled(enabled);
+        this.login = login;
+        this.password = password;
+        this.enabled = enabled;
     }
 
     public Long getId() {
@@ -72,17 +72,17 @@ public class UserDTO {
 
         UserDTO userDTO = (UserDTO) o;
 
-        if (!Objects.equals(getEnabled(), userDTO.getEnabled())) return false;
         if (getLogin() != null ? !getLogin().equals(userDTO.getLogin()) : userDTO.getLogin() != null) return false;
-        return getPassword() != null ? getPassword().equals(userDTO.getPassword()) : userDTO.getPassword() == null;
+        if (getPassword() != null ? !getPassword().equals(userDTO.getPassword()) : userDTO.getPassword() != null)
+            return false;
+        return getEnabled() != null ? getEnabled().equals(userDTO.getEnabled()) : userDTO.getEnabled() == null;
     }
 
     @Override
     public int hashCode() {
-        int result = getId() != null ? getId().hashCode() : 0;
-        result = 31 * result + (getLogin() != null ? getLogin().hashCode() : 0);
+        int result = getLogin() != null ? getLogin().hashCode() : 0;
         result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
-        result = 31 * result + (int) getEnabled();
+        result = 31 * result + (getEnabled() != null ? getEnabled().hashCode() : 0);
         return result;
     }
 }
