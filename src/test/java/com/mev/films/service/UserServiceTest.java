@@ -4,7 +4,9 @@ import com.mev.films.mappers.interfaces.UserMapper;
 import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserRoleDTO;
+import com.mev.films.service.implement.ExceptionServiceImpl;
 import com.mev.films.service.implement.UserServiceImpl;
+import com.mev.films.service.interfaces.ExceptionService;
 import com.mev.films.service.interfaces.UserService;
 import org.easymock.IAnswer;
 import org.junit.Before;
@@ -21,32 +23,31 @@ import static junit.framework.TestCase.assertTrue;
 import static org.easymock.EasyMock.*;
 
 
-//@RunWith(SpringJUnit4ClassRunner.class)
-//@ContextConfiguration(locations = "classpath*:test-dispatcher.xml")
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = "classpath*:test-dispatcher.xml")
 public class UserServiceTest {
-//
-//    @Autowired private UserService userService;
-//
-//    @Autowired private UserMapper userMapperMock;
-//    @Autowired private UserRoleMapper userRoleMapperMock;
-//
-//    private static UserDTO userDTO1 = new UserDTO("user1", "user1", (short) 1);
-//    private static UserDTO userDTO2 = new UserDTO("user2", "user2", (short) 1);
-//
-//    private static UserRoleDTO userRoleDTO1 = new UserRoleDTO("user1", "ROLE_USER");
-//    private static UserRoleDTO userRoleDTO2 = new UserRoleDTO("user2", "ROLE_ADMIN");
-//
-//    @Before
-//    public void setup(){
-//        userMapperMock = createNiceMock(UserMapper.class);
-//        userRoleMapperMock = createNiceMock(UserRoleMapper.class);
-//        userService = new UserServiceImpl(userMapperMock, userRoleMapperMock);
-//
-//        userDTO1.setId(1L);
-//        userDTO2.setId(2L);
-//        userRoleDTO1.setId(1L);
-//        userRoleDTO2.setId(2L);
-//    }
+
+    @Autowired private UserService userService;
+
+    @Autowired private UserMapper userMapperMock;
+    @Autowired private UserRoleMapper userRoleMapperMock;
+
+    @Autowired private ExceptionService exceptionService;
+
+    private UserDTO userDTO1 = new UserDTO("user1", "user1", (short) 1);
+    private UserDTO userDTO2 = new UserDTO("user2", "user2", (short) 1);
+
+    @Before
+    public void setup(){
+        userMapperMock = createNiceMock(UserMapper.class);
+
+        exceptionService = new ExceptionServiceImpl(userMapperMock);
+
+        userService = new UserServiceImpl(userMapperMock, exceptionService);
+
+        userDTO1.setId(1L);
+        userDTO2.setId(2L);
+    }
 //
 //    @Test
 //    public void getUsersTest(){

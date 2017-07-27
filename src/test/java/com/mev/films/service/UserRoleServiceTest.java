@@ -4,8 +4,10 @@ import com.mev.films.mappers.interfaces.UserMapper;
 import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserRoleDTO;
+import com.mev.films.service.implement.ExceptionServiceImpl;
 import com.mev.films.service.implement.UserRoleServiceImpl;
 import com.mev.films.service.implement.UserServiceImpl;
+import com.mev.films.service.interfaces.ExceptionService;
 import com.mev.films.service.interfaces.UserRoleService;
 import com.mev.films.service.interfaces.UserService;
 import org.easymock.IAnswer;
@@ -16,13 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static com.mev.films.service.implement.ExceptionServiceImpl.Errors.*;
 import static junit.framework.TestCase.assertTrue;
-import static org.easymock.EasyMock.createNiceMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
+import static junit.framework.TestCase.fail;
+import static org.easymock.EasyMock.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = "classpath*:test-dispatcher.xml")
@@ -33,6 +32,8 @@ public class UserRoleServiceTest {
 
     @Autowired private UserRoleMapper userRoleMapperMock;
     @Autowired private UserMapper userMapperMock;
+
+    @Autowired private ExceptionService exceptionService;
 
     private static UserDTO userDTO1 = new UserDTO("user1", "user1", (short) 1);
     private static UserDTO userDTO2 = new UserDTO("user2", "user2", (short) 1);
@@ -47,8 +48,10 @@ public class UserRoleServiceTest {
         userMapperMock = createNiceMock(UserMapper.class);
         userRoleMapperMock = createNiceMock(UserRoleMapper.class);
 
-        userService = new UserServiceImpl(userMapperMock);
-        userRoleService = new UserRoleServiceImpl(userRoleMapperMock, userService);
+        exceptionService = new ExceptionServiceImpl(userMapperMock);
+
+        userService = new UserServiceImpl(userMapperMock, exceptionService);
+        userRoleService = new UserRoleServiceImpl(userRoleMapperMock, userService, exceptionService);
 
         userDTO1.setId(1L);
         userDTO2.setId(2L);
@@ -58,55 +61,184 @@ public class UserRoleServiceTest {
     }
 
     @Test
-    public void selectUserRolesTest(){
-
-        expect(userRoleService.getUserRoles()).andAnswer(new IAnswer<List<UserRoleDTO>>() {
-            @Override
-            public List<UserRoleDTO> answer() throws Throwable {
-                List<UserRoleDTO> userRoleDTOS = new ArrayList<>();
-                userRoleDTOS.add(userRoleDTO1);
-                userRoleDTOS.add(userRoleDTO2);
-
-                return userRoleDTOS;
-            }
-        });
-
-        replay(userMapperMock);
-        replay(userRoleMapperMock);
-
-        userRoleService.getUserRoles();
+    public void getUserRolesTest(){
     }
 
     @Test
-    public void selectUserRoleTest(){
+    public void getUserRoleTest(){
 
-        expect(userRoleService.getUserRole(2L)).andAnswer(new IAnswer<UserRoleDTO>() {
+        expect(userRoleMapperMock.selectUserRole(2L)).andAnswer(new IAnswer<UserRoleDTO>() {
             @Override
             public UserRoleDTO answer() throws Throwable {
                 return userRoleDTO2;
             }
         });
 
-        replay(userMapperMock);
         replay(userRoleMapperMock);
 
+        // check valid id
         UserRoleDTO userRoleDTO = userRoleService.getUserRole(2L);
-//        assertTrue("UserRoleDTO1 = " + userRoleDTO1,
-//                userRoleDTO.equals(userRoleDTO1));
+        assertTrue(userRoleDTO2.toString(),
+                userRoleDTO.equals(userRoleDTO2));
+
+        // check id set 'null'
+        try {
+            userRoleService.getUserRole(null);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("user_role_id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ID_PROVIDED).getMessage()));
+        }
+
+        // check id set '-1'
+        try {
+            userRoleService.getUserRole(-1L);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("user_role_id = -1",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ID_PROVIDED).getMessage()));
+        }
+
+        verify(userRoleMapperMock);
     }
-//
-//    @Test
-//    public void updateUserRoleTest(){
-//
-//        userMapperMock.insertUser(userDTO1, userRoleDTO1);
-//
-//        UserRoleDTO getUserRole1 = userRoleMapperMock.selectUserRoleByLogin(userDTO1.getLogin());
-//        getUserRole1.setRole("USER_ADMIN");
-//
-//        userRoleMapperMock.updateUserRole(getUserRole1);
-//
-//        UserRoleDTO userRoleDTO = userRoleMapperMock.selectUserRole(getUserRole1.getId());
-//        assertTrue("UserRoleDTO1 = " + userRoleDTO1,
-//                userRoleDTO.equals(getUserRole1));
-//    }
+
+    @Test
+    public void getUserRoleByLoginTest(){
+
+        expect(userRoleMapperMock.selectUserRoleByLogin("user1")).andAnswer(new IAnswer<UserRoleDTO>() {
+            @Override
+            public UserRoleDTO answer() throws Throwable {
+                return userRoleDTO1;
+            }
+        });
+
+        replay(userRoleMapperMock);
+
+        // check valid login
+        UserRoleDTO userRoleDTO = userRoleService.getUserRoleByLogin("user1");
+        assertTrue(userRoleDTO1.toString(),
+                userRoleDTO.equals(userRoleDTO1));
+
+        // check login set null
+        try {
+            userRoleDTO = userRoleService.getUserRoleByLogin(null);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_LOGIN_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("login = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_LOGIN_PROVIDED).getMessage()));
+        }
+
+        verify(userRoleMapperMock);
+    }
+
+    @Test
+    public void addUserRoleTest(){
+
+        expect(userMapperMock.selectUserByLogin("user1")).andAnswer(new IAnswer<UserDTO>() {
+            @Override
+            public UserDTO answer() throws Throwable {
+                return userDTO1;
+            }
+        });
+
+        replay(userRoleMapperMock);
+        replay(userMapperMock);
+
+        userRoleService.addUserRole(userRoleDTO1);
+
+        // check null
+        try {
+            userRoleService.addUserRole(null);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_NULL_POINTER_EXCEPTION).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userRoleDTO = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_NULL_POINTER_EXCEPTION).getMessage()));
+        }
+
+        // check role null
+        try {
+            userRoleService.addUserRole(new UserRoleDTO(userRoleDTO1.getLogin(), null));
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ROLE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userRoleDTO.role = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ROLE).getMessage()));
+        }
+
+        // check user not found (user == null)
+        try {
+            userRoleService.addUserRole(new UserRoleDTO(userRoleDTO2.getLogin(), userRoleDTO2.getRole()));
+            fail(new ExceptionServiceImpl(USER_ERROR_NULL_POINTER_EXCEPTION).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDTO = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ERROR_NULL_POINTER_EXCEPTION).getMessage()));
+        }
+    }
+
+    @Test
+    public void updateUserRoleTest(){
+
+        expect(userMapperMock.selectUserByLogin("user1")).andAnswer(new IAnswer<UserDTO>() {
+            @Override
+            public UserDTO answer() throws Throwable {
+                return userDTO1;
+            }
+        });
+
+        replay(userRoleMapperMock);
+        replay(userMapperMock);
+
+        userRoleService.updateUserRole(userRoleDTO1);
+
+        // check null
+        try {
+            userRoleService.updateUserRole(null);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_NULL_POINTER_EXCEPTION).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userRoleDTO = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_NULL_POINTER_EXCEPTION).getMessage()));
+        }
+
+        // check id null
+        try {
+            UserRoleDTO userRoleDTO = new UserRoleDTO(userRoleDTO1.getLogin(), userRoleDTO1.getRole());
+            userRoleService.updateUserRole(userRoleDTO);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userRoleDTO.id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ID_PROVIDED).getMessage()));
+        }
+
+        // check id < 0
+        try {
+            UserRoleDTO userRoleDTO = new UserRoleDTO(userRoleDTO1.getLogin(), userRoleDTO1.getRole());
+            userRoleDTO.setId(-5L);
+            userRoleService.updateUserRole(userRoleDTO);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userRoleDTO.id = -5",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ID_PROVIDED).getMessage()));
+        }
+
+        // check role null
+        try {
+            UserRoleDTO userRoleDTO = new UserRoleDTO(userRoleDTO1.getLogin(), null);
+            userRoleDTO.setId(1L);
+            userRoleService.updateUserRole(userRoleDTO);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ROLE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userRoleDTO.role = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_ROLE).getMessage()));
+        }
+
+        // check user not found (user = null)
+        try {
+            UserRoleDTO userRoleDTO = new UserRoleDTO(userRoleDTO2.getLogin(), userRoleDTO2.getRole());
+            userRoleDTO.setId(1L);
+            userRoleService.updateUserRole(userRoleDTO);
+            fail(new ExceptionServiceImpl(USER_ERROR_NULL_POINTER_EXCEPTION).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDTO = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ERROR_NULL_POINTER_EXCEPTION).getMessage()));
+        }
+    }
 }

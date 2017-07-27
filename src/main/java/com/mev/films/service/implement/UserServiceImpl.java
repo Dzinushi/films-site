@@ -1,17 +1,14 @@
 package com.mev.films.service.implement;
 
 import com.mev.films.mappers.interfaces.UserMapper;
-import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.UserDTO;
-import com.mev.films.model.UserRoleDTO;
-import com.mev.films.service.interfaces.UserRoleService;
+import com.mev.films.service.interfaces.ExceptionService;
 import com.mev.films.service.interfaces.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -23,11 +20,14 @@ public class UserServiceImpl implements UserService{
 
     @Autowired private UserMapper userMapper;
 
+    @Autowired private ExceptionService exceptionService;
+
     public UserServiceImpl(){
     }
 
-    public UserServiceImpl(UserMapper userMapper){
+    public UserServiceImpl(UserMapper userMapper, ExceptionService exceptionService){
         this.userMapper = userMapper;
+        this.exceptionService = exceptionService;
     }
 
     @Override

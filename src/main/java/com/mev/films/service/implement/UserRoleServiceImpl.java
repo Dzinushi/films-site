@@ -3,6 +3,7 @@ package com.mev.films.service.implement;
 import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserRoleDTO;
+import com.mev.films.service.interfaces.ExceptionService;
 import com.mev.films.service.interfaces.UserRoleService;
 import com.mev.films.service.interfaces.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -22,13 +23,16 @@ public class UserRoleServiceImpl implements UserRoleService{
     @Autowired private UserRoleMapper userRoleMapper;
 
     @Autowired private UserService userService;
+    @Autowired private ExceptionService exceptionService;
 
     public UserRoleServiceImpl(){
+        this.exceptionService = new ExceptionServiceImpl();
     }
 
-    public UserRoleServiceImpl(UserRoleMapper userRoleMapper, UserService userService){
+    public UserRoleServiceImpl(UserRoleMapper userRoleMapper, UserService userService, ExceptionService exceptionService){
         this.userRoleMapper = userRoleMapper;
         this.userService = userService;
+        this.exceptionService = exceptionService;
     }
 
     @Override
@@ -45,16 +49,9 @@ public class UserRoleServiceImpl implements UserRoleService{
         LOG.debug("getUserRole: id = {}",
                 id);
 
-        UserRoleDTO userRoleDTO = null;
-        if (id != null && id >= 0){
-            userRoleDTO = userRoleMapper.selectUserRole(id);
-        }
-        else {
-            LOG.debug("Error in 'getUserRole'! 'id' is not validate: id = {}",
-                    id);
-        }
+        exceptionService.checkUserRoleId(id);
 
-        return userRoleDTO;
+        return userRoleMapper.selectUserRole(id);
     }
 
     @Override
@@ -63,16 +60,9 @@ public class UserRoleServiceImpl implements UserRoleService{
         LOG.debug("getUserRoleByLogin: login = {}",
                 login);
 
-        UserRoleDTO userRoleDTO = null;
-        if (login != null){
-            userRoleDTO = userRoleMapper.selectUserRoleByLogin(login);
-        }
-        else {
-            LOG.debug("Error in 'getUserRoleByLogin'! 'login' is not validate: login = {}",
-                    login);
-        }
+        exceptionService.checkUserRoleLogin(login);
 
-        return userRoleDTO;
+        return userRoleMapper.selectUserRoleByLogin(login);
     }
 
     @Override
@@ -81,30 +71,9 @@ public class UserRoleServiceImpl implements UserRoleService{
         LOG.debug("addUserRole: {}",
                 userRoleDTO);
 
-        if (userRoleDTO != null){
-            if (userRoleDTO.getLogin() != null) {
+        exceptionService.checkUserRoleWithoutId(userRoleDTO);
 
-                UserDTO userDTO = userService.getUserByLogin(userRoleDTO.getLogin());
-                if (userDTO != null) {
-                    if (userRoleDTO.getRole() != null) {
-
-                        userRoleMapper.insertUserRole(userRoleDTO);
-
-                    } else {
-                        LOG.debug("Error in 'addUserRole'! 'role' is null");
-                    }
-                }
-                else {
-                    LOG.debug("Error in 'addUserRole'! User is not exist");
-                }
-            }
-            else {
-                LOG.debug("Error in 'addUserRole'! 'login' is null");
-            }
-        }
-        else {
-            LOG.debug("Error in 'addUserRole'! 'userRoleDTO' is null");
-        }
+        userRoleMapper.insertUserRole(userRoleDTO);
     }
 
     @Override
@@ -113,35 +82,8 @@ public class UserRoleServiceImpl implements UserRoleService{
         LOG.debug("updateUserRole: {}",
                 userRoleDTO);
 
-        if (userRoleDTO != null){
-            if (userRoleDTO.getId() != null && userRoleDTO.getId() >= 0){
-                if (userRoleDTO.getLogin() != null) {
+        exceptionService.checkUserRole(userRoleDTO);
 
-                    UserDTO userDTO = userService.getUserByLogin(userRoleDTO.getLogin());
-                    if (userDTO != null) {
-                        if (userRoleDTO.getRole() != null) {
-
-                            userRoleMapper.updateUserRole(userRoleDTO);
-
-                        } else {
-                            LOG.debug("Error in 'updateUserRole'! 'role' is null");
-                        }
-                    }
-                    else {
-                        LOG.debug("Error in updateUserRole: that user is not exist");
-                    }
-                }
-                else {
-                    LOG.debug("Error in 'updateUserRole'! 'login' is null");
-                }
-            }
-            else {
-                LOG.debug("Error in 'updateUserRole'! 'id' is not validate: id = {}",
-                        userRoleDTO.getId());
-            }
-        }
-        else {
-            LOG.debug("Error in 'updateUserRole'! 'userRoleDTO' is null");
-        }
+        userRoleMapper.updateUserRole(userRoleDTO);
     }
 }
