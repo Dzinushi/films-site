@@ -15,7 +15,7 @@ public class FilmDTO {
     public FilmDTO(){
     }
 
-    public FilmDTO(String name, String genre, short duration, int price, String image){
+    public FilmDTO(String name, String genre, Short duration, Integer price, String image){
         setName(name);
         setGenre(genre);
         setDuration(duration);

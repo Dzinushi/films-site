@@ -5,6 +5,7 @@ import com.mev.films.model.DiscountDTO;
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserDiscountDTO;
 import com.mev.films.service.interfaces.DiscountService;
+import com.mev.films.service.interfaces.ExceptionService;
 import com.mev.films.service.interfaces.UserDiscountService;
 import com.mev.films.service.interfaces.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -26,63 +27,14 @@ public class UserDiscountServiceImpl implements UserDiscountService{
     @Autowired private UserService userService;
     @Autowired private DiscountService discountService;
 
+    @Autowired private ExceptionService exceptionService;
+
     public UserDiscountServiceImpl(){
     }
 
-    public UserDiscountServiceImpl(UserDiscountMapper userDiscountMapper){
+    public UserDiscountServiceImpl(UserDiscountMapper userDiscountMapper, ExceptionService exceptionService){
         this.userDiscountMapper = userDiscountMapper;
-    }
-
-    private boolean checkUserDiscount(UserDiscountDTO userDiscountDTO, boolean idCheck, String functionName){
-        boolean userOk = false;
-        boolean discountOk = false;
-        boolean idOk = true;
-
-        UserDTO userDTO = userDiscountDTO.getUserDTO();
-        if (userDTO != null){
-            Long userId = userDTO.getId();
-            if (userId != null && userId  >= 0){
-                if (userService.getUser(userId) != null){
-                    userOk = true;
-                }
-                else {
-                    LOG.debug("Error in " + "'" + functionName + "'! User not found");
-                }
-            }
-            else {
-                LOG.debug("Error in " + "'" + functionName + "'! 'user_id is not validate: user_id = {}",
-                        userId);
-            }
-        }
-        else {
-            LOG.debug("Error in " + "'" + functionName + "'! 'userDTO' is null");
-        }
-
-        DiscountDTO discountDTO = userDiscountDTO.getDiscountDTO();
-        if (discountDTO != null){
-            Long discountId = discountDTO.getId();
-            if (discountId != null && discountId >= 0){
-                if (discountService.getDiscount(discountId) != null){
-                    discountOk = true;
-                }
-                else {
-                    LOG.debug("Error in " + "'" + functionName + "'! Discount not found");
-                }
-            }
-            else {
-                LOG.debug("Error in " + "'" + functionName + "'! 'discount_id' is not validate: discount_id = {}",
-                        discountId);
-            }
-        }
-        else {
-            LOG.debug("Error in " + "'" + functionName + "'! 'discountDTO' is null");
-        }
-
-        if (idCheck){
-            idOk = userDiscountDTO.getId() != null && userDiscountDTO.getId() >= 0;
-        }
-
-        return userOk && discountOk && idOk;
+        this.exceptionService = exceptionService;
     }
 
     @Override
@@ -97,16 +49,9 @@ public class UserDiscountServiceImpl implements UserDiscountService{
         LOG.debug("getUserDiscount: id = {}",
                 id);
 
-        UserDiscountDTO userDiscountDTO = null;
-        if (id != null && id >= 0){
-            userDiscountDTO = userDiscountMapper.selectUserDiscount(id);
-        }
-        else {
-            LOG.debug("Error in 'getUserDiscount'! 'id' is not validate: id = {}",
-                    id);
-        }
+        exceptionService.checkUserDiscountId(id);
 
-        return userDiscountDTO;
+        return userDiscountMapper.selectUserDiscount(id);
     }
 
     @Override
@@ -114,16 +59,9 @@ public class UserDiscountServiceImpl implements UserDiscountService{
         LOG.debug("getUserDiscountsByUser: user_id = {}",
                 userId);
 
-        List<UserDiscountDTO> userDiscountDTOS = null;
-        if (userId != null && userId >= 0){
-            userDiscountDTOS = userDiscountMapper.selectUserDiscountsByUser(userId);
-        }
-        else {
-            LOG.debug("Error in 'getUserDiscountsByUser'! 'user_id is not validate: user_id = {}",
-                    userId);
-        }
+        exceptionService.checkUserDiscountUserId(userId);
 
-        return userDiscountDTOS;
+        return userDiscountMapper.selectUserDiscountsByUser(userId);
     }
 
     @Override
@@ -131,16 +69,9 @@ public class UserDiscountServiceImpl implements UserDiscountService{
         LOG.debug("getUserDiscountByDiscount: discount_id = {}",
                 discountId);
 
-        UserDiscountDTO userDiscountDTO = null;
-        if (discountId != null && discountId >= 0){
-            userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(discountId);
-        }
-        else {
-            LOG.debug("Error in 'getUserDiscountByDiscount'! 'discount_id is not validate: discount_id = {}",
-                    discountId);
-        }
+        exceptionService.checkUserDiscountDiscountId(discountId);
 
-        return userDiscountDTO;
+        return userDiscountMapper.selectUserDiscountByDiscount(discountId);
     }
 
     @Override
@@ -148,9 +79,9 @@ public class UserDiscountServiceImpl implements UserDiscountService{
         LOG.debug("addUserDiscount: userDiscountDTO = {}",
                 userDiscountDTO);
 
-        if (checkUserDiscount(userDiscountDTO, false, "addUserDiscount")) {
-            userDiscountMapper.insertUserDiscount(userDiscountDTO);
-        }
+        exceptionService.checkUserDiscountWithoutId(userDiscountDTO);
+
+        userDiscountMapper.insertUserDiscount(userDiscountDTO);
     }
 
     @Override
@@ -158,9 +89,9 @@ public class UserDiscountServiceImpl implements UserDiscountService{
         LOG.debug("updateUserDiscount: userDiscountDTO = {}",
                 userDiscountDTO);
 
-        if (checkUserDiscount(userDiscountDTO, true, "updateUserDiscount")) {
-            userDiscountMapper.updateUserDiscount(userDiscountDTO);
-        }
+        exceptionService.checkUserDiscount(userDiscountDTO);
+
+        userDiscountMapper.updateUserDiscount(userDiscountDTO);
     }
 
     @Override
@@ -168,13 +99,9 @@ public class UserDiscountServiceImpl implements UserDiscountService{
         LOG.debug("deleteUserDiscount: id = {}",
                 id);
 
-        if (id != null && id >= 0){
-            userDiscountMapper.deleteUserDiscount(id);
-        }
-        else {
-            LOG.debug("Error in 'deleteUserDiscount'! 'id' is not validate: id = {}",
-                    id);
-        }
+        exceptionService.checkUserDiscountId(id);
+
+        userDiscountMapper.deleteUserDiscount(id);
     }
 
     @Override
@@ -182,19 +109,9 @@ public class UserDiscountServiceImpl implements UserDiscountService{
         LOG.debug("deleteUserDiscountByDiscount: discount_id = {}",
                 discountId);
 
-        if (discountId != null && discountId >= 0){
-            DiscountDTO discountDTO = discountService.getDiscount(discountId);
-            if (discountDTO != null) {
-                userDiscountMapper.deleteUserDiscountByDiscount(discountId);
-            }
-            else {
-                LOG.debug("Error in 'deleteUserDiscountByDiscount'! Discount is not found");
-            }
-        }
-        else {
-            LOG.debug("Error in 'deleteUserDiscountByDiscount'! 'id' is not validate: id = {}",
-                    discountId);
-        }
+        exceptionService.checkUserDiscountDiscountId(discountId);
+
+        userDiscountMapper.deleteUserDiscountByDiscount(discountId);
     }
 
     @Override
@@ -202,18 +119,8 @@ public class UserDiscountServiceImpl implements UserDiscountService{
         LOG.debug("deleteUserDiscountByUser: user_id = {}",
                 userId);
 
-        if (userId != null && userId >= 0){
-            UserDTO userDTO = userService.getUser(userId);
-            if (userDTO != null) {
-                userDiscountMapper.deleteUserDiscountByUser(userId);
-            }
-            else {
-                LOG.debug("Error in 'deleteUserDiscountByUser'! User is not found");
-            }
-        }
-        else {
-            LOG.debug("Error in 'deleteUserDiscountByUser'! 'id' is not validate: id = {}",
-                    userId);
-        }
+        exceptionService.checkUserDiscountUserId(userId);
+
+        userDiscountMapper.deleteUserDiscountByUser(userId);
     }
 }

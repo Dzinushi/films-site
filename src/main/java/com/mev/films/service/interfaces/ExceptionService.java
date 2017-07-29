@@ -1,8 +1,6 @@
 package com.mev.films.service.interfaces;
 
-import com.mev.films.model.DiscountDTO;
-import com.mev.films.model.UserDTO;
-import com.mev.films.model.UserRoleDTO;
+import com.mev.films.model.*;
 
 public interface ExceptionService {
 
@@ -23,4 +21,18 @@ public interface ExceptionService {
     void checkDiscountCode(String code);
     void checkDiscountWithoutId(DiscountDTO discountDTO);
     void checkDiscount(DiscountDTO discountDTO);
+
+    // FilmService
+    void checkFilmId(Long id);
+    void checkFilmName(String name);
+    void checkFilmImage(String image);
+    void checkFilmWithoutId(FilmDTO filmDTO);
+    void checkFilm(FilmDTO filmDTO);
+
+    // UserDiscountService
+    void checkUserDiscountId(Long id);
+    void checkUserDiscountUserId(Long userId);
+    void checkUserDiscountDiscountId(Long discountId);
+    void checkUserDiscountWithoutId(UserDiscountDTO userDiscountDTO);
+    void checkUserDiscount(UserDiscountDTO userDiscountDTO);
 }

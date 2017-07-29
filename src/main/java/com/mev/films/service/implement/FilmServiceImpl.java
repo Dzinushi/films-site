@@ -3,6 +3,7 @@ package com.mev.films.service.implement;
 import com.mev.films.mappers.interfaces.FilmMapper;
 import com.mev.films.model.FilmDTO;
 import com.mev.films.model.UserDTO;
+import com.mev.films.service.interfaces.ExceptionService;
 import com.mev.films.service.interfaces.FilmService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,11 +22,14 @@ public class FilmServiceImpl implements FilmService{
 
     @Autowired private FilmMapper filmMapper;
 
+    @Autowired private ExceptionService exceptionService;
+
     public FilmServiceImpl(){
     }
 
-    public FilmServiceImpl(FilmMapper filmMapper) {
+    public FilmServiceImpl(FilmMapper filmMapper, ExceptionService exceptionService) {
        this.filmMapper = filmMapper;
+       this.exceptionService = exceptionService;
     }
 
     @Override
@@ -40,16 +44,9 @@ public class FilmServiceImpl implements FilmService{
         LOG.debug("getFilm: id = {}",
                 id);
 
-        FilmDTO filmDTO = null;
-        if (id != null && id >= 0){
-            filmDTO = filmMapper.selectFilm(id);
-        }
-        else {
-            LOG.debug("Error in 'getFilm'! 'id' is not validate: id = {}",
-                    id);
-        }
+        exceptionService.checkFilmId(id);
 
-        return filmDTO;
+        return filmMapper.selectFilm(id);
     }
 
     @Override
@@ -64,15 +61,9 @@ public class FilmServiceImpl implements FilmService{
         LOG.debug("getFilmByName: name = {}",
                 name);
 
-        List<FilmDTO> filmDTOS = null;
-        if (name != null){
-            filmDTOS = filmMapper.selectFilmsSortByName();
-        }
-        else {
-            LOG.debug("Error in 'getFilmByName'! 'name' is null");
-        }
+        exceptionService.checkFilmName(name);
 
-        return filmDTOS;
+        return filmMapper.selectFilmsByName(name);
     }
 
     @Override
@@ -80,19 +71,9 @@ public class FilmServiceImpl implements FilmService{
         LOG.debug("getFilmByImage: image = {}",
                 image);
 
-        FilmDTO filmDTO = null;
-        if (image != null && (image.endsWith(".jpg") ||
-                              image.endsWith(".jpeg") ||
-                              image.endsWith(".png") ||
-                              image.endsWith(".bmp"))){
-            filmDTO = filmMapper.selectFilmByImage(image);
-        }
-        else {
-            LOG.debug("Error in 'getFilmByImage'! image is not validate: image = {}",
-                    image);
-        }
+        exceptionService.checkFilmImage(image);
 
-        return filmDTO;
+        return filmMapper.selectFilmByImage(image);
     }
 
     @Override
@@ -100,46 +81,9 @@ public class FilmServiceImpl implements FilmService{
         LOG.debug("addFilm: {}",
                 filmDTO);
 
-        if (filmDTO != null){
-            if (filmDTO.getName() != null){
-                if (filmDTO.getGenre() != null){
-                    if (filmDTO.getPrice() > 0 && filmDTO.getPrice() < 10000){
-                        if (filmDTO.getDuration() > 0 && filmDTO.getDuration() < 300) {
-                            String image = filmDTO.getImage();
-                            if (image != null && (image.endsWith(".jpg") ||
-                                    image.endsWith(".jpeg") ||
-                                    image.endsWith(".png") ||
-                                    image.endsWith(".bmp"))){
+        exceptionService.checkFilmWithoutId(filmDTO);
 
-                                filmMapper.insertFilm(filmDTO);
-
-                            }
-                            else {
-                                LOG.debug("Error in 'addFilm'! 'image' is not validate: image = {}",
-                                        filmDTO.getImage());
-                            }
-                        }
-                        else {
-                            LOG.debug("Error in 'addFilm'! 'duration' is not validate: duration = {}",
-                                    filmDTO.getDuration());
-                        }
-                    }
-                    else {
-                        LOG.debug("Error in 'addFilm'! 'price' is not validate: price = {}",
-                                filmDTO.getPrice());
-                    }
-                }
-                else {
-                    LOG.debug("Error in 'addFilm'! 'genre' is null");
-                }
-            }
-            else {
-                LOG.debug("Error in 'addFilm'! 'name' is null");
-            }
-        }
-        else {
-            LOG.debug("Error in 'addFilm'! 'filmDTO' is null");
-        }
+        filmMapper.insertFilm(filmDTO);
     }
 
     @Override
@@ -147,47 +91,9 @@ public class FilmServiceImpl implements FilmService{
         LOG.debug("updateFilm: filmDTO = {}",
                 filmDTO);
 
-        if (filmDTO != null){
-            if (filmDTO.getId() != null && filmDTO.getId() >= 0) {
-                if (filmDTO.getName() != null) {
-                    if (filmDTO.getGenre() != null) {
-                        if (filmDTO.getPrice() > 0 && filmDTO.getPrice() < 10000) {
-                            if (filmDTO.getDuration() > 0 && filmDTO.getDuration() < 300) {
-                                String image = filmDTO.getImage();
-                                if (image != null && (image.endsWith(".jpg") ||
-                                        image.endsWith(".jpeg") ||
-                                        image.endsWith(".png") ||
-                                        image.endsWith(".bmp"))) {
+        exceptionService.checkFilm(filmDTO);
 
-                                    filmMapper.updateFilm(filmDTO);
-
-                                } else {
-                                    LOG.debug("Error in 'addFilm'! 'image' is not validate: image = {}",
-                                            image);
-                                }
-                            } else {
-                                LOG.debug("Error in 'addFilm'! 'duration' is not validate: duration = {}",
-                                        filmDTO.getDuration());
-                            }
-                        } else {
-                            LOG.debug("Error in 'addFilm'! 'price' is not validate: price = {}",
-                                    filmDTO.getPrice());
-                        }
-                    } else {
-                        LOG.debug("Error in 'addFilm'! 'genre' is null");
-                    }
-                } else {
-                    LOG.debug("Error in 'addFilm'! 'name' is null");
-                }
-            }
-            else {
-                LOG.debug("Error in 'addFilm'! 'id' is not validate: id = {}",
-                        filmDTO.getId());
-            }
-        }
-        else {
-            LOG.debug("Error in 'addFilm'! 'filmDTO' is null");
-        }
+        filmMapper.updateFilm(filmDTO);
     }
 
     @Override
@@ -196,13 +102,9 @@ public class FilmServiceImpl implements FilmService{
         LOG.debug("deleteFilm: id = {}",
                 id);
 
-        if (id != null && id >= 0){
-            filmMapper.deleteFilm(id);
-        }
-        else {
-            LOG.debug("Error in 'deleteFilm'! 'id' is not validate: id = {}",
-                    id);
-        }
+        exceptionService.checkFilmId(id);
+
+        filmMapper.deleteFilm(id);
     }
 
     @Override
@@ -210,15 +112,8 @@ public class FilmServiceImpl implements FilmService{
         LOG.debug("deleteFilmByImage: image = {}",
                 image);
 
-        if (image != null && (image.endsWith(".jpg") ||
-                image.endsWith(".jpeg") ||
-                image.endsWith(".png") ||
-                image.endsWith(".bmp"))) {
+        exceptionService.checkFilmImage(image);
 
-            filmMapper.deleteFilmByImage(image);
-        } else {
-            LOG.debug("Error in 'addFilm'! 'image' is not validate: image = {}",
-                    image);
-        }
+        filmMapper.deleteFilmByImage(image);
     }
 }
