@@ -40,4 +40,9 @@ public interface ExceptionService {
     void checkOrderId(Long id);
     void checkOrderUserId(Long userId);
     void checkOrderWithoutId(OrderDTO orderDTO);
+
+    // BasketService
+    void checkBasketId(Long id);
+    void checkBasketUserId(Long userId);
+    void checkBasketWithoutId(BasketDTO basketDTO);
 }

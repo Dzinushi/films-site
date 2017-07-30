@@ -35,10 +35,10 @@ public class OrderServiceTest {
 
     @Autowired private ExceptionService exceptionService;
 
-    private UserDTO userDTO1 = new UserDTO("user1", "pass1", (short) 1);
-    private UserDTO userDTO2 = new UserDTO("user2", "pass2", (short) 2);
-    private UserDTO userDTO3 = new UserDTO("user3", "pass3", (short) 3);
-    private UserDTO userDTO4 = new UserDTO("user4", "pass4", (short) 4);
+    private UserDTO userDTO1 = new UserDTO("user1", null, null);
+    private UserDTO userDTO2 = new UserDTO("user2", null, null);
+    private UserDTO userDTO3 = new UserDTO("user3", null, null);
+    private UserDTO userDTO4 = new UserDTO("user4", null, null);
 
     private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 100, 150, "image1.jpeg");
     private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 200, 250, "image2.bmp");

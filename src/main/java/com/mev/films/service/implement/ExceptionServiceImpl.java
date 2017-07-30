@@ -2,6 +2,7 @@ package com.mev.films.service.implement;
 
 import com.mev.films.mappers.interfaces.DiscountMapper;
 import com.mev.films.mappers.interfaces.FilmMapper;
+import com.mev.films.mappers.interfaces.OrderMapper;
 import com.mev.films.mappers.interfaces.UserMapper;
 import com.mev.films.model.*;
 import com.mev.films.service.interfaces.ExceptionService;
@@ -10,12 +11,15 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ExceptionServiceImpl extends RuntimeException implements ExceptionService {
 
     @Autowired private UserMapper userMapper;
     @Autowired private DiscountMapper discountMapper;
     @Autowired private FilmMapper filmMapper;
+    @Autowired private OrderMapper orderMapper;
 
     private Logger LOG = LogManager.getLogger();
 
@@ -70,7 +74,15 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         ORDER_ERROR_FILM_WRONG_ID_PROVIDED,
         ORDER_ERROR_FILM_ID_NOT_FOUND,
         ORDER_ERROR_DISCOUNT_WRONG_ID_PROVIDED,
-        ORDER_ERROR_DISCOUNT_ID_NOT_FOUND
+        ORDER_ERROR_DISCOUNT_ID_NOT_FOUND,
+
+        // BasketService
+        BASKET_ERROR_NULL_POINTER_EXCEPTION,
+        BASKET_ERROR_WRONG_ID_PROVIDED,
+        BASKET_ERROR_USER_WRONG_ID_PROVIDED,
+        BASKET_ERROR_USER_NULL_POINTER_EXCEPTION,
+        BASKET_ERROR_USER_ORDERS_NOT_FOUND_EXCEPTION,
+
     }
 
     public ExceptionServiceImpl(){
@@ -102,6 +114,10 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         this.userMapper = userMapper;
         this.filmMapper = filmMapper;
         this.discountMapper = discountMapper;
+    }
+
+    public ExceptionServiceImpl(OrderMapper orderMapper){
+        this.orderMapper = orderMapper;
     }
 
     @Override
@@ -545,5 +561,46 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         }
     }
 
+    @Override
+    public void checkBasketId(Long id) {
+        LOG.debug("checkBasketId: basket_id = {}",
+                id);
+
+        if (id == null || id < 0){
+            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkBasketUserId(Long userId) {
+        LOG.debug("checkBasketUserId: basket_user_id = {}",
+                userId);
+
+        if (userId == null || userId < 0){
+            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_USER_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkBasketWithoutId(BasketDTO basketDTO) {
+        LOG.debug("checkBasketWithout: {}",
+                basketDTO);
+
+        if (basketDTO == null){
+            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_NULL_POINTER_EXCEPTION);
+        }
+        UserDTO userDTO = basketDTO.getUserDTO();
+        if (userDTO == null){
+            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_USER_NULL_POINTER_EXCEPTION);
+        }
+        Long userId = userDTO.getId();
+        if (userId == null || userId < 0){
+            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_USER_WRONG_ID_PROVIDED);
+        }
+        List<OrderDTO> orderDTOS  = orderMapper.selectOrderByUser(userId);
+        if (orderDTOS == null){
+            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_USER_ORDERS_NOT_FOUND_EXCEPTION);
+        }
+    }
 
 }

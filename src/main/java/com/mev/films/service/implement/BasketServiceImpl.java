@@ -5,10 +5,7 @@ import com.mev.films.mappers.interfaces.BasketMapper;
 import com.mev.films.mappers.interfaces.OrderMapper;
 import com.mev.films.mappers.interfaces.UserDiscountMapper;
 import com.mev.films.model.*;
-import com.mev.films.service.interfaces.BasketService;
-import com.mev.films.service.interfaces.OrderService;
-import com.mev.films.service.interfaces.UserDiscountService;
-import com.mev.films.service.interfaces.UserService;
+import com.mev.films.service.interfaces.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +22,14 @@ public class BasketServiceImpl implements BasketService{
 
     @Autowired private BasketMapper basketMapper;
 
-    @Autowired private OrderService orderService;
+    @Autowired private ExceptionService exceptionService;
 
     public BasketServiceImpl(){
     }
 
-    public BasketServiceImpl(BasketMapper basketMapper, OrderService orderService){
+    public BasketServiceImpl(BasketMapper basketMapper, ExceptionService exceptionService){
         this.basketMapper = basketMapper;
-        this.orderService = orderService;
+        this.exceptionService = exceptionService;
     }
 
     @Override
@@ -47,16 +44,9 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("getBasket: id = {}",
                 id);
 
-        BasketDTO basketDTO = null;
-        if (id != null && id >= 0) {
-            basketDTO = basketMapper.selectBasket(id);
-        }
-        else {
-            LOG.debug("Error in 'getBasket'! 'id' is not validate: id = {}",
-                    id);
-        }
+        exceptionService.checkBasketId(id);
 
-        return basketDTO;
+        return basketMapper.selectBasket(id);
     }
 
     @Override
@@ -64,16 +54,9 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("getBasketByUser: user_id = {}",
                 userId);
 
-        BasketDTO basketDTO = null;
-        if (userId != null && userId >= 0){
-            basketDTO = basketMapper.selectBasketByUser(userId);
-        }
-        else {
-            LOG.debug("Error in 'getBasketByUser'! 'user_id' is not validate: user_id = {}",
-                    userId);
-        }
+        exceptionService.checkBasketUserId(userId);
 
-        return basketDTO;
+        return basketMapper.selectBasketByUser(userId);
     }
 
     @Override
@@ -81,21 +64,9 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("addBasket: basketDTO = {}",
                 basketDTO);
 
-        if (basketDTO != null){
-            if (basketDTO.getUserDTO() != null){
-                List<OrderDTO> orderDTOS = orderService.getOrderByUser(basketDTO.getUserDTO().getId());
-                if (orderDTOS != null){
+        exceptionService.checkBasketWithoutId(basketDTO);
 
-                    basketMapper.insertBasket(basketDTO);
-
-                }
-                LOG.debug("Error in 'addBasket'! Orders not found");
-            }
-            LOG.debug("Error in 'addBasket'! 'userDTO' is null");
-        }
-        else {
-            LOG.debug("Error in 'addBasket'! 'basketDTO' is null");
-        }
+        basketMapper.insertBasket(basketDTO);
     }
 
     @Override
@@ -103,13 +74,9 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("deleteBasket: id = {}",
                 id);
 
-        if (id != null && id >= 0){
-            basketMapper.deleteBasket(id);
-        }
-        else {
-            LOG.debug("Error in 'deleteBasket'! 'id' is not validate: id = {}",
-                    id);
-        }
+        exceptionService.checkBasketId(id);
+
+        basketMapper.deleteBasket(id);
     }
 
     @Override
@@ -117,13 +84,8 @@ public class BasketServiceImpl implements BasketService{
         LOG.debug("deleteBasket: userId = {}",
                 userId);
 
+        exceptionService.checkBasketUserId(userId);
 
-        if (userId != null && userId >= 0){
-            basketMapper.deleteBasketByUser(userId);
-        }
-        else {
-            LOG.debug("Error in 'deleteBasket'! 'user_id' is not validate: user_id = {}",
-                    userId);
-        }
+        basketMapper.deleteBasketByUser(userId);
     }
 }
