@@ -35,4 +35,9 @@ public interface ExceptionService {
     void checkUserDiscountDiscountId(Long discountId);
     void checkUserDiscountWithoutId(UserDiscountDTO userDiscountDTO);
     void checkUserDiscount(UserDiscountDTO userDiscountDTO);
+
+    // OrderService
+    void checkOrderId(Long id);
+    void checkOrderUserId(Long userId);
+    void checkOrderWithoutId(OrderDTO orderDTO);
 }

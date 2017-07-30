@@ -58,7 +58,19 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND,
         USER_DISCOUNT_ERROR_WRONG_DISCOUNT_ID_PROVIDED,
         USER_DISCOUNT_ERROR_DISCOUNT_ID_NOT_FOUND,
-        USER_DISCOUNT_ERROR_WRONG_USED_PROVIDED
+        USER_DISCOUNT_ERROR_WRONG_USED_PROVIDED,
+
+        // OrderService
+        ORDER_ERROR_NULL_POINTER_EXCEPTION,
+        ORDER_ERROR_WRONG_ID_PROVIDED,
+        ORDER_ERROR_USER_NULL_POINTER_EXCEPTION,
+        ORDER_ERROR_USER_WRONG_ID_PROVIDED,
+        ORDER_ERROR_USER_ID_NOT_FOUND,
+        ORDER_ERROR_FILM_NULL_POINTER_EXCEPTION,
+        ORDER_ERROR_FILM_WRONG_ID_PROVIDED,
+        ORDER_ERROR_FILM_ID_NOT_FOUND,
+        ORDER_ERROR_DISCOUNT_WRONG_ID_PROVIDED,
+        ORDER_ERROR_DISCOUNT_ID_NOT_FOUND
     }
 
     public ExceptionServiceImpl(){
@@ -83,6 +95,12 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
     public ExceptionServiceImpl(UserMapper userMapper, DiscountMapper discountMapper){
         this.userMapper = userMapper;
+        this.discountMapper = discountMapper;
+    }
+
+    public ExceptionServiceImpl(UserMapper userMapper, FilmMapper filmMapper, DiscountMapper discountMapper){
+        this.userMapper = userMapper;
+        this.filmMapper = filmMapper;
         this.discountMapper = discountMapper;
     }
 
@@ -458,4 +476,74 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_WRONG_USED_PROVIDED);
         }
     }
+
+    @Override
+    public void checkOrderId(Long id) {
+        LOG.debug("checkOrderId: order_id = {}",
+                id);
+
+        if (id == null || id < 0){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkOrderUserId(Long userId) {
+        LOG.debug("checkOrderUserId: order_user_id = {}",
+                userId);
+
+        if (userId == null || userId < 0){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkOrderWithoutId(OrderDTO orderDTO) {
+        LOG.debug("checkOrderWithoutId: {}",
+                orderDTO);
+
+        if (orderDTO == null){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_NULL_POINTER_EXCEPTION);
+        }
+
+        UserDTO userDTO = orderDTO.getUserDTO();
+        if (userDTO == null){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_USER_NULL_POINTER_EXCEPTION);
+        }
+        Long userId = userDTO.getId();
+        if (userId == null || userId < 0){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED);
+        }
+        userDTO = userMapper.selectUser(userId);
+        if (userDTO == null){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_USER_ID_NOT_FOUND);
+        }
+
+        FilmDTO filmDTO = orderDTO.getFilmDTO();
+        if (filmDTO == null){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_FILM_NULL_POINTER_EXCEPTION);
+        }
+        Long filmId = filmDTO.getId();
+        if (filmId == null || filmId < 0){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_FILM_WRONG_ID_PROVIDED);
+        }
+        filmDTO = filmMapper.selectFilm(filmId);
+        if (filmDTO == null){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_FILM_ID_NOT_FOUND);
+        }
+
+        DiscountDTO discountDTO = orderDTO.getDiscountDTO();
+        if (discountDTO != null){
+            Long discountId = discountDTO.getId();
+            if (discountId == null || discountId < 0){
+                throw new ExceptionServiceImpl(Errors.ORDER_ERROR_DISCOUNT_WRONG_ID_PROVIDED);
+            }
+            discountDTO = discountMapper.selectDiscount(discountId);
+            if (discountDTO == null){
+                throw new ExceptionServiceImpl(Errors.ORDER_ERROR_DISCOUNT_ID_NOT_FOUND);
+            }
+        }
+    }
+
+
 }
