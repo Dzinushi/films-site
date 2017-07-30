@@ -7,7 +7,6 @@ import com.mev.films.mappers.interfaces.UserMapper;
 import com.mev.films.model.DiscountDTO;
 import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserDiscountDTO;
-import com.mev.films.model.UserRoleDTO;
 import com.mev.films.service.implement.ExceptionServiceImpl;
 import com.mev.films.service.implement.UserDiscountServiceImpl;
 import com.mev.films.service.interfaces.ExceptionService;
@@ -154,7 +153,7 @@ public class UserDiscountServiceTest {
     }
 
     @Test
-    public void getUserDiscountByDiscount() {
+    public void getUserDiscountByDiscountTest() {
 
         expect(userDiscountMapperMock.selectUserDiscountByDiscount(userDiscountDTO1.getDiscountDTO().getId())).andAnswer(new IAnswer<UserDiscountDTO>() {
             @Override
@@ -191,21 +190,10 @@ public class UserDiscountServiceTest {
     }
 
     @Test
-    public void addUserDiscount() {
+    public void addUserDiscountTest() {
 
-        expect(userMapperMock.selectUser(userDTO1.getId())).andAnswer(new IAnswer<UserDTO>() {
-            @Override
-            public UserDTO answer() throws Throwable {
-                return userDTO1;
-            }
-        });
-
-        expect(discountMapperMock.selectDiscount(discountDTO1.getId())).andAnswer(new IAnswer<DiscountDTO>() {
-            @Override
-            public DiscountDTO answer() throws Throwable {
-                return discountDTO1;
-            }
-        });
+        expect(userMapperMock.selectUser(userDiscountDTO1.getUserDTO().getId())).andStubReturn(userDTO1);
+        expect(discountMapperMock.selectDiscount(userDiscountDTO1.getDiscountDTO().getId())).andStubReturn(discountDTO1);
 
         replay(userDiscountMapperMock);
         replay(userMapperMock);
@@ -224,7 +212,7 @@ public class UserDiscountServiceTest {
 
         // check user_id null
         try {
-            userDiscountService.addUserDiscount(new UserDiscountDTO(null, userDiscountDTO2.getDiscountDTO(), userDiscountDTO2.isUsed()));
+            userDiscountService.addUserDiscount(new UserDiscountDTO(null, userDiscountDTO1.getDiscountDTO(), userDiscountDTO1.isUsed()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_NULL_POINTER_EXCEPTION).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("userDiscountDTO.user_id = null",
@@ -235,19 +223,19 @@ public class UserDiscountServiceTest {
         try {
             UserDTO userDTO = new UserDTO("login", "pass", (short) 0);
             userDTO.setId(-7L);
-            userDiscountService.addUserDiscount(new UserDiscountDTO(userDTO, userDiscountDTO2.getDiscountDTO(), userDiscountDTO2.isUsed()));
+            userDiscountService.addUserDiscount(new UserDiscountDTO(userDTO, userDiscountDTO1.getDiscountDTO(), userDiscountDTO1.isUsed()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("userDiscountDTO.user_id = null",
+            assertTrue("userDiscountDTO.user_id = -7",
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED).getMessage()));
         }
 
         // check user_id not found
         try {
-            userDiscountService.addUserDiscount(new UserDiscountDTO(userDiscountDTO2.getUserDTO(), userDiscountDTO2.getDiscountDTO(), userDiscountDTO2.isUsed()));
+            userDiscountService.addUserDiscount(new UserDiscountDTO(userDiscountDTO2.getUserDTO(), userDiscountDTO1.getDiscountDTO(), userDiscountDTO1.isUsed()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("userDiscountDTO.user_id = null",
+            assertTrue("userDiscountDTO.user_id = not found",
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND).getMessage()));
         }
 
@@ -293,108 +281,216 @@ public class UserDiscountServiceTest {
         verify(userMapperMock);
         verify(discountMapperMock);
     }
-//
-//    @Test
-//    public void updateUserDiscount() {
-//
-//        expect(userDiscountService.getUserDiscounts()).andStubAnswer(new IAnswer<List<UserDiscountDTO>>() {
-//            @Override
-//            public List<UserDiscountDTO> answer() throws Throwable {
-//                List<UserDiscountDTO> userDiscountDTOS = new ArrayList<>();
-//                userDiscountDTOS.add(userDiscountDTO1);
-//
-//                return userDiscountDTOS;
-//            }
-//        });
-//
-//        expect(userDiscountService.getUserDiscount(userDiscountDTO1.getId())).andStubAnswer(new IAnswer<UserDiscountDTO>() {
-//            @Override
-//            public UserDiscountDTO answer() throws Throwable {
-//                return userDiscountDTO2;
-//            }
-//        });
-//
-//        replay(userDiscountMapperMock);
-//
-//        userDiscountService.addUserDiscount(userDiscountDTO1);
-//
-//        List<UserDiscountDTO> userDiscountDTOS = userDiscountService.getUserDiscounts();
-//        userDiscountDTOS.get(0).setUserDTO(userDiscountDTO2.getUserDTO());
-//        userDiscountDTOS.get(0).setDiscountDTO(userDiscountDTO2.getDiscountDTO());
-//        userDiscountDTOS.get(0).setUsed(userDiscountDTO2.isUsed());
-//
-//        userDiscountService.updateUserDiscount(userDiscountDTOS.get(0));
-//
-//        UserDiscountDTO userDiscountDTO = userDiscountService.getUserDiscount(userDiscountDTO1.getId());
-//        assertTrue("userDiscountDTO1 = " + userDiscountDTOS.get(0).toString(),
-//                userDiscountDTO.equals(userDiscountDTOS.get(0)));
-//
-//        verify(userDiscountMapperMock);
-//    }
-//
-//    @Test
-//    public void deleteUserDiscount() {
-//
-//        expect(userDiscountService.getUserDiscounts()).andStubAnswer(new IAnswer<List<UserDiscountDTO>>() {
-//            @Override
-//            public List<UserDiscountDTO> answer() throws Throwable {
-//                return new ArrayList<>();
-//            }
-//        });
-//
-//        replay(userDiscountMapperMock);
-//
-//        userDiscountService.addUserDiscount(userDiscountDTO1);
-//        userDiscountService.deleteUserDiscount(userDiscountDTO1.getId());
-//
-//        List<UserDiscountDTO> userDiscountDTOS = userDiscountService.getUserDiscounts();
-//        assertTrue("count = 0",
-//                userDiscountDTOS.size() == 0);
-//
-//        verify(userDiscountMapperMock);
-//    }
-//
-//    @Test
-//    public void deleteUserDiscountByDiscount() {
-//
-//        expect(userDiscountService.getUserDiscounts()).andStubAnswer(new IAnswer<List<UserDiscountDTO>>() {
-//            @Override
-//            public List<UserDiscountDTO> answer() throws Throwable {
-//                return new ArrayList<>();
-//            }
-//        });
-//
-//        replay(userDiscountMapperMock);
-//
-//        userDiscountService.addUserDiscount(userDiscountDTO1);
-//        userDiscountService.deleteUserDiscountByDiscount(userDiscountDTO1.getDiscountDTO().getId());
-//
-//        List<UserDiscountDTO> userDiscountDTOS = userDiscountService.getUserDiscounts();
-//        assertTrue("count = 0",
-//                userDiscountDTOS.size() == 0);
-//
-//        verify(userDiscountMapperMock);
-//    }
-//
-//    @Test
-//    public void deleteUserDiscountByUser() {
-//
-//        expect(userDiscountService.getUserDiscounts()).andStubAnswer(new IAnswer<List<UserDiscountDTO>>() {
-//            @Override
-//            public List<UserDiscountDTO> answer() throws Throwable {
-//                return new ArrayList<>();
-//            }
-//        });
-//
-//        replay(userDiscountMapperMock);
-//
-//        userDiscountService.addUserDiscount(userDiscountDTO1);
-//        userDiscountService.deleteUserDiscountByUser(userDiscountDTO1.getUserDTO().getId());
-//
-//        List<UserDiscountDTO> userDiscountDTOS = userDiscountService.getUserDiscounts();
-//        assertTrue("count = 0",
-//                userDiscountDTOS.size() == 0);
-//
-//        verify(userDiscountMapperMock);
-//    }
+
+    @Test
+    public void updateUserDiscountTest() {
+
+        expect(userMapperMock.selectUser(userDiscountDTO1.getUserDTO().getId())).andStubReturn(userDTO1);
+        expect(discountMapperMock.selectDiscount(userDiscountDTO1.getDiscountDTO().getId())).andStubReturn(discountDTO1);
+
+        replay(userDiscountMapperMock);
+        replay(userMapperMock);
+        replay(discountMapperMock);
+
+        userDiscountService.updateUserDiscount(userDiscountDTO1);
+
+        // check null
+        try {
+            userDiscountService.updateUserDiscount(null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_NULL_POINTER_EXCEPTION).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_NULL_POINTER_EXCEPTION).getMessage()));
+        }
+
+        // check id null
+        try {
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDiscountDTO1.getUserDTO(), userDiscountDTO1.getDiscountDTO(), userDiscountDTO1.isUsed());
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED).getMessage()));
+        }
+
+        // check id < 0
+        try {
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDiscountDTO1.getUserDTO(), userDiscountDTO1.getDiscountDTO(), userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(-7L);
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.id = -7",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED).getMessage()));
+        }
+
+        // check user_id null
+        try {
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(null, userDiscountDTO1.getDiscountDTO(), userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(1L);
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_NULL_POINTER_EXCEPTION).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.user_id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_NULL_POINTER_EXCEPTION).getMessage()));
+        }
+
+        // check user_id < 0
+        try {
+            UserDTO userDTO = new UserDTO("login", "pass", (short) 0);
+            userDTO.setId(-7L);
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDTO, userDiscountDTO1.getDiscountDTO(), userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(1L);
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.user_id = -7",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED).getMessage()));
+        }
+
+        // check user_id not found
+        try {
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDiscountDTO2.getUserDTO(), userDiscountDTO1.getDiscountDTO(), userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(1L);
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.user_id = not found",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND).getMessage()));
+        }
+
+        // check discount_id null
+        try {
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDiscountDTO1.getUserDTO(), null, userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(1L);
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_DISCOUNT_NULL_POINTER_EXCEPTION).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.discount_id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_DISCOUNT_NULL_POINTER_EXCEPTION).getMessage()));
+        }
+
+        // check discount_id < 0
+        try {
+            DiscountDTO discountDTO = new DiscountDTO(discountDTO1.getCode(), discountDTO1.getValue());
+            discountDTO.setId(-7L);
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDiscountDTO1.getUserDTO(), discountDTO, userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(1L);
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_DISCOUNT_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.discount_id = -7",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_DISCOUNT_ID_PROVIDED).getMessage()));
+        }
+
+        // check discount_id not found
+        try {
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDiscountDTO1.getUserDTO(), userDiscountDTO2.getDiscountDTO(), userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(1L);
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_DISCOUNT_ID_NOT_FOUND).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.discount_id = not found",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_DISCOUNT_ID_NOT_FOUND).getMessage()));
+        }
+
+        // check used not found
+        try {
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDiscountDTO1.getUserDTO(), userDiscountDTO1.getDiscountDTO(), null);
+            userDiscountDTO.setId(1L);
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_USED_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.used = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_USED_PROVIDED).getMessage()));
+        }
+
+        verify(userDiscountMapperMock);
+        verify(userMapperMock);
+        verify(discountMapperMock);
+    }
+
+    @Test
+    public void deleteUserDiscountTest() {
+
+        replay(userDiscountMapperMock);
+
+        userDiscountService.deleteUserDiscount(userDiscountDTO1.getId());
+
+        // check id null
+        try {
+            userDiscountService.deleteUserDiscount(null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED).getMessage()));
+        }
+
+        // check id < 0
+        try {
+            userDiscountService.deleteUserDiscount(-7L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("id = -7",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED).getMessage()));
+        }
+
+        verify(userDiscountMapperMock);
+    }
+
+    @Test
+    public void deleteUserDiscountByDiscountTest() {
+
+        replay(userDiscountMapperMock);
+
+        userDiscountService.deleteUserDiscountByDiscount(userDiscountDTO1.getDiscountDTO().getId());
+
+        // check id null
+        try {
+            userDiscountService.deleteUserDiscountByDiscount(null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_DISCOUNT_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("discount_id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_DISCOUNT_ID_PROVIDED).getMessage()));
+        }
+
+        // check id < 0
+        try {
+            userDiscountService.deleteUserDiscountByDiscount(-7L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_DISCOUNT_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("discount_id = -7",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_DISCOUNT_ID_PROVIDED).getMessage()));
+        }
+
+        verify(userDiscountMapperMock);
+    }
+
+    @Test
+    public void deleteUserDiscountByUserTest() {
+
+        replay(userDiscountMapperMock);
+
+        userDiscountService.deleteUserDiscountByUser(userDiscountDTO1.getUserDTO().getId());
+
+        // check id null
+        try {
+            userDiscountService.deleteUserDiscountByUser(null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("user_id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED).getMessage()));
+        }
+
+        // check id < 0
+        try {
+            userDiscountService.deleteUserDiscountByUser(-7L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("user = -7",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED).getMessage()));
+        }
+
+        verify(userDiscountMapperMock);
+    }
 }

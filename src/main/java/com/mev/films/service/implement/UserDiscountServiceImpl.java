@@ -24,9 +24,6 @@ public class UserDiscountServiceImpl implements UserDiscountService{
 
     @Autowired private UserDiscountMapper userDiscountMapper;
 
-    @Autowired private UserService userService;
-    @Autowired private DiscountService discountService;
-
     @Autowired private ExceptionService exceptionService;
 
     public UserDiscountServiceImpl(){

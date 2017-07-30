@@ -2,7 +2,6 @@ package com.mev.films.service.implement;
 
 import com.mev.films.mappers.interfaces.DiscountMapper;
 import com.mev.films.mappers.interfaces.FilmMapper;
-import com.mev.films.mappers.interfaces.UserDiscountMapper;
 import com.mev.films.mappers.interfaces.UserMapper;
 import com.mev.films.model.*;
 import com.mev.films.service.interfaces.ExceptionService;
@@ -397,6 +396,7 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED);
         }
         userDTO = userMapper.selectUser(userDTO.getId());
+        System.out.println(userDTO);
         if (userDTO == null) {
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND);
         }
@@ -427,9 +427,13 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         if (userDiscountDTO == null){
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_NULL_POINTER_EXCEPTION);
         }
+        Long id = userDiscountDTO.getId();
+        if (id == null || id < 0){
+            throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED);
+        }
         UserDTO userDTO = userDiscountDTO.getUserDTO();
         if (userDTO == null) {
-            throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_NULL_POINTER_EXCEPTION);
+            throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_USER_NULL_POINTER_EXCEPTION);
         }
         Long userId = userDTO.getId();
         if (userId == null || userId  < 0) {
