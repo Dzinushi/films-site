@@ -45,4 +45,10 @@ public interface ExceptionService {
     void checkBasketId(Long id);
     void checkBasketUserId(Long userId);
     void checkBasketWithoutId(BasketDTO basketDTO);
+
+    // PaymentService
+    void checkPaymentId(Long id);
+    void checkPaymentUserId(Long userId);
+    void checkPaymentFilmId(Long filmId);
+    void checkPaymentWithoutId(Long userId);
 }

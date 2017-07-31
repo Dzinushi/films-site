@@ -7,6 +7,7 @@
 
     <resultMap id="paymentDTO" type="com.mev.films.model.PaymentDTO">
         <id property="id" column="id"/>
+        <result property="totalPrice" column="totalPrice"/>
         <result property="time" column="time"/>
         <association property="userDTO" resultMap="com.mev.films.mappers.interfaces.UserMapper.userDTO" columnPrefix="usr_"/>
         <association property="filmDTO" resultMap="com.mev.films.mappers.interfaces.FilmMapper.filmDTO" columnPrefix="flm_"/>
@@ -15,8 +16,9 @@
 
     <select id="selectPayments" resultMap="paymentDTO">
         SELECT
-            p.id as id,
-            p.time as time,
+            p.id AS id,
+            p.time AS time,
+            p.total_price AS totalPrice,
 
             p.user_id AS usr_id,
             u.login AS usr_login,
@@ -40,8 +42,9 @@
 
     <select id="selectPaymentsByUser" parameterType="map" resultMap="paymentDTO">
         SELECT
-            p.id as id,
-            p.time as time,
+            p.id AS id,
+            p.time AS time,
+            p.total_price AS totalPrice,
 
             p.user_id AS usr_id,
             u.login AS usr_login,
@@ -67,8 +70,9 @@
 
     <select id="selectPaymentsByFilm" parameterType="map" resultMap="paymentDTO">
         SELECT
-            p.id as id,
-            p.time as time,
+            p.id AS id,
+            p.time AS time,
+            p.total_price AS totalPrice,
 
             p.user_id AS usr_id,
             u.login AS usr_login,
@@ -94,8 +98,9 @@
 
     <select id="selectPayment" parameterType="map" resultMap="paymentDTO">
         SELECT
-            p.id as id,
-            p.time as time,
+            p.id AS id,
+            p.time AS time,
+            p.total_price AS totalPrice,
 
             p.user_id AS usr_id,
             u.login AS usr_login,
@@ -121,8 +126,8 @@
 
     <insert id="insertPayment" parameterType="com.mev.films.model.PaymentDTO">
         INSERT INTO
-            payments (user_id, film_id, discount_id, time)
-        VALUES (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, clock_timestamp());
+            payments (user_id, film_id, discount_id, total_price, time)
+        VALUES (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, #{totalPrice}, clock_timestamp());
     </insert>
 
     <delete id="deletePayment" parameterType="map">

@@ -8,6 +8,7 @@ public class OrderDTO {
     private UserDTO userDTO;
     private FilmDTO filmDTO;
     private DiscountDTO discountDTO;
+    private Integer priceByDiscount;
     private Boolean mark;
     private Timestamp time;
 
@@ -53,6 +54,14 @@ public class OrderDTO {
         this.discountDTO = discountDTO;
     }
 
+    public void setPriceByDiscount(Integer priceByDiscount) {
+        this.priceByDiscount = priceByDiscount;
+    }
+
+    public Integer getPriceByDiscount() {
+        return priceByDiscount;
+    }
+
     public Boolean isMark() {
         return mark;
     }
@@ -72,12 +81,15 @@ public class OrderDTO {
 
         OrderDTO orderDTO = (OrderDTO) o;
 
-        if (isMark() != orderDTO.isMark()) return false;
         if (getUserDTO() != null ? !getUserDTO().equals(orderDTO.getUserDTO()) : orderDTO.getUserDTO() != null)
             return false;
         if (getFilmDTO() != null ? !getFilmDTO().equals(orderDTO.getFilmDTO()) : orderDTO.getFilmDTO() != null)
             return false;
-        return getDiscountDTO() != null ? getDiscountDTO().equals(orderDTO.getDiscountDTO()) : orderDTO.getDiscountDTO() == null;
+        if (getDiscountDTO() != null ? !getDiscountDTO().equals(orderDTO.getDiscountDTO()) : orderDTO.getDiscountDTO() != null)
+            return false;
+        if (getPriceByDiscount() != null ? !getPriceByDiscount().equals(orderDTO.getPriceByDiscount()) : orderDTO.getPriceByDiscount() != null)
+            return false;
+        return mark != null ? mark.equals(orderDTO.mark) : orderDTO.mark == null;
     }
 
     @Override
@@ -85,7 +97,8 @@ public class OrderDTO {
         int result = getUserDTO() != null ? getUserDTO().hashCode() : 0;
         result = 31 * result + (getFilmDTO() != null ? getFilmDTO().hashCode() : 0);
         result = 31 * result + (getDiscountDTO() != null ? getDiscountDTO().hashCode() : 0);
-        result = 31 * result + (isMark() ? 1 : 0);
+        result = 31 * result + (getPriceByDiscount() != null ? getPriceByDiscount().hashCode() : 0);
+        result = 31 * result + (mark != null ? mark.hashCode() : 0);
         return result;
     }
 
@@ -96,6 +109,7 @@ public class OrderDTO {
                 ", userDTO=" + userDTO +
                 ", filmDTO=" + filmDTO +
                 ", discountDTO=" + discountDTO +
+                ", priceByDiscount=" + priceByDiscount +
                 ", mark=" + mark +
                 ", time=" + time +
                 '}';

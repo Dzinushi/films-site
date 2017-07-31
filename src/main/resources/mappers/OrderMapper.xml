@@ -7,6 +7,7 @@
 
     <resultMap id="orderDTO" type="com.mev.films.model.OrderDTO">
         <id property="id" column="id"/>
+        <result property="priceByDiscount" column="priceByDiscount"/>
         <result property="mark" column="mark"/>
         <result property="time" column="time"/>
         <association property="userDTO" resultMap="com.mev.films.mappers.interfaces.UserMapper.userDTO" columnPrefix="usr_" />
@@ -19,6 +20,7 @@
             o.id AS id,
             o.mark AS mark,
             o.time AS time,
+            o.price_by_discount AS priceByDiscount,
 
             u.id AS usr_id,
             u.login AS usr_login,
@@ -45,6 +47,7 @@
             o.id AS id,
             o.mark AS mark,
             o.time AS time,
+            o.price_by_discount AS priceByDiscount,
 
             u.id AS usr_id,
             u.login AS usr_login,
@@ -73,6 +76,7 @@
             o.id AS id,
             o.mark AS mark,
             o.time AS time,
+            o.price_by_discount AS priceByDiscount,
 
             u.id AS usr_id,
             u.login AS usr_login,
@@ -101,6 +105,7 @@
             o.id AS id,
             o.mark AS mark,
             o.time AS time,
+            o.price_by_discount AS priceByDiscount,
 
             u.id AS usr_id,
             u.login AS usr_login,
@@ -127,9 +132,9 @@
 
     <insert id="insertOrder" parameterType="com.mev.films.model.OrderDTO">
         INSERT INTO
-            orders (user_id, film_id, discount_id, mark, time)
+            orders (user_id, film_id, discount_id, price_by_discount, mark, time)
         VALUES
-            (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, #{mark}, clock_timestamp())
+            (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, #{priceByDiscount}, #{mark}, clock_timestamp())
     </insert>
 
     <delete id="deleteOrder" parameterType="map">

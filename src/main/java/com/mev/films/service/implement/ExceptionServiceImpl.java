@@ -1,9 +1,6 @@
 package com.mev.films.service.implement;
 
-import com.mev.films.mappers.interfaces.DiscountMapper;
-import com.mev.films.mappers.interfaces.FilmMapper;
-import com.mev.films.mappers.interfaces.OrderMapper;
-import com.mev.films.mappers.interfaces.UserMapper;
+import com.mev.films.mappers.interfaces.*;
 import com.mev.films.model.*;
 import com.mev.films.service.interfaces.ExceptionService;
 import org.apache.logging.log4j.LogManager;
@@ -20,6 +17,8 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
     @Autowired private DiscountMapper discountMapper;
     @Autowired private FilmMapper filmMapper;
     @Autowired private OrderMapper orderMapper;
+    @Autowired private BasketMapper basketMapper;
+    @Autowired private UserDiscountMapper userDiscountMapper;
 
     private Logger LOG = LogManager.getLogger();
 
@@ -83,6 +82,15 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         BASKET_ERROR_USER_NULL_POINTER_EXCEPTION,
         BASKET_ERROR_USER_ORDERS_NOT_FOUND_EXCEPTION,
 
+        // PaymentService
+        PAYMENT_ERROR_WRONG_ID_PROVIDED,
+        PAYMENT_ERROR_USER_NULL_POINTER_EXCEPTION,
+        PAYMENT_ERROR_USER_WRONG_ID_PROVIDED,
+        PAYMENT_ERROR_BASKET_NOT_FOUND,
+        PAYMENT_ERROR_FILM_WRONG_ID_PROVIDED,
+        PAYMENT_ERROR_ORDER_NOT_FOUND,
+        PAYMENT_ERROR_DISCOUNT_NOT_FOUND,
+        PAYMENT_ERROR_DISCOUNT_ALREADY_USED
     }
 
     public ExceptionServiceImpl(){
@@ -118,6 +126,13 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
     public ExceptionServiceImpl(OrderMapper orderMapper){
         this.orderMapper = orderMapper;
+    }
+
+    public ExceptionServiceImpl(BasketMapper basketMapper, OrderMapper orderMapper, DiscountMapper discountMapper, UserDiscountMapper userDiscountMapper){
+        this.basketMapper = basketMapper;
+        this.orderMapper = orderMapper;
+        this.discountMapper = discountMapper;
+        this.userDiscountMapper = userDiscountMapper;
     }
 
     @Override
@@ -603,4 +618,68 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         }
     }
 
+    @Override
+    public void checkPaymentId(Long id) {
+        LOG.debug("checkPaymentId: id = {}",
+                id);
+
+        if (id == null || id < 0){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkPaymentUserId(Long userId) {
+        LOG.debug("checkPaymentUserId: payment_user_id: {}",
+                userId);
+
+        if (userId == null || userId < 0){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_USER_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkPaymentFilmId(Long filmId) {
+        LOG.debug("checkPaymentFilmId: payment_film_id = {}",
+                filmId);
+
+        if (filmId == null || filmId < 0){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_FILM_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkPaymentWithoutId(Long userId) {
+        LOG.debug("checkPaymentWithoutId: payment_user_id = {}",
+                userId);
+
+        if (userId == null || userId < 0){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_USER_WRONG_ID_PROVIDED);
+        }
+        BasketDTO basketDTO = basketMapper.selectBasketByUser(userId);
+        if (basketDTO == null){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_BASKET_NOT_FOUND);
+        }
+        List<OrderDTO> orderDTOS = orderMapper.selectOrderByUserIsMark(basketDTO.getUserDTO().getId());
+        if (orderDTOS == null){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_ORDER_NOT_FOUND);
+        }
+
+        // Check all mark field in orderDTOs
+        for (OrderDTO orderDTO : orderDTOS) {
+
+            // Check is discount validate
+            DiscountDTO discountDTO = discountMapper.selectDiscount(orderDTO.getDiscountDTO().getId());
+            if (discountDTO == null){
+                throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_DISCOUNT_NOT_FOUND);
+            } else {
+
+                // Check is discount free
+                UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(orderDTO.getDiscountDTO().getId());
+                if (userDiscountDTO != null && userDiscountDTO.isUsed()) {
+                    throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_DISCOUNT_ALREADY_USED);
+                }
+            }
+        }
+    }
 }

@@ -43,6 +43,7 @@ CREATE TABLE orders(
   user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
   film_id BIGINT REFERENCES films(id) ON DELETE SET NULL,
   discount_id BIGINT REFERENCES discounts(id) ON DELETE SET NULL,
+  price_by_discount INT,
   mark BOOLEAN,
   time TIMESTAMP,
   UNIQUE (user_id, film_id)
@@ -73,5 +74,6 @@ CREATE TABLE payments(
   user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
   film_id BIGINT REFERENCES films(id) ON DELETE SET NULL,
   discount_id BIGINT REFERENCES discounts(id) ON DELETE SET NULL,
+  total_price INT,
   time TIMESTAMP
 );

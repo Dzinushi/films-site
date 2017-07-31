@@ -1,11 +1,10 @@
 package com.mev.films.service.implement;
 
+import com.mev.films.mappers.interfaces.OrderMapper;
 import com.mev.films.mappers.interfaces.PaymentMapper;
+import com.mev.films.mappers.interfaces.UserDiscountMapper;
 import com.mev.films.model.*;
-import com.mev.films.service.interfaces.BasketService;
-import com.mev.films.service.interfaces.OrderService;
-import com.mev.films.service.interfaces.PaymentService;
-import com.mev.films.service.interfaces.UserDiscountService;
+import com.mev.films.service.interfaces.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +20,19 @@ public class PaymentServiceImpl implements PaymentService{
     private Logger LOG = LogManager.getLogger();
 
     @Autowired private PaymentMapper paymentMapper;
+    @Autowired private OrderMapper orderMapper;
+    @Autowired private UserDiscountMapper userDiscountMapper;
 
-    @Autowired private BasketService basketService;
-    @Autowired private OrderService orderService;
-    @Autowired private UserDiscountService userDiscountService;
+    @Autowired private ExceptionService exceptionService;
 
     public PaymentServiceImpl(){
     }
 
-    public PaymentServiceImpl(PaymentMapper paymentMapper, BasketService basketService, OrderService orderService, UserDiscountService userDiscountService) {
+    public PaymentServiceImpl(PaymentMapper paymentMapper, OrderMapper orderMapper, UserDiscountMapper userDiscountMapper, ExceptionService exceptionService) {
         this.paymentMapper = paymentMapper;
-        this.basketService = basketService;
-        this.orderService = orderService;
-        this.userDiscountService = userDiscountService;
+        this.orderMapper = orderMapper;
+        this.userDiscountMapper = userDiscountMapper;
+        this.exceptionService = exceptionService;
     }
 
     @Override
@@ -48,17 +47,9 @@ public class PaymentServiceImpl implements PaymentService{
         LOG.debug("getPaymentsByUser: user_id = {}",
                 userId);
 
-        List<PaymentDTO> paymentDTOS = null;
-        if (userId != null && userId >= 0){
+        exceptionService.checkPaymentUserId(userId);
 
-            paymentDTOS = paymentMapper.selectPaymentsByUser(userId);
-
-        } else {
-            LOG.debug("Error in 'getPaymentsByUser'! 'user_id' is not validate: user_id = {}",
-                    userId);
-        }
-
-        return paymentDTOS;
+        return paymentMapper.selectPaymentsByUser(userId);
     }
 
     @Override
@@ -66,15 +57,9 @@ public class PaymentServiceImpl implements PaymentService{
         LOG.debug("getPaymentsByFilm: film_id = {}",
                 filmId);
 
-        List<PaymentDTO> paymentDTOS = null;
-        if (filmId != null && filmId >= 0){
-            paymentDTOS = paymentMapper.selectPaymentsByFilm(filmId);
-        } else {
-            LOG.debug("Error in 'getPaymentsByFilm'! 'film_id' is not validate: film_id = {}",
-                    filmId);
-        }
+        exceptionService.checkPaymentFilmId(filmId);
 
-        return paymentDTOS;
+        return paymentMapper.selectPaymentsByFilm(filmId);
     }
 
     @Override
@@ -82,73 +67,42 @@ public class PaymentServiceImpl implements PaymentService{
         LOG.debug("getPayment: id = {}",
                 id);
 
-        PaymentDTO paymentDTO = null;
-        if (id != null && id >=0 ){
-            paymentDTO = paymentMapper.selectPayment(id);
-        } else {
-            LOG.debug("Error in 'getPayment'! 'id' is not validate: id = {}",
-                    id);
-        }
+        exceptionService.checkPaymentId(id);
 
-        return paymentDTO;
+        return paymentMapper.selectPayment(id);
     }
 
     @Override
     public void addPayment(Long userId) {
+        LOG.debug("addPayment: user_id = {}",
+                userId);
 
-        if (userId != null && userId >= 0){
-            BasketDTO basketDTO = basketService.getBasketByUser(userId);
-            if (basketDTO != null){
-                List<OrderDTO> orderDTOS = orderService.getOrderByUserIsMark(basketDTO.getUserDTO().getId());
-                if (orderDTOS != null){
+        exceptionService.checkPaymentWithoutId(userId);
 
-                    // Check all mark field in orderDTOs
-                    for (OrderDTO orderDTO : orderDTOS){
+        List<OrderDTO> orderDTOS = orderMapper.selectOrderByUserIsMark(userId);
+        for (OrderDTO orderDTO : orderDTOS){
+            Integer totalPrice;
+            if (orderDTO.getDiscountDTO() != null){
 
-                        // Check is discount free
-                        DiscountDTO discountDTO = orderDTO.getDiscountDTO();
-                        if (discountDTO != null) {
-                            UserDiscountDTO userDiscountDTO = userDiscountService.getUserDiscountByDiscount(discountDTO.getId());
-                            if (!userDiscountDTO.isUsed()) {
+                totalPrice = orderDTO.getPriceByDiscount();
 
-                                PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO());
-                                LOG.debug("addPayment: {}",
-                                        paymentDTO);
-                                paymentMapper.insertPayment(paymentDTO);
+                // set 'used' in UserDiscount
+                UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(orderDTO.getDiscountDTO().getId());
+                if (userDiscountDTO == null){
 
-                            }
-                            else {
-                                LOG.debug("Error in 'addPayment'! This discount code has already been used");
-                            }
-
-                            // Set discount is 'used'
-                            userDiscountDTO.setUsed(true);
-                            userDiscountService.updateUserDiscount(userDiscountDTO);
-                        }
-                    }
-                    // Delete orders that will be payed
-                    orderService.deleteOrderByUser(userId);
-
+                    // create new UserDiscount
+                    userDiscountDTO = new UserDiscountDTO(orderDTO.getUserDTO(), orderDTO.getDiscountDTO(), true);
+                    userDiscountMapper.insertUserDiscount(userDiscountDTO);
                 } else {
-                    LOG.debug("Error in 'addPayment'! Orders for that user not found");
+                    userDiscountDTO.setUsed(true);
+                    userDiscountMapper.updateUserDiscount(userDiscountDTO);
                 }
-            } else {
-                LOG.debug("Error in 'addPayment'! Basket with this user not found");
             }
-        }
-    }
-
-    @Override
-    public void deletePayment(Long id) {
-        LOG.debug("deletePayment: id = {}",
-                id);
-
-        if (id != null && id >= 0){
-            paymentMapper.deletePayment(id);
-        }
-        else {
-            LOG.debug("Error in 'deletePayment'! 'id' is not validate: id = {}",
-                    id);
+            else {
+                totalPrice = orderDTO.getFilmDTO().getPrice();
+            }
+            PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO(), totalPrice);
+            paymentMapper.insertPayment(paymentDTO);
         }
     }
 }

@@ -44,9 +44,9 @@ public class OrderServiceTest {
     private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 200, 250, "image2.bmp");
     private FilmDTO filmDTO3 = new FilmDTO("film3", "genre3", (short) 250, 280, "image3.png");
 
-    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 15F);
-    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 18F);
-    private DiscountDTO discountDTO3 = new DiscountDTO("code3", 12F);
+    private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
+    private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.18F);
+    private DiscountDTO discountDTO3 = new DiscountDTO("code3", 0.12F);
 
     private OrderDTO orderDTO1;
     private OrderDTO orderDTO2;
@@ -95,13 +95,15 @@ public class OrderServiceTest {
     @Test
     public void getOrderTest(){
 
-        expect(orderMapperMock.selectOrder(orderDTO1.getId())).andReturn(orderDTO1);
+        expect(orderMapperMock.selectOrder(orderDTO2.getId())).andReturn(orderDTO2);
 
         replay(orderMapperMock);
 
-        OrderDTO orderDTO = orderService.getOrder(orderDTO1.getId());
-        assertTrue("orderDTO = " + orderDTO1.toString(),
-                orderDTO.equals(orderDTO1));
+        OrderDTO orderDTO = orderService.getOrder(orderDTO2.getId());
+        assertTrue("orderDTO = " + orderDTO2.toString(),
+                orderDTO.equals(orderDTO2));
+        assertTrue("orderDTO.priceByDiscount = 205",
+                orderDTO.getPriceByDiscount().equals(205));
 
         // check id null
         try {
@@ -144,8 +146,12 @@ public class OrderServiceTest {
                 orderDTOS.size() == 2);
         assertTrue("orderDTO1 = " + orderDTO1.toString(),
                 orderDTOS.get(0).equals(orderDTO1));
+        assertTrue("orderDTO.priceByDiscount = 128",
+                orderDTOS.get(0).getPriceByDiscount().equals(128));
         assertTrue("orderDTO2 = " + orderDTO2.toString(),
                 orderDTOS.get(1).equals(orderDTO2));
+        assertTrue("orderDTO.priceByDiscount = 205",
+                orderDTOS.get(1).getPriceByDiscount().equals(205));
 
         // check user_id null
         try {
@@ -188,8 +194,12 @@ public class OrderServiceTest {
                 orderDTOS.size() == 2);
         assertTrue("orderDTO1 = " + orderDTO1.toString(),
                 orderDTOS.get(0).equals(orderDTO1));
+        assertTrue("orderDTO.priceByDiscount = 128",
+                orderDTOS.get(0).getPriceByDiscount().equals(128));
         assertTrue("orderDTO2 = " + orderDTO2.toString(),
                 orderDTOS.get(1).equals(orderDTO2));
+        assertTrue("orderDTO.priceByDiscount = 205",
+                orderDTOS.get(1).getPriceByDiscount().equals(205));
 
         // check user_id null
         try {

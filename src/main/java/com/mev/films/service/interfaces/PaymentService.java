@@ -11,5 +11,4 @@ public interface PaymentService {
     List<PaymentDTO> getPaymentsByFilm(Long filmId);
     PaymentDTO getPayment(Long id);
     void addPayment(Long userId);
-    void deletePayment(Long id);
 }

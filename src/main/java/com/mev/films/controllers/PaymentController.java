@@ -54,12 +54,4 @@ public class PaymentController {
 
         paymentService.addPayment(userId);
     }
-
-    @RequestMapping(value = "/api/payments", method = RequestMethod.DELETE)
-    public void deletePayment(@RequestParam Long id) {
-        LOG.debug("deletePayment: id = {}",
-                id);
-
-        paymentService.deletePayment(id);
-    }
 }

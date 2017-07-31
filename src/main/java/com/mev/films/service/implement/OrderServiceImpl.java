@@ -41,7 +41,7 @@ public class OrderServiceImpl implements OrderService{
 
             if (price != null && value != null) {
                 Float price_discount = price - (price * value);
-                orderDTO.getFilmDTO().setPrice(Math.round(price_discount));
+                orderDTO.setPriceByDiscount(Math.round(price_discount));
             }
         }
     }
