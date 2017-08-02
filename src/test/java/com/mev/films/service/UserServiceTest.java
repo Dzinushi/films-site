@@ -1,9 +1,7 @@
 package com.mev.films.service;
 
 import com.mev.films.mappers.interfaces.UserMapper;
-import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.UserDTO;
-import com.mev.films.model.UserRoleDTO;
 import com.mev.films.service.implement.ExceptionServiceImpl;
 import com.mev.films.service.implement.UserServiceImpl;
 import com.mev.films.service.interfaces.ExceptionService;
@@ -15,9 +13,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;

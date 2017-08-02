@@ -66,7 +66,6 @@ public class PaymentMapperTest {
             userMapper.deleteUserByLogin(userDTO.getLogin());
         }
 
-
         discountMapper.insertDiscount(discountDTO1);
         discountMapper.insertDiscount(discountDTO2);
         discountMapper.insertDiscount(discountDTO3);
@@ -83,14 +82,26 @@ public class PaymentMapperTest {
         filmDTOS = filmMapper.selectFilms();
         userDTOS = userMapper.selectUsersIdLogin();
 
+        // added baskets
+        basketDTOS = new ArrayList<>();
+        basketDTOS.add(new BasketDTO(userDTOS.get(0)));
+        basketDTOS.add(new BasketDTO(userDTOS.get(1)));
+        basketDTOS.add(new BasketDTO(userDTOS.get(2)));
+
+        for (BasketDTO basketDTO : basketDTOS){
+            basketMapper.insertBasket(basketDTO);
+        }
+
+        basketDTOS = basketMapper.selectBaskets();
+
         // added orders
         orderDTOS = new ArrayList<>();
-        orderDTOS.add(new OrderDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), true));
-        orderDTOS.add(new OrderDTO(userDTOS.get(1), filmDTOS.get(0), discountDTOS.get(1), false));
-        orderDTOS.add(new OrderDTO(userDTOS.get(1), filmDTOS.get(1), null, false));
-        orderDTOS.add(new OrderDTO(userDTOS.get(2), filmDTOS.get(0), null, true));
-        orderDTOS.add(new OrderDTO(userDTOS.get(2), filmDTOS.get(1), null, true));
-        orderDTOS.add(new OrderDTO(userDTOS.get(2), filmDTOS.get(2), discountDTOS.get(2), false));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), true));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(1), filmDTOS.get(0), discountDTOS.get(1), false));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(1), filmDTOS.get(1), null, false));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(2), filmDTOS.get(0), null, true));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(2), filmDTOS.get(1), null, true));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(2), filmDTOS.get(2), discountDTOS.get(2), false));
 
         for (OrderDTO orderDTO : orderDTOS){
             if (orderDTO.getDiscountDTO() != null){
@@ -102,24 +113,14 @@ public class PaymentMapperTest {
             orderMapper.insertOrder(orderDTO);
         }
 
-        // added baskets
-        basketDTOS = new ArrayList<>();
-        basketDTOS.add(new BasketDTO(userDTOS.get(0)));
-        basketDTOS.add(new BasketDTO(userDTOS.get(1)));
-        basketDTOS.add(new BasketDTO(userDTOS.get(2)));
-
-        for (BasketDTO basketDTO : basketDTOS){
-            basketMapper.insertBasket(basketDTO);
-        }
-
         // create payments (3 payments)
         paymentDTOS = new ArrayList<>();
         for (BasketDTO basketDTO : basketDTOS){
-            List<OrderDTO> orders = orderMapper.selectOrderByUser(basketDTO.getUserDTO().getId());
+            List<OrderDTO> orders = orderMapper.selectOrdersByBasket(basketDTO.getId());
             for (OrderDTO orderDTO : orders){
                 if (orderDTO.isMark()){
                     Integer totalPrice = orderDTO.getDiscountDTO() == null ? orderDTO.getFilmDTO().getPrice() : orderDTO.getPriceByDiscount();
-                    PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO(), totalPrice);
+                    PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getBasketDTO().getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO(), totalPrice);
                     paymentDTOS.add(paymentDTO);
                 }
             }

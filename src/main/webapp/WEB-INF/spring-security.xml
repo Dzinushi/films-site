@@ -9,7 +9,7 @@
 
     <security:http auto-config='true' use-expressions="false">
 
-        <intercept-url pattern="/admin**" access="ROLE_ADMIN" />
+        <intercept-url pattern="/admin/**" access="ROLE_ADMIN" />
         <intercept-url pattern="/api/**" access="ROLE_USER" />
 
         <form-login

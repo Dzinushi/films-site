@@ -16,14 +16,14 @@ public class UserDiscountController {
 
     @Autowired private UserDiscountService userDiscountService;
 
-    @RequestMapping(value = {"/api/user_discounts"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/api/user_discounts"}, method = RequestMethod.GET)
     public List<UserDiscountDTO> getUserDiscounts() {
         LOG.debug("getUserDiscounts");
 
         return userDiscountService.getUserDiscounts();
     }
 
-    @RequestMapping(value = {"/api/user_discount"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/api/user_discount"}, method = RequestMethod.GET)
     public UserDiscountDTO getUserDiscount(@RequestParam Long id) {
         LOG.debug("getUserDiscount: id = {}",
                 id);
@@ -31,7 +31,7 @@ public class UserDiscountController {
         return userDiscountService.getUserDiscount(id);
     }
 
-    @RequestMapping(value = {"/api/user_discounts/user"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/api/user_discounts/user"}, method = RequestMethod.GET)
     public List<UserDiscountDTO> getUserDiscountsByUser(@RequestParam Long userId) {
         LOG.debug("getUserDiscountsByUser: user_id = {}",
                 userId);
@@ -39,7 +39,7 @@ public class UserDiscountController {
         return userDiscountService.getUserDiscountsByUser(userId);
     }
 
-    @RequestMapping(value = {"/api/user_discounts/discount"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/api/user_discounts/discount"}, method = RequestMethod.GET)
     public UserDiscountDTO getUserDiscountByDiscount(@RequestParam Long discountId) {
         LOG.debug("getUserDiscountByDiscount: discount_id = {}",
                 discountId);
@@ -47,7 +47,7 @@ public class UserDiscountController {
         return userDiscountService.getUserDiscountByDiscount(discountId);
     }
 
-    @RequestMapping(value = {"/api/user_discounts"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/admin/api/user_discounts"}, method = RequestMethod.POST)
     public void addUserDiscount(@RequestBody UserDiscountDTO userDiscountDTO) {
         LOG.debug("addUserDiscount: userDiscountDTO = {}",
                 userDiscountDTO);
@@ -55,7 +55,7 @@ public class UserDiscountController {
         userDiscountService.addUserDiscount(userDiscountDTO);
     }
 
-    @RequestMapping(value = {"/api/user_discounts"}, method = RequestMethod.PUT)
+    @RequestMapping(value = {"/admin/api/user_discounts"}, method = RequestMethod.PUT)
     public void updateUserDiscount(@RequestBody UserDiscountDTO userDiscountDTO) {
         LOG.debug("updateUserDiscount: userDiscountDTO = {}",
                 userDiscountDTO);
@@ -63,7 +63,7 @@ public class UserDiscountController {
         userDiscountService.updateUserDiscount(userDiscountDTO);
     }
 
-    @RequestMapping(value = {"/api/user_discounts"}, method = RequestMethod.DELETE)
+    @RequestMapping(value = {"/admin/api/user_discounts"}, method = RequestMethod.DELETE)
     public void deleteUserDiscount(@RequestParam Long id) {
         LOG.debug("deleteUserDiscount: id = {}",
                 id);
@@ -71,7 +71,7 @@ public class UserDiscountController {
         userDiscountService.deleteUserDiscount(id);
     }
 
-    @RequestMapping(value = {"/api/user_discounts/discount"}, method = RequestMethod.DELETE)
+    @RequestMapping(value = {"/admin/api/user_discounts/discount"}, method = RequestMethod.DELETE)
     public void deleteUserDiscountByDiscount(@RequestParam Long discountId) {
         LOG.debug("deleteUserDiscountByDiscount: discount_id = {}",
                 discountId);
@@ -79,7 +79,7 @@ public class UserDiscountController {
         userDiscountService.deleteUserDiscountByDiscount(discountId);
     }
 
-    @RequestMapping(value = {"/api/user_discounts/user"}, method = RequestMethod.DELETE)
+    @RequestMapping(value = {"/admin/api/user_discounts/user"}, method = RequestMethod.DELETE)
     public void deleteUserDiscountByUser(@RequestParam Long userId) {
         LOG.debug("deleteUserDiscountByUser: user_id = {}",
                 userId);

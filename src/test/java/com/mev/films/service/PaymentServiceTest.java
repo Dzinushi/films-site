@@ -46,6 +46,7 @@ public class PaymentServiceTest {
     private UserDTO userDTO3 = new UserDTO("user3", null, null);
 
     private UserDiscountDTO userDiscountDTO1;
+    private UserDiscountDTO userDiscountDTO2;
 
     private List<BasketDTO> baskets;
 
@@ -77,22 +78,10 @@ public class PaymentServiceTest {
         filmDTO2.setId(2L);
 
         userDiscountDTO1 = new UserDiscountDTO(userDTO1, discountDTO1, false);
+        userDiscountDTO2 = new UserDiscountDTO(userDTO2, discountDTO2, true);
 
         userDiscountDTO1.setId(1L);
-
-        orders = new ArrayList<>();
-        orders.add(new OrderDTO(userDTO1, filmDTO1, discountDTO1, true));
-        orders.add(new OrderDTO(userDTO1, filmDTO2, discountDTO2, true));
-        orders.add(new OrderDTO(userDTO2, filmDTO1, null, false));
-        orders.add(new OrderDTO(userDTO3, filmDTO2, null, true));
-
-        orders.get(0).setPriceByDiscount(Math.round(filmDTO1.getPrice() - (filmDTO1.getPrice() * discountDTO1.getValue())));
-        orders.get(1).setPriceByDiscount(Math.round(filmDTO2.getPrice() - (filmDTO2.getPrice() * discountDTO2.getValue())));
-
-        orders.get(0).setId(1L);
-        orders.get(1).setId(2L);
-        orders.get(2).setId(3L);
-        orders.get(3).setId(4L);
+        userDiscountDTO2.setId(2L);
 
         baskets = new ArrayList<>();
         baskets.add(new BasketDTO(userDTO1));
@@ -103,13 +92,27 @@ public class PaymentServiceTest {
         baskets.get(1).setId(2L);
         baskets.get(2).setId(3L);
 
+        orders = new ArrayList<>();
+        orders.add(new OrderDTO(baskets.get(0), filmDTO1, discountDTO1, true));
+        orders.add(new OrderDTO(baskets.get(1), filmDTO2, discountDTO2, true));
+        orders.add(new OrderDTO(baskets.get(1), filmDTO1, null, false));
+        orders.add(new OrderDTO(baskets.get(2), filmDTO2, null, true));
+
+        orders.get(0).setPriceByDiscount(Math.round(filmDTO1.getPrice() - (filmDTO1.getPrice() * discountDTO1.getValue())));
+        orders.get(1).setPriceByDiscount(Math.round(filmDTO2.getPrice() - (filmDTO2.getPrice() * discountDTO2.getValue())));
+
+        orders.get(0).setId(1L);
+        orders.get(1).setId(2L);
+        orders.get(2).setId(3L);
+        orders.get(3).setId(4L);
+
         payments = new ArrayList<>();
         long id = 1;
         for (BasketDTO basketDTO : baskets){
             for (OrderDTO orderDTO : orders){
-                if (orderDTO.getUserDTO().equals(basketDTO.getUserDTO())){
+                if (orderDTO.getBasketDTO().equals(basketDTO)){
                     Integer totalPrice = orderDTO.getDiscountDTO() == null ? orderDTO.getFilmDTO().getPrice() : orderDTO.getPriceByDiscount();
-                    PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO(), totalPrice);
+                    PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getBasketDTO().getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO(), totalPrice);
                     paymentDTO.setId(id);
                     payments.add(paymentDTO);
                     ++id;
@@ -245,12 +248,21 @@ public class PaymentServiceTest {
     @Test
     public void addPaymentTest(){
 
-        expect(basketMapperMock.selectBasketByUser(userDTO1.getId())).andStubReturn(baskets.get(0));
-        expect(orderMapperMock.selectOrderByUserIsMark(userDTO1.getId())).andStubAnswer(new IAnswer<List<OrderDTO>>() {
+        expect(basketMapperMock.selectBasket(baskets.get(0).getId())).andStubReturn(baskets.get(0));
+        expect(basketMapperMock.selectBasket(baskets.get(1).getId())).andStubReturn(baskets.get(1));
+        expect(basketMapperMock.selectBasket(baskets.get(2).getId())).andStubReturn(baskets.get(2));
+        expect(orderMapperMock.selectOrdersByBasketIsMark(userDTO1.getId())).andStubAnswer(new IAnswer<List<OrderDTO>>() {
             @Override
             public List<OrderDTO> answer() throws Throwable {
                 List<OrderDTO> orderDTOS = new ArrayList<>();
                 orderDTOS.add(orders.get(0));
+                return orderDTOS;
+            }
+        });
+        expect(orderMapperMock.selectOrdersByBasketIsMark(userDTO2.getId())).andStubAnswer(new IAnswer<List<OrderDTO>>() {
+            @Override
+            public List<OrderDTO> answer() throws Throwable {
+                List<OrderDTO> orderDTOS = new ArrayList<>();
                 orderDTOS.add(orders.get(1));
                 return orderDTOS;
             }
@@ -258,30 +270,84 @@ public class PaymentServiceTest {
         expect(discountMapperMock.selectDiscount(discountDTO1.getId())).andStubReturn(discountDTO1);
         expect(discountMapperMock.selectDiscount(discountDTO2.getId())).andStubReturn(discountDTO2);
         expect(userDiscountMapperMock.selectUserDiscountByDiscount(discountDTO1.getId())).andStubReturn(userDiscountDTO1);
+        expect(userDiscountMapperMock.selectUserDiscountByDiscount(discountDTO2.getId())).andStubReturn(userDiscountDTO2);
 
         replay(basketMapperMock);
         replay(orderMapperMock);
         replay(userDiscountMapperMock);
         replay(discountMapperMock);
 
-        paymentService.addPayment(userDTO1.getId());
+        paymentService.addPayment(baskets.get(0));
 
-        // check user_id null
+        // check basket null
         try{
             paymentService.addPayment(null);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_USER_WRONG_ID_PROVIDED).getMessage());
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_BASKET_NULL_POINTER_EXCEPTION).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("paymentDTO.user_id = null",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_USER_WRONG_ID_PROVIDED).getMessage()));
+            assertTrue("paymentDTO.basketDTO = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_BASKET_NULL_POINTER_EXCEPTION).getMessage()));
         }
 
-        // check user_id < 0
+        // check basket_id null
         try{
-            paymentService.addPayment(-8L);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_USER_WRONG_ID_PROVIDED).getMessage());
+            paymentService.addPayment(new BasketDTO(userDTO1));
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("paymentDTO.user_id = -8",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_USER_WRONG_ID_PROVIDED).getMessage()));
+            assertTrue("paymentDTO.basket_id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage()));
+        }
+
+        // check basket_id < 0
+        try{
+            BasketDTO basketDTO = new BasketDTO(userDTO1);
+            basketDTO.setId(-6L);
+            paymentService.addPayment(basketDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("paymentDTO.user_id = -6",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage()));
+        }
+
+        // check basket_id not found
+        try{
+            BasketDTO basketDTO = new BasketDTO(userDTO1);
+            basketDTO.setId(4L);
+            paymentService.addPayment(basketDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_BASKET_NOT_FOUND).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("paymentDTO.basket_id not found",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_BASKET_NOT_FOUND).getMessage()));
+        }
+
+        // check basket_id compare false
+        try{
+            UserDTO userDTO = new UserDTO(userDTO2.getLogin(), null, null);
+            userDTO.setId(1L);
+            BasketDTO basketDTO = new BasketDTO(userDTO);
+            basketDTO.setId(1L);
+            paymentService.addPayment(basketDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_BASKET_COMPARE_FALSE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("paymentDTO.basketDTO compare false",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_BASKET_COMPARE_FALSE).getMessage()));
+        }
+
+        // check orderDTOS not found
+        try{
+            paymentService.addPayment(baskets.get(2));
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_ORDER_NOT_FOUND).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("paymentDTO: orderDTO by basketDTO not found",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_ORDER_NOT_FOUND).getMessage()));
+        }
+
+        // check userDiscountDTO: discount just used
+        try{
+            paymentService.addPayment(baskets.get(1));
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_DISCOUNT_ALREADY_USED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("paymentDTO: userDiscountDTO already used",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_DISCOUNT_ALREADY_USED).getMessage()));
         }
     }
 }

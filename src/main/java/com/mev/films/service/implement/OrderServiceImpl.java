@@ -1,10 +1,8 @@
 package com.mev.films.service.implement;
 
+import com.mev.films.mappers.interfaces.BasketMapper;
 import com.mev.films.mappers.interfaces.OrderMapper;
-import com.mev.films.model.DiscountDTO;
-import com.mev.films.model.FilmDTO;
-import com.mev.films.model.OrderDTO;
-import com.mev.films.model.UserDTO;
+import com.mev.films.model.*;
 import com.mev.films.service.interfaces.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,14 +19,16 @@ public class OrderServiceImpl implements OrderService{
     private Logger LOG = LogManager.getLogger();
 
     @Autowired private OrderMapper orderMapper;
+    @Autowired private BasketMapper basketMapper;
 
     @Autowired private ExceptionService exceptionService;
 
     public OrderServiceImpl(){
     }
 
-    public OrderServiceImpl(OrderMapper orderMapper, ExceptionService exceptionService){
+    public OrderServiceImpl(OrderMapper orderMapper, BasketMapper basketMapper, ExceptionService exceptionService){
         this.orderMapper = orderMapper;
+        this.basketMapper = basketMapper;
         this.exceptionService = exceptionService;
     }
 
@@ -76,14 +76,14 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<OrderDTO> getOrderByUser(Long userId) {
+    public List<OrderDTO> getOrderByBasket(Long basketId) {
 
-        LOG.debug("getOrderByUser: user_id = {}",
-                userId);
+        LOG.debug("getOrderByBasket: user_id = {}",
+                basketId);
 
-        exceptionService.checkOrderUserId(userId);
+        exceptionService.checkOrderBasketId(basketId);
 
-        List<OrderDTO> orderDTOS = orderMapper.selectOrderByUser(userId);
+        List<OrderDTO> orderDTOS = orderMapper.selectOrdersByBasket(basketId);
         for (OrderDTO orderDTO : orderDTOS){
             priceByDiscount(orderDTO);
         }
@@ -92,14 +92,14 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<OrderDTO> getOrderByUserIsMark(Long userId) {
+    public List<OrderDTO> getOrderByBasketIsMark(Long basketId) {
 
-        LOG.debug("getOrderByUserIsMark: user_id = {}",
-                userId);
+        LOG.debug("getOrderByBasketIsMark: user_id = {}",
+                basketId);
 
-        exceptionService.checkOrderUserId(userId);
+        exceptionService.checkOrderBasketId(basketId);
 
-        List<OrderDTO> orderDTOS = orderMapper.selectOrderByUserIsMark(userId);
+        List<OrderDTO> orderDTOS = orderMapper.selectOrdersByBasketIsMark(basketId);
         for (OrderDTO orderDTO : orderDTOS){
             priceByDiscount(orderDTO);
         }
@@ -115,6 +115,17 @@ public class OrderServiceImpl implements OrderService{
 
         exceptionService.checkOrderWithoutId(orderDTO);
 
+        // checking if basket exist for this user
+        BasketDTO basketDTO = basketMapper.selectBasketByUser(orderDTO.getBasketDTO().getUserDTO().getId());
+
+        // create basket for this user
+        if (basketDTO == null){
+            basketMapper.insertBasket(new BasketDTO(orderDTO.getBasketDTO().getUserDTO()));
+        }
+
+        // set basketDTO for orderDTO
+        basketDTO = basketMapper.selectBasketByUser(orderDTO.getBasketDTO().getUserDTO().getId());
+        orderDTO.setBasketDTO(basketDTO);
         orderMapper.insertOrder(orderDTO);
     }
 
@@ -130,13 +141,13 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public void deleteOrderByUser(Long userId) {
+    public void deleteOrderByBasket(Long basketId) {
 
-        LOG.debug("deleteOrderByUser: user_id = {}",
-                userId);
+        LOG.debug("deleteOrderByBasket: user_id = {}",
+                basketId);
 
-        exceptionService.checkOrderUserId(userId);
+        exceptionService.checkOrderBasketId(basketId);
 
-        orderMapper.deleteOrderByUser(userId);
+        orderMapper.deleteOrderByBasket(basketId);
     }
 }

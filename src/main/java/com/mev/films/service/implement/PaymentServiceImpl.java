@@ -73,13 +73,13 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
-    public void addPayment(Long userId) {
-        LOG.debug("addPayment: user_id = {}",
-                userId);
+    public void addPayment(BasketDTO basketDTO) {
+        LOG.debug("addPayment: {}",
+                basketDTO);
 
-        exceptionService.checkPaymentWithoutId(userId);
+        exceptionService.checkPaymentWithoutId(basketDTO);
 
-        List<OrderDTO> orderDTOS = orderMapper.selectOrderByUserIsMark(userId);
+        List<OrderDTO> orderDTOS = orderMapper.selectOrdersByBasketIsMark(basketDTO.getId());
         for (OrderDTO orderDTO : orderDTOS){
             Integer totalPrice;
             if (orderDTO.getDiscountDTO() != null){
@@ -91,7 +91,7 @@ public class PaymentServiceImpl implements PaymentService{
                 if (userDiscountDTO == null){
 
                     // create new UserDiscount
-                    userDiscountDTO = new UserDiscountDTO(orderDTO.getUserDTO(), orderDTO.getDiscountDTO(), true);
+                    userDiscountDTO = new UserDiscountDTO(orderDTO.getBasketDTO().getUserDTO(), orderDTO.getDiscountDTO(), true);
                     userDiscountMapper.insertUserDiscount(userDiscountDTO);
                 } else {
                     userDiscountDTO.setUsed(true);
@@ -101,8 +101,11 @@ public class PaymentServiceImpl implements PaymentService{
             else {
                 totalPrice = orderDTO.getFilmDTO().getPrice();
             }
-            PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO(), totalPrice);
+            PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getBasketDTO().getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO(), totalPrice);
             paymentMapper.insertPayment(paymentDTO);
+
+            // delete order that just payed
+            orderMapper.deleteOrder(orderDTO.getId());
         }
     }
 }

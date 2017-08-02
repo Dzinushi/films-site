@@ -7,9 +7,9 @@ import java.util.List;
 public interface OrderMapper {
     List<OrderDTO> selectOrders();
     OrderDTO selectOrder(Long id);
-    List<OrderDTO> selectOrderByUser(Long id);
-    List<OrderDTO> selectOrderByUserIsMark(Long userId);
+    List<OrderDTO> selectOrdersByBasket(Long basketId);
+    List<OrderDTO> selectOrdersByBasketIsMark(Long basketId);
     void insertOrder(OrderDTO orderDTO);
     void deleteOrder(Long id);
-    void deleteOrderByUser(Long userId);
+    void deleteOrderByBasket(Long basketId);
 }

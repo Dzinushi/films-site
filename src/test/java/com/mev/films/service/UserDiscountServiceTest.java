@@ -49,6 +49,7 @@ public class UserDiscountServiceTest {
 
     @Before
     public void setup(){
+
         userDTO1.setId(1L);
         userDTO2.setId(2L);
 
@@ -192,7 +193,7 @@ public class UserDiscountServiceTest {
     @Test
     public void addUserDiscountTest() {
 
-        expect(userMapperMock.selectUser(userDiscountDTO1.getUserDTO().getId())).andStubReturn(userDTO1);
+        expect(userMapperMock.selectUserIdLogin(userDiscountDTO1.getUserDTO().getId())).andStubReturn(userDTO1);
         expect(discountMapperMock.selectDiscount(userDiscountDTO1.getDiscountDTO().getId())).andStubReturn(discountDTO1);
 
         replay(userDiscountMapperMock);
@@ -239,6 +240,19 @@ public class UserDiscountServiceTest {
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND).getMessage()));
         }
 
+        // check user compare false
+        try {
+            UserDTO userDTO = new UserDTO(userDTO2.getLogin(), userDTO1.getPassword(), userDTO1.getEnabled());
+            userDTO.setId(1L);
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDTO, userDiscountDTO1.getDiscountDTO(), userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(1L);
+            userDiscountService.addUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_COMPARE_FALSE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.userDTO compare false",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_COMPARE_FALSE).getMessage()));
+        }
+
         // check discount_id null
         try {
             userDiscountService.addUserDiscount(new UserDiscountDTO(userDiscountDTO1.getUserDTO(), null, userDiscountDTO1.isUsed()));
@@ -268,6 +282,19 @@ public class UserDiscountServiceTest {
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_DISCOUNT_ID_NOT_FOUND).getMessage()));
         }
 
+        // check discount compare false
+        try {
+            DiscountDTO discountDTO = new DiscountDTO(discountDTO2.getCode(), discountDTO1.getValue());
+            discountDTO.setId(1L);
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDiscountDTO1.getUserDTO(), discountDTO, userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(1L);
+            userDiscountService.addUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_DISCOUNT_COMPARE_FALSE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.discountDTO compare false",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_DISCOUNT_COMPARE_FALSE).getMessage()));
+        }
+
         // check used not found
         try {
             userDiscountService.addUserDiscount(new UserDiscountDTO(userDiscountDTO1.getUserDTO(), userDiscountDTO1.getDiscountDTO(), null));
@@ -285,7 +312,7 @@ public class UserDiscountServiceTest {
     @Test
     public void updateUserDiscountTest() {
 
-        expect(userMapperMock.selectUser(userDiscountDTO1.getUserDTO().getId())).andStubReturn(userDTO1);
+        expect(userMapperMock.selectUserIdLogin(userDiscountDTO1.getUserDTO().getId())).andStubReturn(userDTO1);
         expect(discountMapperMock.selectDiscount(userDiscountDTO1.getDiscountDTO().getId())).andStubReturn(discountDTO1);
 
         replay(userDiscountMapperMock);
@@ -359,6 +386,19 @@ public class UserDiscountServiceTest {
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND).getMessage()));
         }
 
+        // check user compare false
+        try {
+            UserDTO userDTO = new UserDTO(userDTO2.getLogin(), userDTO1.getPassword(), userDTO1.getEnabled());
+            userDTO.setId(1L);
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDTO, userDiscountDTO1.getDiscountDTO(), userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(1L);
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_COMPARE_FALSE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.userDTO compare false",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_USER_COMPARE_FALSE).getMessage()));
+        }
+
         // check discount_id null
         try {
             UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDiscountDTO1.getUserDTO(), null, userDiscountDTO1.isUsed());
@@ -392,6 +432,20 @@ public class UserDiscountServiceTest {
         } catch (ExceptionServiceImpl e){
             assertTrue("userDiscountDTO.discount_id = not found",
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_DISCOUNT_ID_NOT_FOUND).getMessage()));
+        }
+
+
+        // check discount compare false
+        try {
+            DiscountDTO discountDTO = new DiscountDTO(discountDTO2.getCode(), discountDTO1.getValue());
+            discountDTO.setId(1L);
+            UserDiscountDTO userDiscountDTO = new UserDiscountDTO(userDiscountDTO1.getUserDTO(), discountDTO, userDiscountDTO1.isUsed());
+            userDiscountDTO.setId(1L);
+            userDiscountService.updateUserDiscount(userDiscountDTO);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_DISCOUNT_COMPARE_FALSE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userDiscountDTO.discountDTO compare false",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_ERROR_DISCOUNT_COMPARE_FALSE).getMessage()));
         }
 
         // check used not found

@@ -9,7 +9,7 @@ public interface BasketService {
     List<BasketDTO> getBaskets();
     BasketDTO getBasket(Long id);
     BasketDTO getBasketByUser(Long userId);
-    void addBasket(BasketDTO basketDTO);
-    void deleteBasket(Long id);
-    void deleteBasketByUser(Long id);
+//    void addBasket(BasketDTO basketDTO);
+//    void deleteBasket(Long id);
+//    void deleteBasketByUser(Long id);
 }

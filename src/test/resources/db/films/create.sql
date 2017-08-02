@@ -37,24 +37,23 @@ CREATE TABLE discounts(
 );
 
 
-CREATE SEQUENCE orders_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
-CREATE TABLE orders(
-  id BIGINT PRIMARY KEY DEFAULT nextval('orders_id_seq'::regclass),
-  user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
-  film_id BIGINT REFERENCES films(id) ON DELETE SET NULL,
-  discount_id BIGINT REFERENCES discounts(id) ON DELETE SET NULL,
-  price_by_discount INT,
-  mark BOOLEAN,
-  time TIMESTAMP,
-  UNIQUE (user_id, film_id)
-);
-
-
 CREATE SEQUENCE baskets_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
 CREATE TABLE baskets (
   id BIGINT PRIMARY KEY DEFAULT nextval('baskets_id_seq' :: REGCLASS),
   user_id BIGINT UNIQUE REFERENCES users(id) ON DELETE SET NULL,
   time TIMESTAMP
+);
+
+CREATE SEQUENCE orders_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+CREATE TABLE orders(
+  id BIGINT PRIMARY KEY DEFAULT nextval('orders_id_seq'::regclass),
+  basket_id BIGINT REFERENCES baskets(id) ON DELETE SET NULL,
+  film_id BIGINT REFERENCES films(id) ON DELETE SET NULL,
+  discount_id BIGINT REFERENCES discounts(id) ON DELETE SET NULL,
+  price_by_discount INT,
+  mark BOOLEAN,
+  time TIMESTAMP,
+  UNIQUE (basket_id, film_id)
 );
 
 

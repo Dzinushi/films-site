@@ -59,33 +59,33 @@ public class BasketServiceImpl implements BasketService{
         return basketMapper.selectBasketByUser(userId);
     }
 
-    @Override
-    public void addBasket(BasketDTO basketDTO) {
-        LOG.debug("addBasket: basketDTO = {}",
-                basketDTO);
-
-        exceptionService.checkBasketWithoutId(basketDTO);
-
-        basketMapper.insertBasket(basketDTO);
-    }
-
-    @Override
-    public void deleteBasket(Long id){
-        LOG.debug("deleteBasket: id = {}",
-                id);
-
-        exceptionService.checkBasketId(id);
-
-        basketMapper.deleteBasket(id);
-    }
-
-    @Override
-    public void deleteBasketByUser(Long userId) {
-        LOG.debug("deleteBasket: userId = {}",
-                userId);
-
-        exceptionService.checkBasketUserId(userId);
-
-        basketMapper.deleteBasketByUser(userId);
-    }
+//    @Override
+//    public void addBasket(BasketDTO basketDTO) {
+//        LOG.debug("addBasket: basketDTO = {}",
+//                basketDTO);
+//
+//        exceptionService.checkBasketWithoutId(basketDTO);
+//
+//        basketMapper.insertBasket(basketDTO);
+//    }
+//
+//    @Override
+//    public void deleteBasket(Long id){
+//        LOG.debug("deleteBasket: id = {}",
+//                id);
+//
+//        exceptionService.checkBasketId(id);
+//
+//        basketMapper.deleteBasket(id);
+//    }
+//
+//    @Override
+//    public void deleteBasketByUser(Long userId) {
+//        LOG.debug("deleteBasket: userId = {}",
+//                userId);
+//
+//        exceptionService.checkBasketUserId(userId);
+//
+//        basketMapper.deleteBasketByUser(userId);
+//    }
 }

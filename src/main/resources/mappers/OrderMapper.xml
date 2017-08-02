@@ -10,7 +10,7 @@
         <result property="priceByDiscount" column="priceByDiscount"/>
         <result property="mark" column="mark"/>
         <result property="time" column="time"/>
-        <association property="userDTO" resultMap="com.mev.films.mappers.interfaces.UserMapper.userDTO" columnPrefix="usr_" />
+        <association property="basketDTO" resultMap="com.mev.films.mappers.interfaces.BasketMapper.basketDTO" columnPrefix="bsk_" />
         <association property="filmDTO" resultMap="com.mev.films.mappers.interfaces.FilmMapper.filmDTO" columnPrefix="flm_" />
         <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO" columnPrefix="dsc_" />
     </resultMap>
@@ -22,8 +22,9 @@
             o.time AS time,
             o.price_by_discount AS priceByDiscount,
 
-            u.id AS usr_id,
-            u.login AS usr_login,
+            b.id AS bsk_id,
+            u.id AS bsk_usr_id,
+            u.login AS bsk_usr_login,
 
             f.id AS flm_id,
             f.name AS flm_name,
@@ -37,7 +38,8 @@
             d.value AS dsc_value
         FROM
             orders AS o
-            INNER JOIN users AS u ON o.user_id = u.id
+            INNER JOIN baskets AS b ON o.basket_id = b.id
+            INNER JOIN users AS u ON b.user_id = u.id
             INNER JOIN films AS f ON o.film_id = f.id
             LEFT JOIN discounts AS d ON o.discount_id = d.id
     </select>
@@ -49,8 +51,9 @@
             o.time AS time,
             o.price_by_discount AS priceByDiscount,
 
-            u.id AS usr_id,
-            u.login AS usr_login,
+            b.id AS bsk_id,
+            u.id AS bsk_usr_id,
+            u.login AS bsk_usr_login,
 
             f.id AS flm_id,
             f.name AS flm_name,
@@ -64,22 +67,24 @@
             d.value AS dsc_value
         FROM
             orders AS o
-            INNER JOIN users AS u ON o.user_id = u.id
+            INNER JOIN baskets AS b ON o.basket_id = b.id
+            INNER JOIN users AS u ON b.user_id = u.id
             INNER JOIN films AS f ON o.film_id = f.id
             LEFT JOIN discounts AS d ON o.discount_id = d.id
         WHERE
             o.id = #{0}
     </select>
 
-    <select id="selectOrderByUser" parameterType="map" resultMap="orderDTO">
+    <select id="selectOrdersByBasket" parameterType="map" resultMap="orderDTO">
         SELECT
             o.id AS id,
             o.mark AS mark,
             o.time AS time,
             o.price_by_discount AS priceByDiscount,
 
-            u.id AS usr_id,
-            u.login AS usr_login,
+            b.id AS bsk_id,
+            u.id AS bsk_usr_id,
+            u.login AS bsk_usr_login,
 
             f.id AS flm_id,
             f.name AS flm_name,
@@ -93,22 +98,24 @@
             d.value AS dsc_value
         FROM
             orders AS o
-            INNER JOIN users AS u ON o.user_id = u.id
+            INNER JOIN baskets AS b ON o.basket_id = b.id
+            INNER JOIN users AS u ON b.user_id = u.id
             INNER JOIN films AS f ON o.film_id = f.id
             LEFT JOIN discounts AS d ON o.discount_id = d.id
         WHERE
-            o.user_id = #{0}
+            o.basket_id = #{0}
     </select>
 
-    <select id="selectOrderByUserIsMark" parameterType="map" resultMap="orderDTO">
+    <select id="selectOrderByBasketIsMark" parameterType="map" resultMap="orderDTO">
         SELECT
             o.id AS id,
             o.mark AS mark,
             o.time AS time,
             o.price_by_discount AS priceByDiscount,
 
-            u.id AS usr_id,
-            u.login AS usr_login,
+            b.id AS bsk_id,
+            u.id AS bsk_usr_id,
+            u.login AS bsk_usr_login,
 
             f.id AS flm_id,
             f.name AS flm_name,
@@ -122,19 +129,21 @@
             d.value AS dsc_value
         FROM
             orders AS o
-            INNER JOIN users AS u ON o.user_id = u.id
+            INNER JOIN baskets AS b ON o.basket_id = b.id
+            INNER JOIN users AS u ON b.user_id = u.id
             INNER JOIN films AS f ON o.film_id = f.id
             LEFT JOIN discounts AS d ON o.discount_id = d.id
         WHERE
-            o.user_id = #{0} AND
-                o.mark = TRUE
+            o.basket_id = #{0}
+            AND
+            o.mark = TRUE
     </select>
 
     <insert id="insertOrder" parameterType="com.mev.films.model.OrderDTO">
         INSERT INTO
-            orders (user_id, film_id, discount_id, price_by_discount, mark, time)
+            orders (basket_id, film_id, discount_id, price_by_discount, mark, time)
         VALUES
-            (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, #{priceByDiscount}, #{mark}, clock_timestamp())
+            (#{basketDTO.id}, #{filmDTO.id}, #{discountDTO.id}, #{priceByDiscount}, #{mark}, clock_timestamp())
     </insert>
 
     <delete id="deleteOrder" parameterType="map">
@@ -144,11 +153,11 @@
             id = #{0}
     </delete>
 
-    <delete id="deleteOrderByUser" parameterType="map">
+    <delete id="deleteOrderByBasket" parameterType="map">
         DELETE FROM
             orders
         WHERE
-            user_id = #{0}
+            basket_id = #{0}
     </delete>
 
 </mapper>

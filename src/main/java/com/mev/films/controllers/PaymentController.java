@@ -1,5 +1,6 @@
 package com.mev.films.controllers;
 
+import com.mev.films.model.BasketDTO;
 import com.mev.films.model.PaymentDTO;
 import com.mev.films.service.interfaces.PaymentService;
 import org.apache.logging.log4j.LogManager;
@@ -16,14 +17,15 @@ public class PaymentController {
 
     @Autowired private PaymentService paymentService;
 
-    @RequestMapping(value = "/api/payments", method = RequestMethod.GET)
+    // for admin
+    @RequestMapping(value = "/admin/api/payments", method = RequestMethod.GET)
     public List<PaymentDTO> getPaymentsDTO() {
         LOG.debug("getPayments");
 
         return paymentService.getPayments();
     }
 
-    @RequestMapping(value = "/api/payments/user", method = RequestMethod.GET)
+    @RequestMapping(value = {"/api/payments/user", "/admin/api/payments/user"}, method = RequestMethod.GET)
     public List<PaymentDTO> getPaymentsDTOByUser(@RequestParam Long userId) {
         LOG.debug("getPaymentsByUser: user_id = {}",
                 userId);
@@ -31,7 +33,8 @@ public class PaymentController {
         return paymentService.getPaymentsByUser(userId);
     }
 
-    @RequestMapping(value = "/api/payments/film", method = RequestMethod.GET)
+    // for admin
+    @RequestMapping(value = "/admin/api/payments/film", method = RequestMethod.GET)
     public List<PaymentDTO> getPaymentsDTOByFilm(@RequestParam Long filmId) {
         LOG.debug("getPaymentsByFilm: film_id = {}",
                 filmId);
@@ -39,7 +42,8 @@ public class PaymentController {
         return paymentService.getPaymentsByFilm(filmId);
     }
 
-    @RequestMapping(value = "/api/payment", method = RequestMethod.GET)
+    // for admin
+    @RequestMapping(value = "/admin/api/payment", method = RequestMethod.GET)
     public PaymentDTO getPayment(@RequestParam Long id) {
         LOG.debug("getPayment: id = {}",
                 id);
@@ -47,11 +51,11 @@ public class PaymentController {
         return paymentService.getPayment(id);
     }
 
-    @RequestMapping(value = "/api/payments", method = RequestMethod.POST)
-    public void addPayment(@RequestBody Long userId) {
-        LOG.debug("addPayment: user_id = {}",
-                userId);
+    @RequestMapping(value = {"/api/payments", "/admin/api/payments"}, method = RequestMethod.POST)
+    public void addPayment(@RequestBody BasketDTO basketDTO) {
+        LOG.debug("addPayment: {}",
+                basketDTO);
 
-        paymentService.addPayment(userId);
+        paymentService.addPayment(basketDTO);
     }
 }

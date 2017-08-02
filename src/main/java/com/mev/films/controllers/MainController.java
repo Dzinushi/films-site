@@ -26,7 +26,7 @@ public class MainController {
         return model;
     }
 
-    @RequestMapping(value = "/admin**", method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin**"}, method = RequestMethod.GET)
     public ModelAndView adminPage(){
 
         LOG.debug("Connect to /admin");

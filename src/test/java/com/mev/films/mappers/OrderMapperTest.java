@@ -22,6 +22,7 @@ public class OrderMapperTest {
     @Autowired private FilmMapper filmMapper;
     @Autowired private UserMapper userMapper;
     @Autowired private UserRoleMapper userRoleMapper;
+    @Autowired private BasketMapper basketMapper;
 
     private UserDTO userDTO1 = new UserDTO("user1", "password1", (short) 1);
     private UserDTO userDTO2 = new UserDTO("user2", "password2", (short) 1);
@@ -38,6 +39,10 @@ public class OrderMapperTest {
     private DiscountDTO discountDTO1 = new DiscountDTO("code1", 0.15F);
     private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.12F);
     private DiscountDTO discountDTO3 = new DiscountDTO("code3", 0.18F);
+
+    private BasketDTO basketDTO1;
+    private BasketDTO basketDTO2;
+    private BasketDTO basketDTO3;
 
     private OrderDTO orderDTO1;
     private OrderDTO orderDTO2;
@@ -87,10 +92,20 @@ public class OrderMapperTest {
         filmDTOS = filmMapper.selectFilms();
         discountDTOS = discountMapper.selectDiscounts();
 
-        orderDTO1 = new OrderDTO(userDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), false);
-        orderDTO2 = new OrderDTO(userDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1), false);
-        orderDTO3 = new OrderDTO(userDTOS.get(2), filmDTOS.get(2), discountDTOS.get(2), false);
-        orderDTO4 = new OrderDTO(userDTOS.get(0), filmDTOS.get(1), discountDTOS.get(2), false);
+        basketDTO1 = new BasketDTO(userDTOS.get(0));
+        basketDTO2 = new BasketDTO(userDTOS.get(1));
+        basketDTO3 = new BasketDTO(userDTOS.get(2));
+
+        basketMapper.insertBasket(basketDTO1);
+        basketMapper.insertBasket(basketDTO2);
+        basketMapper.insertBasket(basketDTO3);
+
+        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
+
+        orderDTO1 = new OrderDTO(basketDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), false);
+        orderDTO2 = new OrderDTO(basketDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1), false);
+        orderDTO3 = new OrderDTO(basketDTOS.get(2), filmDTOS.get(2), discountDTOS.get(2), false);
+        orderDTO4 = new OrderDTO(basketDTOS.get(0), filmDTOS.get(1), discountDTOS.get(2), false);
     }
 
     @Test
@@ -125,14 +140,14 @@ public class OrderMapperTest {
     }
 
     @Test
-    public void selectOrderByUserTest(){
+    public void selectOrderByBasketTest(){
 
         orderMapper.insertOrder(orderDTO3);
         orderMapper.insertOrder(orderDTO1);
         orderMapper.insertOrder(orderDTO2);
         orderMapper.insertOrder(orderDTO4);
 
-        List<OrderDTO> orderDTOS = orderMapper.selectOrderByUser(orderDTO1.getUserDTO().getId());
+        List<OrderDTO> orderDTOS = orderMapper.selectOrdersByBasket(orderDTO1.getBasketDTO().getId());
         assertTrue("count = 2",
                 orderDTOS.size() == 2);
         assertTrue("orderDTO1 = " + orderDTO1.toString(),
@@ -203,13 +218,13 @@ public class OrderMapperTest {
     }
 
     @Test
-    public void deleteOrderByUserTest(){
+    public void deleteOrderByBasketTest(){
 
         // add 1 and delete 1
         orderMapper.insertOrder(orderDTO1);
 
         List<OrderDTO> orderDTOS = orderMapper.selectOrders();
-        orderMapper.deleteOrderByUser(orderDTOS.get(0).getUserDTO().getId());
+        orderMapper.deleteOrderByBasket(orderDTOS.get(0).getBasketDTO().getId());
 
         orderDTOS = orderMapper.selectOrders();
         assertTrue("count = 0",
@@ -220,8 +235,8 @@ public class OrderMapperTest {
         orderMapper.insertOrder(orderDTO2);
 
         orderDTOS = orderMapper.selectOrders();
-        orderMapper.deleteOrderByUser(orderDTOS.get(0).getUserDTO().getId());
-        orderMapper.deleteOrderByUser(orderDTOS.get(1).getUserDTO().getId());
+        orderMapper.deleteOrderByBasket(orderDTOS.get(0).getBasketDTO().getId());
+        orderMapper.deleteOrderByBasket(orderDTOS.get(1).getBasketDTO().getId());
 
         orderDTOS = orderMapper.selectOrders();
         assertTrue("count = 0",
@@ -232,7 +247,7 @@ public class OrderMapperTest {
         orderMapper.insertOrder(orderDTO2);
 
         orderDTOS = orderMapper.selectOrders();
-        orderMapper.deleteOrderByUser(orderDTOS.get(0).getUserDTO().getId());
+        orderMapper.deleteOrderByBasket(orderDTOS.get(0).getBasketDTO().getId());
 
         orderDTOS = orderMapper.selectOrders();
         assertTrue("count = 1",

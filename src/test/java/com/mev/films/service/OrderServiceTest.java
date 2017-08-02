@@ -1,13 +1,7 @@
 package com.mev.films.service;
 
-import com.mev.films.mappers.interfaces.DiscountMapper;
-import com.mev.films.mappers.interfaces.FilmMapper;
-import com.mev.films.mappers.interfaces.OrderMapper;
-import com.mev.films.mappers.interfaces.UserMapper;
-import com.mev.films.model.DiscountDTO;
-import com.mev.films.model.FilmDTO;
-import com.mev.films.model.OrderDTO;
-import com.mev.films.model.UserDTO;
+import com.mev.films.mappers.interfaces.*;
+import com.mev.films.model.*;
 import com.mev.films.service.implement.ExceptionServiceImpl;
 import com.mev.films.service.implement.OrderServiceImpl;
 import com.mev.films.service.interfaces.ExceptionService;
@@ -32,6 +26,7 @@ public class OrderServiceTest {
     @Autowired private UserMapper userMapperMock;
     @Autowired private FilmMapper filmMapperMock;
     @Autowired private DiscountMapper discountMapperMock;
+    @Autowired private BasketMapper basketMapperMock;
 
     @Autowired private ExceptionService exceptionService;
 
@@ -48,6 +43,10 @@ public class OrderServiceTest {
     private DiscountDTO discountDTO2 = new DiscountDTO("code2", 0.18F);
     private DiscountDTO discountDTO3 = new DiscountDTO("code3", 0.12F);
 
+    private BasketDTO basketDTO1;
+    private BasketDTO basketDTO2;
+    private BasketDTO basketDTO3;
+
     private OrderDTO orderDTO1;
     private OrderDTO orderDTO2;
     private OrderDTO orderDTO3;
@@ -60,9 +59,10 @@ public class OrderServiceTest {
         userMapperMock = createNiceMock(UserMapper.class);
         filmMapperMock = createNiceMock(FilmMapper.class);
         discountMapperMock = createNiceMock(DiscountMapper.class);
+        basketMapperMock = createNiceMock(BasketMapper.class);
 
         exceptionService = new ExceptionServiceImpl(userMapperMock, filmMapperMock, discountMapperMock);
-        orderService = new OrderServiceImpl(orderMapperMock, exceptionService);
+        orderService = new OrderServiceImpl(orderMapperMock, basketMapperMock, exceptionService);
 
         userDTO1.setId(1L);
         userDTO2.setId(2L);
@@ -77,10 +77,18 @@ public class OrderServiceTest {
         discountDTO2.setId(2L);
         discountDTO3.setId(3L);
 
-        orderDTO1 = new OrderDTO(userDTO1, filmDTO1, discountDTO1, true);
-        orderDTO2 = new OrderDTO(userDTO1, filmDTO2, discountDTO2, true);
-        orderDTO3 = new OrderDTO(userDTO2, filmDTO1, null, false);
-        orderDTO4 = new OrderDTO(userDTO3, filmDTO2, null, true);
+        basketDTO1 = new BasketDTO(userDTO1);
+        basketDTO2 = new BasketDTO(userDTO2);
+        basketDTO3 = new BasketDTO(userDTO3);
+
+        basketDTO1.setId(1L);
+        basketDTO2.setId(2L);
+        basketDTO3.setId(3L);
+
+        orderDTO1 = new OrderDTO(basketDTO1, filmDTO1, discountDTO1, true);
+        orderDTO2 = new OrderDTO(basketDTO1, filmDTO2, discountDTO2, true);
+        orderDTO3 = new OrderDTO(basketDTO2, filmDTO1, null, false);
+        orderDTO4 = new OrderDTO(basketDTO3, filmDTO2, null, true);
 
         orderDTO1.setId(1L);
         orderDTO2.setId(2L);
@@ -127,9 +135,9 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void getOrderByUserTest(){
+    public void getOrderByBasketTest(){
 
-        expect(orderMapperMock.selectOrderByUser(orderDTO1.getUserDTO().getId())).andAnswer(new IAnswer<List<OrderDTO>>() {
+        expect(orderMapperMock.selectOrdersByBasket(orderDTO1.getBasketDTO().getId())).andAnswer(new IAnswer<List<OrderDTO>>() {
             @Override
             public List<OrderDTO> answer() throws Throwable {
                 List<OrderDTO> orderDTOS = new ArrayList<>();
@@ -141,7 +149,7 @@ public class OrderServiceTest {
 
         replay(orderMapperMock);
 
-        List<OrderDTO> orderDTOS = orderService.getOrderByUser(orderDTO1.getUserDTO().getId());
+        List<OrderDTO> orderDTOS = orderService.getOrderByBasket(orderDTO1.getBasketDTO().getId());
         assertTrue("count = 2",
                 orderDTOS.size() == 2);
         assertTrue("orderDTO1 = " + orderDTO1.toString(),
@@ -153,31 +161,31 @@ public class OrderServiceTest {
         assertTrue("orderDTO.priceByDiscount = 205",
                 orderDTOS.get(1).getPriceByDiscount().equals(205));
 
-        // check user_id null
+        // check basket_id null
         try {
-            orderService.getOrderByUser(null);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage());
+            orderService.getOrderByBasket(null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("user_id = null",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage()));
+            assertTrue("basket_id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage()));
         }
 
-        // check user_id < 0
+        // check basket_id < 0
         try {
-            orderService.getOrderByUser(-6L);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage());
+            orderService.getOrderByBasket(-6L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("user_id = -6",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage()));
+            assertTrue("basket_id = -6",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage()));
         }
 
         verify(orderMapperMock);
     }
 
     @Test
-    public void getOrderByUserIsMarkTest(){
+    public void getOrderByBasketIsMarkTest(){
 
-        expect(orderMapperMock.selectOrderByUserIsMark(userDTO1.getId())).andAnswer(new IAnswer<List<OrderDTO>>() {
+        expect(orderMapperMock.selectOrdersByBasketIsMark(basketDTO1.getId())).andAnswer(new IAnswer<List<OrderDTO>>() {
             @Override
             public List<OrderDTO> answer() throws Throwable {
                 List<OrderDTO> orderDTOS = new ArrayList<>();
@@ -189,7 +197,7 @@ public class OrderServiceTest {
 
         replay(orderMapperMock);
 
-        List<OrderDTO> orderDTOS = orderService.getOrderByUserIsMark(orderDTO1.getUserDTO().getId());
+        List<OrderDTO> orderDTOS = orderService.getOrderByBasketIsMark(orderDTO1.getBasketDTO().getId());
         assertTrue("count = 2",
                 orderDTOS.size() == 2);
         assertTrue("orderDTO1 = " + orderDTO1.toString(),
@@ -201,22 +209,22 @@ public class OrderServiceTest {
         assertTrue("orderDTO.priceByDiscount = 205",
                 orderDTOS.get(1).getPriceByDiscount().equals(205));
 
-        // check user_id null
+        // check basket_id null
         try {
-            orderService.getOrderByUserIsMark(null);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage());
+            orderService.getOrderByBasketIsMark(null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("user_id = null",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage()));
+            assertTrue("basket_id = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage()));
         }
 
-        // check user_id < 0
+        // check basket_id < 0
         try {
-            orderService.getOrderByUserIsMark(-6L);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage());
+            orderService.getOrderByBasketIsMark(-6L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("user_id = -6",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage()));
+            assertTrue("basket_id = -6",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage()));
         }
 
         verify(orderMapperMock);
@@ -225,9 +233,9 @@ public class OrderServiceTest {
     @Test
     public void addOrderTest(){
 
-        expect(userMapperMock.selectUser(userDTO1.getId())).andStubReturn(userDTO1);
-        expect(userMapperMock.selectUser(userDTO2.getId())).andStubReturn(userDTO1);
-        expect(userMapperMock.selectUser(userDTO3.getId())).andStubReturn(userDTO3);
+        expect(userMapperMock.selectUserIdLogin(userDTO1.getId())).andStubReturn(userDTO1);
+        expect(userMapperMock.selectUserIdLogin(userDTO2.getId())).andStubReturn(userDTO2);
+        expect(userMapperMock.selectUserIdLogin(userDTO3.getId())).andStubReturn(userDTO3);
 
         expect(filmMapperMock.selectFilm(filmDTO1.getId())).andStubReturn(filmDTO1);
         expect(filmMapperMock.selectFilm(filmDTO2.getId())).andStubReturn(filmDTO2);
@@ -235,9 +243,14 @@ public class OrderServiceTest {
         expect(discountMapperMock.selectDiscount(discountDTO1.getId())).andStubReturn(discountDTO1);
         expect(discountMapperMock.selectDiscount(discountDTO2.getId())).andStubReturn(discountDTO2);
 
+        expect(basketMapperMock.selectBasketByUser(basketDTO1.getUserDTO().getId())).andStubReturn(basketDTO1);
+        expect(basketMapperMock.selectBasketByUser(basketDTO2.getUserDTO().getId())).andStubReturn(basketDTO2);
+        expect(basketMapperMock.selectBasketByUser(basketDTO3.getUserDTO().getId())).andStubReturn(basketDTO3);
+
         replay(userMapperMock);
         replay(filmMapperMock);
         replay(discountMapperMock);
+        replay(basketMapperMock);
 
         orderService.addOrder(orderDTO1);
         orderService.addOrder(orderDTO2);
@@ -253,9 +266,19 @@ public class OrderServiceTest {
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_NULL_POINTER_EXCEPTION).getMessage()));
         }
 
-        // check user null
+        // check basket null
         try {
             orderService.addOrder(new OrderDTO(null, orderDTO1.getFilmDTO(), orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_NULL_POINTER_EXCEPTION).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("orderDTO.basketDTO = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_NULL_POINTER_EXCEPTION).getMessage()));
+        }
+
+        // check user null
+        try {
+            BasketDTO basketDTO = new BasketDTO(null);
+            orderService.addOrder(new OrderDTO(basketDTO, orderDTO1.getFilmDTO(), orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_NULL_POINTER_EXCEPTION).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.userDTO = null",
@@ -264,8 +287,9 @@ public class OrderServiceTest {
 
         // check user_id null
         try {
-            UserDTO userDTO = new UserDTO(userDTO1.getLogin(), userDTO1.getPassword(), userDTO1.getEnabled());
-            orderService.addOrder(new OrderDTO(userDTO, orderDTO1.getFilmDTO(), orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
+            UserDTO userDTO = new UserDTO(userDTO1.getLogin(), null, null);
+            BasketDTO basketDTO = new BasketDTO(userDTO);
+            orderService.addOrder(new OrderDTO(basketDTO, orderDTO1.getFilmDTO(), orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.userDTO.id = null",
@@ -274,9 +298,10 @@ public class OrderServiceTest {
 
         // check user_id < 0
         try {
-            UserDTO userDTO = new UserDTO(userDTO1.getLogin(), userDTO1.getPassword(), userDTO1.getEnabled());
+            UserDTO userDTO = new UserDTO(userDTO1.getLogin(), null, null);
             userDTO.setId(-6L);
-            orderService.addOrder(new OrderDTO(userDTO, orderDTO1.getFilmDTO(), orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
+            BasketDTO basketDTO = new BasketDTO(userDTO);
+            orderService.addOrder(new OrderDTO(basketDTO, orderDTO1.getFilmDTO(), orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.userDTO.id = -6",
@@ -285,16 +310,27 @@ public class OrderServiceTest {
 
         // check user not found
         try {
-            orderService.addOrder(new OrderDTO(userDTO4, orderDTO1.getFilmDTO(), orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
+            orderService.addOrder(new OrderDTO(new BasketDTO(userDTO4), orderDTO1.getFilmDTO(), orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_ID_NOT_FOUND).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.userDTO = not found",
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_ID_NOT_FOUND).getMessage()));
         }
 
+        // check userDTO compare false
+        try {
+            UserDTO userDTO = new UserDTO(userDTO2.getLogin(), null, null);
+            userDTO.setId(1L);
+            orderService.addOrder(new OrderDTO(new BasketDTO(userDTO), orderDTO1.getFilmDTO(), orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_COMPARE_FALSE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("orderDTO.userDTO compare false",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_COMPARE_FALSE).getMessage()));
+        }
+
         // check film null
         try {
-            orderService.addOrder(new OrderDTO(orderDTO1.getUserDTO(), null, orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
+            orderService.addOrder(new OrderDTO(orderDTO1.getBasketDTO(), null, orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_FILM_NULL_POINTER_EXCEPTION).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.filmDTO = null",
@@ -304,7 +340,7 @@ public class OrderServiceTest {
         // check film_id null
         try {
             FilmDTO filmDTO = new FilmDTO(filmDTO1.getName(), filmDTO1.getGenre(), filmDTO1.getDuration(), filmDTO1.getPrice(), filmDTO1.getImage());
-            orderService.addOrder(new OrderDTO(orderDTO1.getUserDTO(), filmDTO, orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
+            orderService.addOrder(new OrderDTO(orderDTO1.getBasketDTO(), filmDTO, orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_FILM_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.filmDTO.id = null",
@@ -315,7 +351,7 @@ public class OrderServiceTest {
         try {
             FilmDTO filmDTO = new FilmDTO(filmDTO1.getName(), filmDTO1.getGenre(), filmDTO1.getDuration(), filmDTO1.getPrice(), filmDTO1.getImage());
             filmDTO.setId(-7L);
-            orderService.addOrder(new OrderDTO(orderDTO1.getUserDTO(), filmDTO, orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
+            orderService.addOrder(new OrderDTO(orderDTO1.getBasketDTO(), filmDTO, orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_FILM_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.filmDTO.id = -7",
@@ -324,17 +360,28 @@ public class OrderServiceTest {
 
         // check film not found
         try {
-            orderService.addOrder(new OrderDTO(orderDTO1.getUserDTO(), filmDTO3, orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
+            orderService.addOrder(new OrderDTO(orderDTO1.getBasketDTO(), filmDTO3, orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_FILM_ID_NOT_FOUND).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.filmDTO = not found",
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_FILM_ID_NOT_FOUND).getMessage()));
         }
 
+        // check filmDTO compare false
+        try {
+            FilmDTO filmDTO = new FilmDTO(filmDTO2.getName(), filmDTO1.getGenre(), filmDTO1.getDuration(), filmDTO1.getPrice(), filmDTO1.getImage());
+            filmDTO.setId(1L);
+            orderService.addOrder(new OrderDTO(orderDTO1.getBasketDTO(), filmDTO, orderDTO1.getDiscountDTO(), orderDTO1.isMark()));
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_FILM_COMPARE_FALSE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("orderDTO.filmDTO compare false",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_FILM_COMPARE_FALSE).getMessage()));
+        }
+
         // check discount_id null
         try {
             DiscountDTO discountDTO = new DiscountDTO("code", 11F);
-            orderService.addOrder(new OrderDTO(orderDTO1.getUserDTO(), orderDTO1.getFilmDTO(), discountDTO, orderDTO1.isMark()));
+            orderService.addOrder(new OrderDTO(orderDTO1.getBasketDTO(), orderDTO1.getFilmDTO(), discountDTO, orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_DISCOUNT_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.discount = null",
@@ -345,7 +392,7 @@ public class OrderServiceTest {
         try {
             DiscountDTO discountDTO = new DiscountDTO("code", 11F);
             discountDTO.setId(-6L);
-            orderService.addOrder(new OrderDTO(orderDTO1.getUserDTO(), orderDTO1.getFilmDTO(), discountDTO, orderDTO1.isMark()));
+            orderService.addOrder(new OrderDTO(orderDTO1.getBasketDTO(), orderDTO1.getFilmDTO(), discountDTO, orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_DISCOUNT_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.discount = -6",
@@ -354,16 +401,27 @@ public class OrderServiceTest {
 
         // check discount not found
         try {
-            orderService.addOrder(new OrderDTO(orderDTO1.getUserDTO(), orderDTO1.getFilmDTO(), discountDTO3, orderDTO1.isMark()));
+            orderService.addOrder(new OrderDTO(orderDTO1.getBasketDTO(), orderDTO1.getFilmDTO(), discountDTO3, orderDTO1.isMark()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_DISCOUNT_ID_NOT_FOUND).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("orderDTO.discount = not found",
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_DISCOUNT_ID_NOT_FOUND).getMessage()));
         }
 
+        try {
+            DiscountDTO discountDTO = new DiscountDTO(discountDTO2.getCode(), discountDTO1.getValue());
+            discountDTO.setId(1L);
+            orderService.addOrder(new OrderDTO(orderDTO1.getBasketDTO(), orderDTO1.getFilmDTO(), discountDTO, orderDTO1.isMark()));
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_DISCOUNT_COMPARE_FALSE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("orderDTO.discountDTO compare false",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_DISCOUNT_COMPARE_FALSE).getMessage()));
+        }
+
         verify(userMapperMock);
         verify(filmMapperMock);
         verify(discountMapperMock);
+        verify(basketMapperMock);
     }
 
     @Test
@@ -391,26 +449,26 @@ public class OrderServiceTest {
     }
 
     @Test
-    public void deleteOrderByUserTest(){
+    public void deleteOrderByBasketTest(){
 
-        orderService.deleteOrder(orderDTO4.getId());
+        orderService.deleteOrderByBasket(orderDTO4.getBasketDTO().getId());
 
         // check id null
         try {
-            orderService.deleteOrderByUser(null);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage());
+            orderService.deleteOrderByBasket(null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("id = null",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage()));
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage()));
         }
 
         // check id < 0
         try {
-            orderService.deleteOrderByUser(-6L);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage());
+            orderService.deleteOrderByBasket(-6L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("id = -6",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED).getMessage()));
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED).getMessage()));
         }
     }
 }

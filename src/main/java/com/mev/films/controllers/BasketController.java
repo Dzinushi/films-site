@@ -15,14 +15,15 @@ public class BasketController {
 
     @Autowired private BasketService basketService;
 
-    @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.GET)
+    // for admin
+    @RequestMapping(value = {"/admin/api/baskets"}, method = RequestMethod.GET)
     public List<BasketDTO> getBaskets() {
         LOG.debug("getBaskets");
 
         return basketService.getBaskets();
     }
 
-    @RequestMapping(value = {"/api/basket"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/admin/api/basket", "/api/basket"}, method = RequestMethod.GET)
     public BasketDTO getBasket(@RequestParam Long id){
         LOG.debug("getBasket: id = {}",
                 id);
@@ -30,7 +31,7 @@ public class BasketController {
         return basketService.getBasket(id);
     }
 
-    @RequestMapping(value = {"/api/baskets/user"}, method = RequestMethod.GET)
+    @RequestMapping(value = {"/api/baskets/user", "/admin/api/baskets/user"}, method = RequestMethod.GET)
     public BasketDTO getBasketByUser(@RequestParam Long userId) {
         LOG.debug("getBasketByUser: user_id = {}",
                 userId);
@@ -38,27 +39,27 @@ public class BasketController {
         return basketService.getBasketByUser(userId);
     }
 
-    @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.POST)
-    public void addBasket(@RequestBody BasketDTO basketDTO) {
-        LOG.debug("addBasket: basketDTO",
-                basketDTO);
-
-        basketService.addBasket(basketDTO);
-    }
-
-    @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.DELETE)
-    public void deleteBasket(@RequestParam Long id) {
-        LOG.debug("deleteBasket: id = {}",
-                id);
-
-        basketService.deleteBasket(id);
-    }
-
-    @RequestMapping(value = {"/api/baskets/user"}, method = RequestMethod.DELETE)
-    public void deleteBasketByUser(@RequestParam Long userId) {
-        LOG.debug("deleteBasket: user_id = {}",
-                userId);
-
-        basketService.deleteBasketByUser(userId);
-    }
+//    @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.POST)
+//    public void addBasket(@RequestBody BasketDTO basketDTO) {
+//        LOG.debug("addBasket: basketDTO",
+//                basketDTO);
+//
+//        basketService.addBasket(basketDTO);
+//    }
+//
+//    @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.DELETE)
+//    public void deleteBasket(@RequestParam Long id) {
+//        LOG.debug("deleteBasket: id = {}",
+//                id);
+//
+//        basketService.deleteBasket(id);
+//    }
+//
+//    @RequestMapping(value = {"/api/baskets/user"}, method = RequestMethod.DELETE)
+//    public void deleteBasketByUser(@RequestParam Long userId) {
+//        LOG.debug("deleteBasket: user_id = {}",
+//                userId);
+//
+//        basketService.deleteBasketByUser(userId);
+//    }
 }

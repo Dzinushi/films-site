@@ -59,34 +59,41 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED,
         USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED,
         USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND,
+        USER_DISCOUNT_ERROR_USER_COMPARE_FALSE,
         USER_DISCOUNT_ERROR_WRONG_DISCOUNT_ID_PROVIDED,
         USER_DISCOUNT_ERROR_DISCOUNT_ID_NOT_FOUND,
+        USER_DISCOUNT_ERROR_DISCOUNT_COMPARE_FALSE,
         USER_DISCOUNT_ERROR_WRONG_USED_PROVIDED,
 
         // OrderService
         ORDER_ERROR_NULL_POINTER_EXCEPTION,
         ORDER_ERROR_WRONG_ID_PROVIDED,
+        ORDER_ERROR_BASKET_NULL_POINTER_EXCEPTION,
+        ORDER_ERROR_BASKET_WRONG_ID_PROVIDED,
         ORDER_ERROR_USER_NULL_POINTER_EXCEPTION,
         ORDER_ERROR_USER_WRONG_ID_PROVIDED,
         ORDER_ERROR_USER_ID_NOT_FOUND,
+        ORDER_ERROR_USER_COMPARE_FALSE,
         ORDER_ERROR_FILM_NULL_POINTER_EXCEPTION,
         ORDER_ERROR_FILM_WRONG_ID_PROVIDED,
         ORDER_ERROR_FILM_ID_NOT_FOUND,
+        ORDER_ERROR_FILM_COMPARE_FALSE,
         ORDER_ERROR_DISCOUNT_WRONG_ID_PROVIDED,
         ORDER_ERROR_DISCOUNT_ID_NOT_FOUND,
+        ORDER_ERROR_DISCOUNT_COMPARE_FALSE,
 
         // BasketService
-        BASKET_ERROR_NULL_POINTER_EXCEPTION,
         BASKET_ERROR_WRONG_ID_PROVIDED,
         BASKET_ERROR_USER_WRONG_ID_PROVIDED,
-        BASKET_ERROR_USER_NULL_POINTER_EXCEPTION,
-        BASKET_ERROR_USER_ORDERS_NOT_FOUND_EXCEPTION,
 
-        // PaymentService
+        // PaymentService need to update
         PAYMENT_ERROR_WRONG_ID_PROVIDED,
         PAYMENT_ERROR_USER_NULL_POINTER_EXCEPTION,
         PAYMENT_ERROR_USER_WRONG_ID_PROVIDED,
+        PAYMENT_ERROR_BASKET_NULL_POINTER_EXCEPTION,
+        PAYMENT_ERROR_BASKET_WRONG_ID_PROVIDED,
         PAYMENT_ERROR_BASKET_NOT_FOUND,
+        PAYMENT_ERROR_BASKET_COMPARE_FALSE,
         PAYMENT_ERROR_FILM_WRONG_ID_PROVIDED,
         PAYMENT_ERROR_ORDER_NOT_FOUND,
         PAYMENT_ERROR_DISCOUNT_NOT_FOUND,
@@ -444,10 +451,11 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         if (userId == null || userId  < 0) {
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED);
         }
-        userDTO = userMapper.selectUser(userDTO.getId());
-        System.out.println(userDTO);
-        if (userDTO == null) {
+        UserDTO userDTOSelect = userMapper.selectUserIdLogin(userDTO.getId());
+        if (userDTOSelect == null) {
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND);
+        } else if (!userDTO.equals(userDTOSelect)){
+            throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_USER_COMPARE_FALSE);
         }
 
         DiscountDTO discountDTO = userDiscountDTO.getDiscountDTO();
@@ -458,9 +466,11 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         if (discountId == null || discountId < 0) {
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_WRONG_DISCOUNT_ID_PROVIDED);
         }
-        discountDTO = discountMapper.selectDiscount(discountDTO.getId());
-        if (discountDTO == null) {
+        DiscountDTO discountDTOSelect = discountMapper.selectDiscount(discountDTO.getId());
+        if (discountDTOSelect == null) {
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_DISCOUNT_ID_NOT_FOUND);
+        } else if (!discountDTO.equals(discountDTOSelect)){
+            throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_DISCOUNT_COMPARE_FALSE);
         }
 
         if (userDiscountDTO.isUsed() == null){
@@ -487,8 +497,12 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         Long userId = userDTO.getId();
         if (userId == null || userId  < 0) {
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_WRONG_USER_ID_PROVIDED);
-        } else if (userMapper.selectUser(userId) == null) {
+        }
+        UserDTO userDTOSelect = userMapper.selectUserIdLogin(userId);
+        if (userDTOSelect == null) {
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_USER_ID_NOT_FOUND);
+        } else if (!userDTO.equals(userDTOSelect)){
+            throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_USER_COMPARE_FALSE);
         }
 
         DiscountDTO discountDTO = userDiscountDTO.getDiscountDTO();
@@ -499,8 +513,12 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         Long discountId = discountDTO.getId();
         if (discountId == null || discountId < 0) {
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_WRONG_DISCOUNT_ID_PROVIDED);
-        } else if (discountMapper.selectDiscount(discountId) == null) {
+        }
+        DiscountDTO discountDTOSelect = discountMapper.selectDiscount(discountId);
+        if (discountDTOSelect== null) {
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_DISCOUNT_ID_NOT_FOUND);
+        } else if (!discountDTO.equals(discountDTOSelect)){
+            throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_DISCOUNT_COMPARE_FALSE);
         }
 
         if (userDiscountDTO.isUsed() == null){
@@ -519,12 +537,12 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
     }
 
     @Override
-    public void checkOrderUserId(Long userId) {
-        LOG.debug("checkOrderUserId: order_user_id = {}",
-                userId);
+    public void checkOrderBasketId(Long basketId) {
+        LOG.debug("checkOrderBasketId: order_basket_id = {}",
+                basketId);
 
-        if (userId == null || userId < 0){
-            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED);
+        if (basketId == null || basketId < 0){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_BASKET_WRONG_ID_PROVIDED);
         }
     }
 
@@ -537,7 +555,11 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
             throw new ExceptionServiceImpl(Errors.ORDER_ERROR_NULL_POINTER_EXCEPTION);
         }
 
-        UserDTO userDTO = orderDTO.getUserDTO();
+        BasketDTO basketDTO = orderDTO.getBasketDTO();
+        if (basketDTO == null){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_BASKET_NULL_POINTER_EXCEPTION);
+        }
+        UserDTO userDTO = basketDTO.getUserDTO();
         if (userDTO == null){
             throw new ExceptionServiceImpl(Errors.ORDER_ERROR_USER_NULL_POINTER_EXCEPTION);
         }
@@ -545,9 +567,11 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         if (userId == null || userId < 0){
             throw new ExceptionServiceImpl(Errors.ORDER_ERROR_USER_WRONG_ID_PROVIDED);
         }
-        userDTO = userMapper.selectUser(userId);
-        if (userDTO == null){
+        UserDTO userDTOSelect = userMapper.selectUserIdLogin(userId);
+        if (userDTOSelect == null){
             throw new ExceptionServiceImpl(Errors.ORDER_ERROR_USER_ID_NOT_FOUND);
+        } else if (!userDTO.equals(userDTOSelect)){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_USER_COMPARE_FALSE);
         }
 
         FilmDTO filmDTO = orderDTO.getFilmDTO();
@@ -558,9 +582,11 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         if (filmId == null || filmId < 0){
             throw new ExceptionServiceImpl(Errors.ORDER_ERROR_FILM_WRONG_ID_PROVIDED);
         }
-        filmDTO = filmMapper.selectFilm(filmId);
-        if (filmDTO == null){
+        FilmDTO filmDTOSelect = filmMapper.selectFilm(filmId);
+        if (filmDTOSelect == null){
             throw new ExceptionServiceImpl(Errors.ORDER_ERROR_FILM_ID_NOT_FOUND);
+        } else if (!filmDTO.equals(filmDTOSelect)){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_FILM_COMPARE_FALSE);
         }
 
         DiscountDTO discountDTO = orderDTO.getDiscountDTO();
@@ -569,9 +595,11 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
             if (discountId == null || discountId < 0){
                 throw new ExceptionServiceImpl(Errors.ORDER_ERROR_DISCOUNT_WRONG_ID_PROVIDED);
             }
-            discountDTO = discountMapper.selectDiscount(discountId);
-            if (discountDTO == null){
+            DiscountDTO discountDTOSelect = discountMapper.selectDiscount(discountId);
+            if (discountDTOSelect == null){
                 throw new ExceptionServiceImpl(Errors.ORDER_ERROR_DISCOUNT_ID_NOT_FOUND);
+            } else if (!discountDTO.equals(discountDTOSelect)){
+                throw new ExceptionServiceImpl(Errors.ORDER_ERROR_DISCOUNT_COMPARE_FALSE);
             }
         }
     }
@@ -596,27 +624,27 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         }
     }
 
-    @Override
-    public void checkBasketWithoutId(BasketDTO basketDTO) {
-        LOG.debug("checkBasketWithout: {}",
-                basketDTO);
-
-        if (basketDTO == null){
-            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_NULL_POINTER_EXCEPTION);
-        }
-        UserDTO userDTO = basketDTO.getUserDTO();
-        if (userDTO == null){
-            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_USER_NULL_POINTER_EXCEPTION);
-        }
-        Long userId = userDTO.getId();
-        if (userId == null || userId < 0){
-            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_USER_WRONG_ID_PROVIDED);
-        }
-        List<OrderDTO> orderDTOS  = orderMapper.selectOrderByUser(userId);
-        if (orderDTOS == null){
-            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_USER_ORDERS_NOT_FOUND_EXCEPTION);
-        }
-    }
+//    @Override
+//    public void checkBasketWithoutId(BasketDTO basketDTO) {
+//        LOG.debug("checkBasketWithout: {}",
+//                basketDTO);
+//
+//        if (basketDTO == null){
+//            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_NULL_POINTER_EXCEPTION);
+//        }
+//        UserDTO userDTO = basketDTO.getUserDTO();
+//        if (userDTO == null){
+//            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_USER_NULL_POINTER_EXCEPTION);
+//        }
+//        Long userId = userDTO.getId();
+//        if (userId == null || userId < 0){
+//            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_USER_WRONG_ID_PROVIDED);
+//        }
+//        List<OrderDTO> orderDTOS  = orderMapper.selectOrderByUser(userId);
+//        if (orderDTOS == null){
+//            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_USER_ORDERS_NOT_FOUND_EXCEPTION);
+//        }
+//    }
 
     @Override
     public void checkPaymentId(Long id) {
@@ -649,19 +677,25 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
     }
 
     @Override
-    public void checkPaymentWithoutId(Long userId) {
-        LOG.debug("checkPaymentWithoutId: payment_user_id = {}",
-                userId);
+    public void checkPaymentWithoutId(BasketDTO basketDTO) {
+        LOG.debug("checkPaymentWithoutId: {}",
+                basketDTO);
 
-        if (userId == null || userId < 0){
-            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_USER_WRONG_ID_PROVIDED);
-        }
-        BasketDTO basketDTO = basketMapper.selectBasketByUser(userId);
         if (basketDTO == null){
-            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_BASKET_NOT_FOUND);
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_BASKET_NULL_POINTER_EXCEPTION);
         }
-        List<OrderDTO> orderDTOS = orderMapper.selectOrderByUserIsMark(basketDTO.getUserDTO().getId());
-        if (orderDTOS == null){
+        Long basketId = basketDTO.getId();
+        if (basketId == null || basketId < 0){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_BASKET_WRONG_ID_PROVIDED);
+        }
+        BasketDTO basketDTOSelect = basketMapper.selectBasket(basketDTO.getId());
+        if (basketDTOSelect == null){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_BASKET_NOT_FOUND);
+        } else if (!basketDTO.equals(basketDTOSelect)){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_BASKET_COMPARE_FALSE);
+        }
+        List<OrderDTO> orderDTOS = orderMapper.selectOrdersByBasketIsMark(basketDTO.getId());
+        if (orderDTOS == null || orderDTOS.size() == 0){
             throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_ORDER_NOT_FOUND);
         }
 

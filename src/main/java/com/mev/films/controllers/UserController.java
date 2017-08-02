@@ -19,14 +19,16 @@ public class UserController {
     @Autowired private UserService userService;
     @Autowired private UserRoleService userRoleService;
 
-    @RequestMapping(value = {"/api/users"}, method = RequestMethod.GET)
+    // for admin
+    @RequestMapping(value = {"/admin/api/users"}, method = RequestMethod.GET)
     public List<UserDTO> getUsers() {
         LOG.debug("getUsers");
 
         return userService.getUsers();
     }
 
-    @RequestMapping(value = "/api/user", method = RequestMethod.GET)
+    // for admin
+    @RequestMapping(value = {"/admin/api/user"}, method = RequestMethod.GET)
     public UserDTO getUser(Long id){
         LOG.debug("getUser: id = {}",
                 id);
@@ -34,7 +36,8 @@ public class UserController {
         return userService.getUser(id);
     }
 
-    @RequestMapping(value = {"/api/users/login"}, method = RequestMethod.GET)
+    // for admin
+    @RequestMapping(value = {"/admin/api/users/login"}, method = RequestMethod.GET)
     public UserDTO getUserByLogin(@RequestParam String login) {
         LOG.debug("getUserByLogin: login = {}",
                 login);
@@ -42,14 +45,16 @@ public class UserController {
         return userService.getUserByLogin(login);
     }
 
-    @RequestMapping(value = {"/api/users/roles"}, method = RequestMethod.GET)
+    // for admin
+    @RequestMapping(value = {"/admin/api/users/roles"}, method = RequestMethod.GET)
     public List<UserRoleDTO> getUserRoles() {
         LOG.debug("getUserRoles");
 
         return userRoleService.getUserRoles();
     }
 
-    @RequestMapping(value = {"/api/users/role"}, method = RequestMethod.GET)
+    // for admin
+    @RequestMapping(value = {"/admin/api/users/role"}, method = RequestMethod.GET)
     public UserRoleDTO getUserRole(Long id){
         LOG.debug("getUserRole: id = {}",
                 id);
@@ -57,7 +62,8 @@ public class UserController {
         return userRoleService.getUserRole(id);
     }
 
-    @RequestMapping(value = {"/api/users/roles/login"}, method = RequestMethod.GET)
+    // for admin
+    @RequestMapping(value = {"/admin/api/users/roles/login"}, method = RequestMethod.GET)
     public UserRoleDTO getUserRoleByLogin(@RequestParam String login) {
         LOG.debug("getUserRole: login = {}",
                 login);
@@ -65,7 +71,7 @@ public class UserController {
         return userRoleService.getUserRoleByLogin(login);
     }
 
-    @RequestMapping(value = {"/api/users"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/api/users", "/admin/api/users"}, method = RequestMethod.POST)
     public void addUser(@RequestBody UserDTO userDTO,
                         @RequestBody UserRoleDTO userRoleDTO) {
         LOG.debug("addUser: userDTO = {}, userRoleDTO = {}",
@@ -75,7 +81,7 @@ public class UserController {
         userRoleService.addUserRole(userRoleDTO);
     }
 
-    @RequestMapping(value = {"/api/users"}, method = RequestMethod.PUT)
+    @RequestMapping(value = {"/api/users", "/admin/api/users"}, method = RequestMethod.PUT)
     public void updateUser(@RequestBody UserDTO userDTO) {
         LOG.debug("updateUser: userDTO = {}",
                 userDTO);
@@ -83,7 +89,8 @@ public class UserController {
         userService.updateUser(userDTO);
     }
 
-    @RequestMapping(value = {"/api/users/role"}, method = RequestMethod.PUT)
+    // for admin
+    @RequestMapping(value = {"/admin/api/users/role"}, method = RequestMethod.PUT)
     public void updateUserRole(@RequestBody UserRoleDTO userRoleDTO) {
         LOG.debug("updateRole: userDTO = {}, userRoleDTO = {}",
                 userRoleDTO, userRoleDTO);
@@ -99,7 +106,8 @@ public class UserController {
 //        userService.deleteUser(id);
 //    }
 
-    @RequestMapping(value = {"/api/users/login"}, method = RequestMethod.DELETE)
+    // for admin
+    @RequestMapping(value = {"/admin/api/users/login"}, method = RequestMethod.DELETE)
     public void deleteUserByLogin(@RequestParam String login) {
         LOG.debug("deleteUserByLogin: login = {}",
                 login);

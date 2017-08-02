@@ -24,6 +24,15 @@
             id = #{0}
     </select>
 
+    <select id="selectUserIdLogin" parameterType="map" resultMap="userDTO">
+        SELECT
+            id, login
+        FROM
+            users
+        WHERE
+            id = #{0}
+    </select>
+
     <select id="selectUsersIdLogin" resultMap="userDTO">
         SELECT
             id,login

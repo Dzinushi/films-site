@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 public class OrderDTO {
 
     private Long id;
-    private UserDTO userDTO;
+    private BasketDTO basketDTO;
     private FilmDTO filmDTO;
     private DiscountDTO discountDTO;
     private Integer priceByDiscount;
@@ -15,8 +15,8 @@ public class OrderDTO {
     public OrderDTO(){
     }
 
-    public OrderDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, Boolean mark){
-        this.userDTO = userDTO;
+    public OrderDTO(BasketDTO basketDTO, FilmDTO filmDTO, DiscountDTO discountDTO, Boolean mark){
+        this.basketDTO = basketDTO;
         this.filmDTO = filmDTO;
         this.discountDTO = discountDTO;
         this.mark = mark;
@@ -30,12 +30,12 @@ public class OrderDTO {
         this.id = id;
     }
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    public void setBasketDTO(BasketDTO basketDTO) {
+        this.basketDTO = basketDTO;
     }
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    public BasketDTO getBasketDTO() {
+        return basketDTO;
     }
 
     public FilmDTO getFilmDTO() {
@@ -81,7 +81,7 @@ public class OrderDTO {
 
         OrderDTO orderDTO = (OrderDTO) o;
 
-        if (getUserDTO() != null ? !getUserDTO().equals(orderDTO.getUserDTO()) : orderDTO.getUserDTO() != null)
+        if (getBasketDTO() != null ? !getBasketDTO().equals(orderDTO.getBasketDTO()) : orderDTO.getBasketDTO() != null)
             return false;
         if (getFilmDTO() != null ? !getFilmDTO().equals(orderDTO.getFilmDTO()) : orderDTO.getFilmDTO() != null)
             return false;
@@ -94,7 +94,7 @@ public class OrderDTO {
 
     @Override
     public int hashCode() {
-        int result = getUserDTO() != null ? getUserDTO().hashCode() : 0;
+        int result = getBasketDTO() != null ? getBasketDTO().hashCode() : 0;
         result = 31 * result + (getFilmDTO() != null ? getFilmDTO().hashCode() : 0);
         result = 31 * result + (getDiscountDTO() != null ? getDiscountDTO().hashCode() : 0);
         result = 31 * result + (getPriceByDiscount() != null ? getPriceByDiscount().hashCode() : 0);
@@ -106,7 +106,7 @@ public class OrderDTO {
     public String toString() {
         return "OrderDTO{" +
                 "id=" + id +
-                ", userDTO=" + userDTO +
+                ", basketDTO=" + basketDTO +
                 ", filmDTO=" + filmDTO +
                 ", discountDTO=" + discountDTO +
                 ", priceByDiscount=" + priceByDiscount +
