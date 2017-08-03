@@ -21,6 +21,14 @@ public class PaymentDTO {
         this.totalPrice = totalPrice;
     }
 
+    public PaymentDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, Integer totalPrice, Timestamp time){
+        this.userDTO = userDTO;
+        this.filmDTO = filmDTO;
+        this.discountDTO = discountDTO;
+        this.totalPrice = totalPrice;
+        this.time = time;
+    }
+
     public Long getId() {
         return id;
     }

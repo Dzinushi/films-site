@@ -14,6 +14,12 @@
         <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO" columnPrefix="dsc_"/>
     </resultMap>
 
+    <resultMap id="userDTO" type="com.mev.films.model.UserDTO">
+        <id property="id" column="id"/>
+        <result property="login" column="login"/>
+        <result property="median" column="median"/>
+    </resultMap>
+
     <select id="selectPayments" resultMap="paymentDTO">
         SELECT
             p.id AS id,
@@ -124,10 +130,42 @@
             p.id = #{0}
     </select>
 
+    <select id="selectUsersPayingAboveMedianForLastMonth" parameterType="map" resultMap="userDTO">
+        SELECT
+            u2.id,
+            u2.login,
+            avg(p2.bought) AS median
+        FROM
+            users AS u2
+            INNER JOIN (
+                SELECT
+                    u.id,
+                    u.login,
+                    p.time,
+                    sum(p.total_price) AS bought
+                FROM
+                    users as u
+                    INNER JOIN payments AS p ON u.id = p.user_id
+                WHERE
+                    extract(MONTH FROM p.time) = #{0}
+                GROUP BY
+                    u.id, u.login, p.time
+            ) AS p2 ON u2.id = p2.id
+        GROUP BY
+            u2.id, u2.login
+        HAVING
+            avg(p2.bought) > (SELECT
+                                  avg(payments.total_price)
+                              FROM
+                                  payments)
+        ORDER BY
+            avg(p2.bought) DESC
+    </select>
+
     <insert id="insertPayment" parameterType="com.mev.films.model.PaymentDTO">
         INSERT INTO
             payments (user_id, film_id, discount_id, total_price, time)
-        VALUES (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, #{totalPrice}, clock_timestamp());
+        VALUES (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, #{totalPrice}, #{time});
     </insert>
 
     <delete id="deletePayment" parameterType="map">

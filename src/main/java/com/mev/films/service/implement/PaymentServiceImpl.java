@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -79,6 +80,7 @@ public class PaymentServiceImpl implements PaymentService{
 
         exceptionService.checkPaymentWithoutId(basketDTO);
 
+        Long time = System.currentTimeMillis();
         List<OrderDTO> orderDTOS = orderMapper.selectOrdersByBasketIsMark(basketDTO.getId());
         for (OrderDTO orderDTO : orderDTOS){
             Integer totalPrice;
@@ -101,7 +103,11 @@ public class PaymentServiceImpl implements PaymentService{
             else {
                 totalPrice = orderDTO.getFilmDTO().getPrice();
             }
-            PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getBasketDTO().getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO(), totalPrice);
+            PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getBasketDTO().getUserDTO(),
+                    orderDTO.getFilmDTO(),
+                    orderDTO.getDiscountDTO(),
+                    totalPrice,
+                    new Timestamp(time));
             paymentMapper.insertPayment(paymentDTO);
 
             // delete order that just payed

@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
@@ -32,7 +34,7 @@ public class PaymentMapperTest {
 
     private FilmDTO filmDTO1 = new FilmDTO("film1", "genre1", (short) 10, 100, "url1");
     private FilmDTO filmDTO2 = new FilmDTO("film2", "genre2", (short) 20, 200, "url2");
-    private FilmDTO filmDTO3 = new FilmDTO("film3", "genre3", (short) 30, 200, "url3");
+    private FilmDTO filmDTO3 = new FilmDTO("film3", "genre3", (short) 30, 150, "url3");
 
     private UserDTO userDTO1 = new UserDTO("user1", "password1", (short) 1);
     private UserDTO userDTO2 = new UserDTO("user2", "password2", (short) 2);
@@ -45,7 +47,7 @@ public class PaymentMapperTest {
     private List<PaymentDTO> paymentDTOS;
 
     @Before
-    public void setup(){
+    public void setup() throws InterruptedException {
         List<PaymentDTO> payments = paymentMapper.selectPayments();
         for (PaymentDTO paymentDTO : payments){
             paymentMapper.deletePayment(paymentDTO.getId());
@@ -97,11 +99,12 @@ public class PaymentMapperTest {
         // added orders
         orderDTOS = new ArrayList<>();
         orderDTOS.add(new OrderDTO(basketDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), true));
-        orderDTOS.add(new OrderDTO(basketDTOS.get(1), filmDTOS.get(0), discountDTOS.get(1), false));
-        orderDTOS.add(new OrderDTO(basketDTOS.get(1), filmDTOS.get(1), null, false));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(1), filmDTOS.get(0), discountDTOS.get(1), true));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(1), filmDTOS.get(1), null, true));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(1), filmDTOS.get(2), null, true));
         orderDTOS.add(new OrderDTO(basketDTOS.get(2), filmDTOS.get(0), null, true));
-        orderDTOS.add(new OrderDTO(basketDTOS.get(2), filmDTOS.get(1), null, true));
-        orderDTOS.add(new OrderDTO(basketDTOS.get(2), filmDTOS.get(2), discountDTOS.get(2), false));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(2), filmDTOS.get(2), discountDTOS.get(2), true));
+        orderDTOS.add(new OrderDTO(basketDTOS.get(2), filmDTOS.get(1), null, false));
 
         for (OrderDTO orderDTO : orderDTOS){
             if (orderDTO.getDiscountDTO() != null){
@@ -114,13 +117,28 @@ public class PaymentMapperTest {
         }
 
         // create payments (3 payments)
+        int user2Add = 2;
         paymentDTOS = new ArrayList<>();
         for (BasketDTO basketDTO : basketDTOS){
+            Long time = System.currentTimeMillis();
             List<OrderDTO> orders = orderMapper.selectOrdersByBasket(basketDTO.getId());
             for (OrderDTO orderDTO : orders){
                 if (orderDTO.isMark()){
+                    if (orderDTO.getBasketDTO().getUserDTO().getId() == 2 && user2Add != 0){
+                        -- user2Add;
+                    } else if (orderDTO.getBasketDTO().getUserDTO().getId() == 2 ||
+                            orderDTO.getBasketDTO().getUserDTO().getId() == 3){
+                        Thread.sleep(1L);
+                        time = System.currentTimeMillis();
+                    }
+
                     Integer totalPrice = orderDTO.getDiscountDTO() == null ? orderDTO.getFilmDTO().getPrice() : orderDTO.getPriceByDiscount();
-                    PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getBasketDTO().getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO(), totalPrice);
+                    PaymentDTO paymentDTO = new PaymentDTO(
+                            orderDTO.getBasketDTO().getUserDTO(),
+                            orderDTO.getFilmDTO(),
+                            orderDTO.getDiscountDTO(),
+                            totalPrice,
+                            new Timestamp(time));
                     paymentDTOS.add(paymentDTO);
                 }
             }
@@ -135,14 +153,20 @@ public class PaymentMapperTest {
         }
 
         List<PaymentDTO> payments = paymentMapper.selectPayments();
-        assertTrue("count = 3",
-                payments.size() == 3);
+        assertTrue("count = 6",
+                payments.size() == 6);
         assertTrue("paymentDTO1 = " + paymentDTOS.get(0).toString(),
                 payments.get(0).equals(paymentDTOS.get(0)));
         assertTrue("paymentDTO2 = " + paymentDTOS.get(1).toString(),
                 payments.get(1).equals(paymentDTOS.get(1)));
         assertTrue("paymentDTO3 = " + paymentDTOS.get(2).toString(),
                 payments.get(2).equals(paymentDTOS.get(2)));
+        assertTrue("paymentDTO4 = " + paymentDTOS.get(3).toString(),
+                payments.get(3).equals(paymentDTOS.get(3)));
+        assertTrue("paymentDTO5 = " + paymentDTOS.get(4).toString(),
+                payments.get(4).equals(paymentDTOS.get(4)));
+        assertTrue("paymentDTO6 = " + paymentDTOS.get(5).toString(),
+                payments.get(5).equals(paymentDTOS.get(5)));
     }
 
     @Test
@@ -153,12 +177,14 @@ public class PaymentMapperTest {
         }
 
         List<PaymentDTO> payments = paymentMapper.selectPaymentsByUser(paymentDTOS.get(1).getUserDTO().getId());
-        assertTrue("count = 2",
-                payments.size() == 2);
-        assertTrue("paymentDTO1 = " + paymentDTOS.get(1).toString(),
+        assertTrue("count = 3",
+                payments.size() == 3);
+        assertTrue("paymentDTO2 = " + paymentDTOS.get(1).toString(),
                 payments.get(0).equals(paymentDTOS.get(1)));
-        assertTrue("paymentDTO2 = " + paymentDTOS.get(2).toString(),
+        assertTrue("paymentDTO3 = " + paymentDTOS.get(2).toString(),
                 payments.get(1).equals(paymentDTOS.get(2)));
+        assertTrue("paymentDTO4 = " + paymentDTOS.get(3).toString(),
+                payments.get(2).equals(paymentDTOS.get(3)));
     }
 
     @Test
@@ -170,15 +196,14 @@ public class PaymentMapperTest {
 
         List<PaymentDTO> payments = paymentMapper.selectPaymentsByFilm(paymentDTOS.get(0).getFilmDTO().getId());
 
-        System.out.println(paymentDTOS.get(0));
-        System.out.println(payments.get(0));
-
-        assertTrue("count = 2",
-                payments.size() == 2);
+        assertTrue("count = 3",
+                payments.size() == 3);
         assertTrue("paymentDTO1 = " + paymentDTOS.get(0).toString(),
                 payments.get(0).equals(paymentDTOS.get(0)));
         assertTrue("paymentDTO2 = " + paymentDTOS.get(1).toString(),
                 payments.get(1).equals(paymentDTOS.get(1)));
+        assertTrue("paymentDTO5 = " + paymentDTOS.get(4).toString(),
+                payments.get(2).equals(paymentDTOS.get(4)));
     }
 
     @Test
@@ -192,6 +217,37 @@ public class PaymentMapperTest {
         PaymentDTO paymentDTO = paymentMapper.selectPayment(paymentDTOS.get(2).getId());
         assertTrue("paymentDTO1 = " + paymentDTOS.get(2).toString(),
                 paymentDTO.equals(paymentDTOS.get(2)));
+    }
+
+    @Test
+    public void selectUsersPayingAboveMedianForLastMonthTest(){
+
+        for (PaymentDTO paymentDTO : paymentDTOS){
+            paymentMapper.insertPayment(paymentDTO);
+//            System.out.printf("login=%s, price=%d, time=%s\n", paymentDTO.getUserDTO().getLogin(), paymentDTO.getTotalPrice(), paymentDTO.getTime());
+        }
+
+//        System.out.println();
+
+        Timestamp paymentTime = paymentDTOS.get(0).getTime();
+        Long time = paymentTime.getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+
+        List<UserDTO> userDTOS = paymentMapper.selectUsersPayingAboveMedianForLastMonth(calendar.get(Calendar.MONTH) + 1);
+
+        assertTrue("count = 1",
+                userDTOS.size() == 1);
+        assertTrue("userDTO.login = user2",
+                userDTOS.get(0).getLogin().equals("user2"));
+        assertTrue("userDTO.median = 215",
+                userDTOS.get(0).getMedian() == 215);
+
+//        for (UserDTO userDTO : userDTOS){
+//            System.out.println(userDTO);
+//        }
+
+
     }
 
     @Test

@@ -8,6 +8,7 @@ public class UserDTO {
     private String login;
     private String password;
     private Short enabled;
+    private Integer median;
     private Timestamp time;
 
     public UserDTO(){
@@ -51,18 +52,16 @@ public class UserDTO {
         this.enabled = enabled;
     }
 
-    public Timestamp getTime() {
-        return time;
+    public void setMedian(Integer median) {
+        this.median = median;
     }
 
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-                "id=" + id +
-                ", login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", enabled=" + enabled +
-                '}';
+    public Integer getMedian() {
+        return median;
+    }
+
+    public Timestamp getTime() {
+        return time;
     }
 
     @Override
@@ -84,5 +83,17 @@ public class UserDTO {
         result = 31 * result + (getPassword() != null ? getPassword().hashCode() : 0);
         result = 31 * result + (getEnabled() != null ? getEnabled().hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "UserDTO{" +
+                "id=" + id +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
+                ", median=" + median +
+                ", time=" + time +
+                '}';
     }
 }
