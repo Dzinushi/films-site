@@ -219,6 +219,7 @@ public class PaymentMapperTest {
                 paymentDTO.equals(paymentDTOS.get(2)));
     }
 
+    // need to check test
     @Test
     public void selectUsersPayingAboveMedianForLastMonthTest(){
 
@@ -248,6 +249,33 @@ public class PaymentMapperTest {
 //        }
 
 
+    }
+
+    // need to check test
+    @Test
+    public void selectPaymentsSortByUsersOrders(){
+
+        for (PaymentDTO paymentDTO : paymentDTOS){
+            paymentMapper.insertPayment(paymentDTO);
+        }
+
+        List<PaymentDTO> paymentDTOS = paymentMapper.selectPaymentsSortByUsersOrders();
+        for (PaymentDTO paymentDTO : paymentDTOS){
+            System.out.printf("%s, total_price=%d, time=%s\n", paymentDTO.getUserDTO(), paymentDTO.getTotalPrice(), paymentDTO.getTime());
+        }
+    }
+
+    @Test
+    public void selectTop5BestOrders(){
+
+        for (PaymentDTO paymentDTO : paymentDTOS){
+            paymentMapper.insertPayment(paymentDTO);
+        }
+
+        List<UserDTO> userDTOS = paymentMapper.selectTop5BestOrders();
+        for (UserDTO userDTO : userDTOS){
+            System.out.println(userDTO);
+        }
     }
 
     @Test

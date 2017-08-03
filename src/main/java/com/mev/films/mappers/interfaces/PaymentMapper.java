@@ -12,6 +12,8 @@ public interface PaymentMapper {
     List<PaymentDTO> selectPaymentsByFilm(Long filmId);
     PaymentDTO selectPayment(Long id);
     List<UserDTO> selectUsersPayingAboveMedianForLastMonth(Integer month);
+    List<PaymentDTO> selectPaymentsSortByUsersOrders();
+    List<UserDTO> selectTop5BestOrders();
     void insertPayment(PaymentDTO paymentDTO);
     void deletePayment(Long id);
 }

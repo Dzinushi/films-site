@@ -9,6 +9,7 @@ public class UserDTO {
     private String password;
     private Short enabled;
     private Integer median;
+    private Integer totalOrdersPrice;
     private Timestamp time;
 
     public UserDTO(){
@@ -60,6 +61,14 @@ public class UserDTO {
         return median;
     }
 
+    public void setTotalOrdersPrice(Integer totalOrdersPrice) {
+        this.totalOrdersPrice = totalOrdersPrice;
+    }
+
+    public Integer getTotalOrdersPrice() {
+        return totalOrdersPrice;
+    }
+
     public Timestamp getTime() {
         return time;
     }
@@ -93,6 +102,7 @@ public class UserDTO {
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
                 ", median=" + median +
+                ", totalOrdersPrice=" + totalOrdersPrice +
                 ", time=" + time +
                 '}';
     }

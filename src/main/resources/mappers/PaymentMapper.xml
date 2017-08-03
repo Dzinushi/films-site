@@ -18,6 +18,7 @@
         <id property="id" column="id"/>
         <result property="login" column="login"/>
         <result property="median" column="median"/>
+        <result property="totalOrdersPrice" column="totalOrdersPrice"/>
     </resultMap>
 
     <select id="selectPayments" resultMap="paymentDTO">
@@ -134,13 +135,12 @@
         SELECT
             u2.id,
             u2.login,
-            avg(p2.bought) AS median
+            avg(bought) AS median
         FROM
             users AS u2
             INNER JOIN (
                 SELECT
                     u.id,
-                    u.login,
                     p.time,
                     sum(p.total_price) AS bought
                 FROM
@@ -149,17 +149,61 @@
                 WHERE
                     extract(MONTH FROM p.time) = #{0}
                 GROUP BY
-                    u.id, u.login, p.time
+                    u.id, p.time
             ) AS p2 ON u2.id = p2.id
         GROUP BY
             u2.id, u2.login
         HAVING
-            avg(p2.bought) > (SELECT
+            avg(bought) > (SELECT
                                   avg(payments.total_price)
                               FROM
                                   payments)
         ORDER BY
-            avg(p2.bought) DESC
+            avg(bought) DESC
+    </select>
+
+    <select id="selectPaymentsSortByUsersOrders" resultMap="paymentDTO">
+        SELECT
+            p.id AS id,
+            p.time AS time,
+            p.total_price AS totalPrice,
+
+            p.user_id AS usr_id,
+            u.login AS usr_login,
+
+            p.film_id AS flm_id,
+            f.name AS flm_name,
+            f.image AS flm_image
+        FROM
+            payments AS p
+            INNER JOIN users AS u ON p.user_id = u.id
+            INNER JOIN films AS f ON p.film_id = f.id
+        ORDER BY
+            u.login, p.time
+    </select>
+
+    <select id="selectTop5BestOrders" resultMap="userDTO">
+        SELECT
+            u2.id,
+            u2.login,
+            sum(bought) AS totalOrdersPrice
+        FROM
+            users AS u2
+            INNER JOIN (
+                SELECT
+                    u.id,
+                    sum(p.total_price) AS bought
+                FROM
+                    payments AS p
+                    INNER JOIN users AS u ON p.user_id = u.id
+                GROUP BY
+                    u.id, u.login
+            ) AS p2 ON p2.id = u2.id
+        GROUP BY
+            u2.id, u2.login
+        ORDER BY
+            totalOrdersPrice DESC
+        LIMIT 5
     </select>
 
     <insert id="insertPayment" parameterType="com.mev.films.model.PaymentDTO">
