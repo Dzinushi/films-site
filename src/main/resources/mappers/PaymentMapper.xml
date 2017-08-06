@@ -179,7 +179,7 @@
             INNER JOIN users AS u ON p.user_id = u.id
             INNER JOIN films AS f ON p.film_id = f.id
         ORDER BY
-            u.login, p.time
+            u.login, f.name, p.time
     </select>
 
     <select id="selectTop5BestOrders" resultMap="userDTO">
