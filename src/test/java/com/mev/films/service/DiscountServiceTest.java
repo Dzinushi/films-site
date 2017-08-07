@@ -51,7 +51,7 @@ public class DiscountServiceTest {
     @Test
     public void getDiscount(){
 
-        expect(discountMapperMock.selectDiscount(discountDTO1.getId())).andAnswer(new IAnswer<DiscountDTO>() {
+        expect(discountMapperMock.select(discountDTO1.getId())).andAnswer(new IAnswer<DiscountDTO>() {
             @Override
             public DiscountDTO answer() throws Throwable {
                 return discountDTO1;
@@ -88,7 +88,7 @@ public class DiscountServiceTest {
     @Test
     public void getDiscountByCode(){
 
-        expect(discountMapperMock.selectDiscountByCode(discountDTO2.getCode())).andAnswer(new IAnswer<DiscountDTO>() {
+        expect(discountMapperMock.selectByCode(discountDTO2.getCode())).andAnswer(new IAnswer<DiscountDTO>() {
             @Override
             public DiscountDTO answer() throws Throwable {
                 return discountDTO2;

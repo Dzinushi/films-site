@@ -99,7 +99,7 @@ public class OrderServiceTest {
     @Test
     public void getOrdersTest(){
 
-        expect(orderMapperMock.selectOrders(2L, 1L)).andStubAnswer(new IAnswer<List<OrderDTO>>() {
+        expect(orderMapperMock.selects(2L, 1L)).andStubAnswer(new IAnswer<List<OrderDTO>>() {
             @Override
             public List<OrderDTO> answer() throws Throwable {
                 List<OrderDTO> orderDTOS = new ArrayList<>();
@@ -172,7 +172,7 @@ public class OrderServiceTest {
     @Test
     public void getOrderTest(){
 
-        expect(orderMapperMock.selectOrder(orderDTO2.getId())).andReturn(orderDTO2);
+        expect(orderMapperMock.select(orderDTO2.getId())).andReturn(orderDTO2);
 
         replay(orderMapperMock);
 
@@ -206,7 +206,7 @@ public class OrderServiceTest {
     @Test
     public void getOrderByBasketTest(){
 
-        expect(orderMapperMock.selectOrdersByBasket(orderDTO1.getBasketDTO().getId())).andAnswer(new IAnswer<List<OrderDTO>>() {
+        expect(orderMapperMock.selectsByBasket(orderDTO1.getBasketDTO().getId())).andAnswer(new IAnswer<List<OrderDTO>>() {
             @Override
             public List<OrderDTO> answer() throws Throwable {
                 List<OrderDTO> orderDTOS = new ArrayList<>();
@@ -254,7 +254,7 @@ public class OrderServiceTest {
     @Test
     public void getOrderByBasketIsMarkTest(){
 
-        expect(orderMapperMock.selectOrdersByBasketIsMark(basketDTO1.getId())).andAnswer(new IAnswer<List<OrderDTO>>() {
+        expect(orderMapperMock.selectsByBasketIsMark(basketDTO1.getId())).andAnswer(new IAnswer<List<OrderDTO>>() {
             @Override
             public List<OrderDTO> answer() throws Throwable {
                 List<OrderDTO> orderDTOS = new ArrayList<>();
@@ -302,19 +302,19 @@ public class OrderServiceTest {
     @Test
     public void addOrderTest(){
 
-        expect(userMapperMock.selectUserIdLogin(userDTO1.getId())).andStubReturn(userDTO1);
-        expect(userMapperMock.selectUserIdLogin(userDTO2.getId())).andStubReturn(userDTO2);
-        expect(userMapperMock.selectUserIdLogin(userDTO3.getId())).andStubReturn(userDTO3);
+        expect(userMapperMock.selectIdLogin(userDTO1.getId())).andStubReturn(userDTO1);
+        expect(userMapperMock.selectIdLogin(userDTO2.getId())).andStubReturn(userDTO2);
+        expect(userMapperMock.selectIdLogin(userDTO3.getId())).andStubReturn(userDTO3);
 
-        expect(filmMapperMock.selectFilm(filmDTO1.getId())).andStubReturn(filmDTO1);
-        expect(filmMapperMock.selectFilm(filmDTO2.getId())).andStubReturn(filmDTO2);
+        expect(filmMapperMock.select(filmDTO1.getId())).andStubReturn(filmDTO1);
+        expect(filmMapperMock.select(filmDTO2.getId())).andStubReturn(filmDTO2);
 
-        expect(discountMapperMock.selectDiscount(discountDTO1.getId())).andStubReturn(discountDTO1);
-        expect(discountMapperMock.selectDiscount(discountDTO2.getId())).andStubReturn(discountDTO2);
+        expect(discountMapperMock.select(discountDTO1.getId())).andStubReturn(discountDTO1);
+        expect(discountMapperMock.select(discountDTO2.getId())).andStubReturn(discountDTO2);
 
-        expect(basketMapperMock.selectBasketByUser(basketDTO1.getUserDTO().getId())).andStubReturn(basketDTO1);
-        expect(basketMapperMock.selectBasketByUser(basketDTO2.getUserDTO().getId())).andStubReturn(basketDTO2);
-        expect(basketMapperMock.selectBasketByUser(basketDTO3.getUserDTO().getId())).andStubReturn(basketDTO3);
+        expect(basketMapperMock.selectByUser(basketDTO1.getUserDTO().getId())).andStubReturn(basketDTO1);
+        expect(basketMapperMock.selectByUser(basketDTO2.getUserDTO().getId())).andStubReturn(basketDTO2);
+        expect(basketMapperMock.selectByUser(basketDTO3.getUserDTO().getId())).andStubReturn(basketDTO3);
 
         replay(userMapperMock);
         replay(filmMapperMock);

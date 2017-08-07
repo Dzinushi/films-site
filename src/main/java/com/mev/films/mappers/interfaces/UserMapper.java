@@ -5,13 +5,13 @@ import com.mev.films.model.UserDTO;
 import java.util.List;
 
 public interface UserMapper {
-    List<UserDTO> selectUsers();
-    UserDTO selectUser(Long id);
-    UserDTO selectUserIdLogin(Long id);
-    List<UserDTO> selectUsersIdLogin();
-    List<UserDTO> selectUsersSortByLogin();
-    UserDTO selectUserByLogin(String login);
-    void insertUser(UserDTO userDTO);
-    void updateUser(UserDTO userDTO);
-    void deleteUserByLogin(String login);
+    List<UserDTO> selects();
+    UserDTO select(Long id);
+    UserDTO selectIdLogin(Long id);
+    List<UserDTO> selectsIdLogin();
+    List<UserDTO> selectsSortByLogin();
+    UserDTO selectByLogin(String login);
+    void insert(UserDTO userDTO);
+    void update(UserDTO userDTO);
+    void deleteByLogin(String login);
 }

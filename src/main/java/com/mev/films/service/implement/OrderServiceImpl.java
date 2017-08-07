@@ -53,14 +53,14 @@ public class OrderServiceImpl implements OrderService{
 
         exceptionService.checkOrderNumberFrom(number, from);
 
-        return orderMapper.selectOrders(number, from);
+        return orderMapper.selects(number, from);
     }
 
     @Override
     public Long getOrdersCount() {
         LOG.debug("getOrdersCount");
 
-        return orderMapper.selectOrdersCount();
+        return orderMapper.selectsCount();
     }
 
     @Override
@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService{
 
         exceptionService.checkOrderId(id);
 
-        OrderDTO orderDTO = orderMapper.selectOrder(id);
+        OrderDTO orderDTO = orderMapper.select(id);
         priceByDiscount(orderDTO);
 
         return orderDTO;
@@ -85,7 +85,7 @@ public class OrderServiceImpl implements OrderService{
 
         exceptionService.checkOrderBasketId(basketId);
 
-        List<OrderDTO> orderDTOS = orderMapper.selectOrdersByBasket(basketId);
+        List<OrderDTO> orderDTOS = orderMapper.selectsByBasket(basketId);
         for (OrderDTO orderDTO : orderDTOS){
             priceByDiscount(orderDTO);
         }
@@ -101,7 +101,7 @@ public class OrderServiceImpl implements OrderService{
 
         exceptionService.checkOrderBasketId(basketId);
 
-        List<OrderDTO> orderDTOS = orderMapper.selectOrdersByBasketIsMark(basketId);
+        List<OrderDTO> orderDTOS = orderMapper.selectsByBasketIsMark(basketId);
         for (OrderDTO orderDTO : orderDTOS){
             priceByDiscount(orderDTO);
         }
@@ -118,38 +118,38 @@ public class OrderServiceImpl implements OrderService{
         exceptionService.checkOrderWithoutId(orderDTO);
 
         // checking if basket exist for this user
-        BasketDTO basketDTO = basketMapper.selectBasketByUser(orderDTO.getBasketDTO().getUserDTO().getId());
+        BasketDTO basketDTO = basketMapper.selectByUser(orderDTO.getBasketDTO().getUserDTO().getId());
 
         // create basket for this user
         if (basketDTO == null){
-            basketMapper.insertBasket(new BasketDTO(orderDTO.getBasketDTO().getUserDTO()));
+            basketMapper.insert(new BasketDTO(orderDTO.getBasketDTO().getUserDTO()));
         }
 
         // set basketDTO for orderDTO
-        basketDTO = basketMapper.selectBasketByUser(orderDTO.getBasketDTO().getUserDTO().getId());
+        basketDTO = basketMapper.selectByUser(orderDTO.getBasketDTO().getUserDTO().getId());
         orderDTO.setBasketDTO(basketDTO);
-        orderMapper.insertOrder(orderDTO);
+        orderMapper.insert(orderDTO);
     }
 
     @Override
     public void deleteOrder(Long id) {
 
-        LOG.debug("deleteOrder: id = {}",
+        LOG.debug("delete: id = {}",
                 id);
 
         exceptionService.checkOrderId(id);
 
-        orderMapper.deleteOrder(id);
+        orderMapper.delete(id);
     }
 
     @Override
     public void deleteOrderByBasket(Long basketId) {
 
-        LOG.debug("deleteOrderByBasket: user_id = {}",
+        LOG.debug("deleteByBasket: user_id = {}",
                 basketId);
 
         exceptionService.checkOrderBasketId(basketId);
 
-        orderMapper.deleteOrderByBasket(basketId);
+        orderMapper.deleteByBasket(basketId);
     }
 }

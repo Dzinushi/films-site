@@ -56,18 +56,18 @@ public class BasketController {
 //    }
 //
 //    @RequestMapping(value = {"/api/baskets"}, method = RequestMethod.DELETE)
-//    public void deleteBasket(@RequestParam Long id) {
-//        LOG.debug("deleteBasket: id = {}",
+//    public void delete(@RequestParam Long id) {
+//        LOG.debug("delete: id = {}",
 //                id);
 //
-//        basketService.deleteBasket(id);
+//        basketService.delete(id);
 //    }
 //
 //    @RequestMapping(value = {"/api/baskets/user"}, method = RequestMethod.DELETE)
-//    public void deleteBasketByUser(@RequestParam Long userId) {
-//        LOG.debug("deleteBasket: user_id = {}",
+//    public void deleteByUser(@RequestParam Long userId) {
+//        LOG.debug("delete: user_id = {}",
 //                userId);
 //
-//        basketService.deleteBasketByUser(userId);
+//        basketService.deleteByUser(userId);
 //    }
 }

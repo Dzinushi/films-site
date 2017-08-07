@@ -83,7 +83,7 @@ public class UserController {
 
     @RequestMapping(value = {"/api/users", "/admin/api/users"}, method = RequestMethod.PUT)
     public void updateUser(@RequestBody UserDTO userDTO) {
-        LOG.debug("updateUser: userDTO = {}",
+        LOG.debug("update: userDTO = {}",
                 userDTO);
 
         userService.updateUser(userDTO);
@@ -109,7 +109,7 @@ public class UserController {
     // for admin
     @RequestMapping(value = {"/admin/api/users/login"}, method = RequestMethod.DELETE)
     public void deleteUserByLogin(@RequestParam String login) {
-        LOG.debug("deleteUserByLogin: login = {}",
+        LOG.debug("deleteByLogin: login = {}",
                 login);
 
         userService.deleteUserByLogin(login);

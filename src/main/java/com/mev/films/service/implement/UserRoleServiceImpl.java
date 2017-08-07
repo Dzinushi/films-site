@@ -1,7 +1,6 @@
 package com.mev.films.service.implement;
 
 import com.mev.films.mappers.interfaces.UserRoleMapper;
-import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserRoleDTO;
 import com.mev.films.service.interfaces.ExceptionService;
 import com.mev.films.service.interfaces.UserRoleService;
@@ -40,7 +39,7 @@ public class UserRoleServiceImpl implements UserRoleService{
 
         LOG.debug("getUserRoles");
 
-        return userRoleMapper.selectUserRoles();
+        return userRoleMapper.select();
     }
 
     @Override
@@ -51,7 +50,7 @@ public class UserRoleServiceImpl implements UserRoleService{
 
         exceptionService.checkUserRoleId(id);
 
-        return userRoleMapper.selectUserRole(id);
+        return userRoleMapper.select(id);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class UserRoleServiceImpl implements UserRoleService{
 
         exceptionService.checkUserRoleLogin(login);
 
-        return userRoleMapper.selectUserRoleByLogin(login);
+        return userRoleMapper.selectByLogin(login);
     }
 
     @Override
@@ -73,17 +72,17 @@ public class UserRoleServiceImpl implements UserRoleService{
 
         exceptionService.checkUserRoleWithoutId(userRoleDTO);
 
-        userRoleMapper.insertUserRole(userRoleDTO);
+        userRoleMapper.insert(userRoleDTO);
     }
 
     @Override
     public void updateUserRole(UserRoleDTO userRoleDTO) {
 
-        LOG.debug("updateUserRole: {}",
+        LOG.debug("update: {}",
                 userRoleDTO);
 
         exceptionService.checkUserRole(userRoleDTO);
 
-        userRoleMapper.updateUserRole(userRoleDTO);
+        userRoleMapper.update(userRoleDTO);
     }
 }

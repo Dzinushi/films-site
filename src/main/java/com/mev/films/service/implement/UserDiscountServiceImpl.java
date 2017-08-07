@@ -1,13 +1,9 @@
 package com.mev.films.service.implement;
 
 import com.mev.films.mappers.interfaces.UserDiscountMapper;
-import com.mev.films.model.DiscountDTO;
-import com.mev.films.model.UserDTO;
 import com.mev.films.model.UserDiscountDTO;
-import com.mev.films.service.interfaces.DiscountService;
 import com.mev.films.service.interfaces.ExceptionService;
 import com.mev.films.service.interfaces.UserDiscountService;
-import com.mev.films.service.interfaces.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +34,7 @@ public class UserDiscountServiceImpl implements UserDiscountService{
     public List<UserDiscountDTO> getUserDiscounts() {
         LOG.debug("getUserDiscounts");
 
-        return userDiscountMapper.selectUserDiscounts();
+        return userDiscountMapper.selects();
     }
 
     @Override
@@ -48,7 +44,7 @@ public class UserDiscountServiceImpl implements UserDiscountService{
 
         exceptionService.checkUserDiscountId(id);
 
-        return userDiscountMapper.selectUserDiscount(id);
+        return userDiscountMapper.select(id);
     }
 
     @Override
@@ -58,7 +54,7 @@ public class UserDiscountServiceImpl implements UserDiscountService{
 
         exceptionService.checkUserDiscountUserId(userId);
 
-        return userDiscountMapper.selectUserDiscountsByUser(userId);
+        return userDiscountMapper.selectsByUser(userId);
     }
 
     @Override
@@ -68,7 +64,7 @@ public class UserDiscountServiceImpl implements UserDiscountService{
 
         exceptionService.checkUserDiscountDiscountId(discountId);
 
-        return userDiscountMapper.selectUserDiscountByDiscount(discountId);
+        return userDiscountMapper.selectByDiscount(discountId);
     }
 
     @Override
@@ -78,46 +74,46 @@ public class UserDiscountServiceImpl implements UserDiscountService{
 
         exceptionService.checkUserDiscountWithoutId(userDiscountDTO);
 
-        userDiscountMapper.insertUserDiscount(userDiscountDTO);
+        userDiscountMapper.insert(userDiscountDTO);
     }
 
     @Override
     public void updateUserDiscount(UserDiscountDTO userDiscountDTO) {
-        LOG.debug("updateUserDiscount: userDiscountDTO = {}",
+        LOG.debug("update: userDiscountDTO = {}",
                 userDiscountDTO);
 
         exceptionService.checkUserDiscount(userDiscountDTO);
 
-        userDiscountMapper.updateUserDiscount(userDiscountDTO);
+        userDiscountMapper.update(userDiscountDTO);
     }
 
     @Override
     public void deleteUserDiscount(Long id) {
-        LOG.debug("deleteUserDiscount: id = {}",
+        LOG.debug("delete: id = {}",
                 id);
 
         exceptionService.checkUserDiscountId(id);
 
-        userDiscountMapper.deleteUserDiscount(id);
+        userDiscountMapper.delete(id);
     }
 
     @Override
     public void deleteUserDiscountByDiscount(Long discountId) {
-        LOG.debug("deleteUserDiscountByDiscount: discount_id = {}",
+        LOG.debug("deleteByDiscount: discount_id = {}",
                 discountId);
 
         exceptionService.checkUserDiscountDiscountId(discountId);
 
-        userDiscountMapper.deleteUserDiscountByDiscount(discountId);
+        userDiscountMapper.deleteByDiscount(discountId);
     }
 
     @Override
     public void deleteUserDiscountByUser(Long userId) {
-        LOG.debug("deleteUserDiscountByUser: user_id = {}",
+        LOG.debug("deleteByUser: user_id = {}",
                 userId);
 
         exceptionService.checkUserDiscountUserId(userId);
 
-        userDiscountMapper.deleteUserDiscountByUser(userId);
+        userDiscountMapper.deleteByUser(userId);
     }
 }

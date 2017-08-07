@@ -2,7 +2,6 @@ package com.mev.films.service.implement;
 
 import com.mev.films.mappers.interfaces.FilmMapper;
 import com.mev.films.model.FilmDTO;
-import com.mev.films.model.UserDTO;
 import com.mev.films.service.interfaces.ExceptionService;
 import com.mev.films.service.interfaces.FilmService;
 import org.apache.logging.log4j.LogManager;
@@ -10,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -36,7 +34,7 @@ public class FilmServiceImpl implements FilmService{
     public List<FilmDTO> getFilms() {
         LOG.debug("getFilms");
 
-        return filmMapper.selectFilms();
+        return filmMapper.selects();
     }
 
     @Override
@@ -46,14 +44,14 @@ public class FilmServiceImpl implements FilmService{
 
         exceptionService.checkFilmId(id);
 
-        return filmMapper.selectFilm(id);
+        return filmMapper.select(id);
     }
 
     @Override
     public List<FilmDTO> getFilmsSortByName() {
         LOG.debug("getFilmsSortByName");
 
-        return filmMapper.selectFilmsSortByName();
+        return filmMapper.selectsSortByName();
     }
 
     @Override
@@ -63,7 +61,7 @@ public class FilmServiceImpl implements FilmService{
 
         exceptionService.checkFilmName(name);
 
-        return filmMapper.selectFilmsByName(name);
+        return filmMapper.selectsByName(name);
     }
 
     @Override
@@ -73,7 +71,7 @@ public class FilmServiceImpl implements FilmService{
 
         exceptionService.checkFilmImage(image);
 
-        return filmMapper.selectFilmByImage(image);
+        return filmMapper.selectByImage(image);
     }
 
     @Override
@@ -83,37 +81,37 @@ public class FilmServiceImpl implements FilmService{
 
         exceptionService.checkFilmWithoutId(filmDTO);
 
-        filmMapper.insertFilm(filmDTO);
+        filmMapper.insert(filmDTO);
     }
 
     @Override
     public void updateFilm(FilmDTO filmDTO) {
-        LOG.debug("updateFilm: filmDTO = {}",
+        LOG.debug("update: filmDTO = {}",
                 filmDTO);
 
         exceptionService.checkFilm(filmDTO);
 
-        filmMapper.updateFilm(filmDTO);
+        filmMapper.update(filmDTO);
     }
 
     @Override
     public void deleteFilm(Long id) {
 
-        LOG.debug("deleteFilm: id = {}",
+        LOG.debug("delete: id = {}",
                 id);
 
         exceptionService.checkFilmId(id);
 
-        filmMapper.deleteFilm(id);
+        filmMapper.delete(id);
     }
 
     @Override
     public void deleteFilmByImage(String image) {
-        LOG.debug("deleteFilmByImage: image = {}",
+        LOG.debug("deleteByImage: image = {}",
                 image);
 
         exceptionService.checkFilmImage(image);
 
-        filmMapper.deleteFilmByImage(image);
+        filmMapper.deleteByImage(image);
     }
 }

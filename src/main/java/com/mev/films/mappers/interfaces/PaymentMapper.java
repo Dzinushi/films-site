@@ -8,14 +8,14 @@ import java.util.List;
 
 public interface PaymentMapper {
     List<PaymentDTO> selectAll();
-    List<PaymentDTO> selectPayments(Long limit, Long offset);
-    Long selectPaymentsCount();
-    List<PaymentDTO> selectPaymentsByUser(Long userId);
-    List<PaymentDTO> selectPaymentsByFilm(Long filmId);
-    PaymentDTO selectPayment(Long id);
+    List<PaymentDTO> selects(Long limit, Long offset);
+    Long selectCount();
+    List<PaymentDTO> selectsByUser(Long userId);
+    List<PaymentDTO> selectsByFilm(Long filmId);
+    PaymentDTO select(Long id);
     List<UserDTO> selectUsersPayingAboveMedianForLastMonth(Integer month);
-    List<PaymentDTO> selectPaymentsSortByUsersOrders();
-    List<UserDTO> selectTop5BestOrders();
-    void insertPayment(PaymentDTO paymentDTO);
-    void deletePayment(Long id);
+    List<PaymentDTO> selectsSortByUsersOrders();
+    List<UserDTO> selectsTop5Orders();
+    void insert(PaymentDTO paymentDTO);
+    void delete(Long id);
 }

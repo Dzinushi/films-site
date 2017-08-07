@@ -6,13 +6,13 @@ import com.mev.films.model.UserDiscountDTO;
 import java.util.List;
 
 public interface UserDiscountMapper {
-    List<UserDiscountDTO> selectUserDiscounts();
-    UserDiscountDTO selectUserDiscount(Long id);
-    List<UserDiscountDTO> selectUserDiscountsByUser(Long userId);
-    UserDiscountDTO selectUserDiscountByDiscount(Long discountId);
-    void insertUserDiscount(UserDiscountDTO userDiscountDTO);
-    void updateUserDiscount(UserDiscountDTO userDiscountDTO);
-    void deleteUserDiscount(Long id);
-    void deleteUserDiscountByDiscount(Long discountId);
-    void deleteUserDiscountByUser(Long userId);
+    List<UserDiscountDTO> selects();
+    UserDiscountDTO select(Long id);
+    List<UserDiscountDTO> selectsByUser(Long userId);
+    UserDiscountDTO selectByDiscount(Long discountId);
+    void insert(UserDiscountDTO userDiscountDTO);
+    void update(UserDiscountDTO userDiscountDTO);
+    void delete(Long id);
+    void deleteByDiscount(Long discountId);
+    void deleteByUser(Long userId);
 }

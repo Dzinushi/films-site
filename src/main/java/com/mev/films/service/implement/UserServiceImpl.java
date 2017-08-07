@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService{
     public List<UserDTO> getUsers() {
         LOG.debug("getUsers");
 
-        return userMapper.selectUsers();
+        return userMapper.selects();
     }
 
     @Override
@@ -44,14 +44,14 @@ public class UserServiceImpl implements UserService{
 
         exceptionService.checkUserId(id);
 
-        return userMapper.selectUser(id);
+        return userMapper.select(id);
     }
 
     @Override
     public List<UserDTO> getUsersSortByLogin() {
         LOG.debug("getUsersSortByLogin");
 
-        return userMapper.selectUsersSortByLogin();
+        return userMapper.selectsSortByLogin();
     }
 
     @Override
@@ -61,14 +61,14 @@ public class UserServiceImpl implements UserService{
 
         exceptionService.checkUserLogin(login);
 
-        return userMapper.selectUserByLogin(login);
+        return userMapper.selectByLogin(login);
     }
 
     @Override
     public List<UserDTO> getUsersIdLogin() {
         LOG.debug("getUsersIdLogin");
 
-        return userMapper.selectUsersIdLogin();
+        return userMapper.selectsIdLogin();
     }
 
     @Override
@@ -78,17 +78,17 @@ public class UserServiceImpl implements UserService{
 
         exceptionService.checkUserWithoutId(userDTO);
 
-        userMapper.insertUser(userDTO);
+        userMapper.insert(userDTO);
     }
 
     @Override
     public void updateUser(UserDTO userDTO) {
-        LOG.debug("updateUser: userDTO = {}",
+        LOG.debug("update: userDTO = {}",
                 userDTO);
 
         exceptionService.checkUser(userDTO);
 
-        userMapper.updateUser(userDTO);
+        userMapper.update(userDTO);
     }
 
 //    @Override
@@ -107,11 +107,11 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public void deleteUserByLogin(String login) {
-        LOG.debug("deleteUserByLogin: login = {}",
+        LOG.debug("deleteByLogin: login = {}",
                 login);
 
         exceptionService.checkUserLogin(login);
 
-        userMapper.deleteUserByLogin(login);
+        userMapper.deleteByLogin(login);
     }
 }

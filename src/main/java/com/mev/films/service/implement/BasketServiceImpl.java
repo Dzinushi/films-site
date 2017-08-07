@@ -2,8 +2,6 @@ package com.mev.films.service.implement;
 
 
 import com.mev.films.mappers.interfaces.BasketMapper;
-import com.mev.films.mappers.interfaces.OrderMapper;
-import com.mev.films.mappers.interfaces.UserDiscountMapper;
 import com.mev.films.model.*;
 import com.mev.films.service.interfaces.*;
 import org.apache.logging.log4j.LogManager;
@@ -39,14 +37,14 @@ public class BasketServiceImpl implements BasketService{
 
         exceptionService.checkBasketNumberFrom(number, from);
 
-        return basketMapper.selectBaskets(number, from);
+        return basketMapper.selects(number, from);
     }
 
     @Override
     public Long getBasketsCount() {
         LOG.debug("getBasketsCount");
 
-        return basketMapper.selectBasketsCount();
+        return basketMapper.selectsCount();
     }
 
     @Override
@@ -56,7 +54,7 @@ public class BasketServiceImpl implements BasketService{
 
         exceptionService.checkBasketId(id);
 
-        return basketMapper.selectBasket(id);
+        return basketMapper.select(id);
     }
 
     @Override
@@ -66,7 +64,7 @@ public class BasketServiceImpl implements BasketService{
 
         exceptionService.checkBasketUserId(userId);
 
-        return basketMapper.selectBasketByUser(userId);
+        return basketMapper.selectByUser(userId);
     }
 
 //    @Override
@@ -76,26 +74,26 @@ public class BasketServiceImpl implements BasketService{
 //
 //        exceptionService.checkBasketWithoutId(basketDTO);
 //
-//        basketMapper.insertBasket(basketDTO);
+//        basketMapper.insert(basketDTO);
 //    }
 //
 //    @Override
-//    public void deleteBasket(Long id){
-//        LOG.debug("deleteBasket: id = {}",
+//    public void delete(Long id){
+//        LOG.debug("delete: id = {}",
 //                id);
 //
 //        exceptionService.checkBasketId(id);
 //
-//        basketMapper.deleteBasket(id);
+//        basketMapper.delete(id);
 //    }
 //
 //    @Override
-//    public void deleteBasketByUser(Long userId) {
-//        LOG.debug("deleteBasket: userId = {}",
+//    public void deleteByUser(Long userId) {
+//        LOG.debug("delete: userId = {}",
 //                userId);
 //
 //        exceptionService.checkBasketUserId(userId);
 //
-//        basketMapper.deleteBasketByUser(userId);
+//        basketMapper.deleteByUser(userId);
 //    }
 }

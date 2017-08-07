@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface BasketMapper {
     List<BasketDTO> selectAll();
-    List<BasketDTO> selectBaskets(Long limit, Long offset);
-    Long selectBasketsCount();
-    BasketDTO selectBasket(Long id);
-    BasketDTO selectBasketByUser(Long id);
-    void insertBasket(BasketDTO basketDTO);
-    void deleteBasket(Long id);
-    void deleteBasketByUser(Long userId);
+    List<BasketDTO> selects(Long limit, Long offset);
+    Long selectsCount();
+    BasketDTO select(Long id);
+    BasketDTO selectByUser(Long id);
+    void insert(BasketDTO basketDTO);
+    void delete(Long id);
+    void deleteByUser(Long userId);
 }

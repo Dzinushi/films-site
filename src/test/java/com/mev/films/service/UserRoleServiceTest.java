@@ -67,7 +67,7 @@ public class UserRoleServiceTest {
     @Test
     public void getUserRoleTest(){
 
-        expect(userRoleMapperMock.selectUserRole(2L)).andAnswer(new IAnswer<UserRoleDTO>() {
+        expect(userRoleMapperMock.select(2L)).andAnswer(new IAnswer<UserRoleDTO>() {
             @Override
             public UserRoleDTO answer() throws Throwable {
                 return userRoleDTO2;
@@ -105,7 +105,7 @@ public class UserRoleServiceTest {
     @Test
     public void getUserRoleByLoginTest(){
 
-        expect(userRoleMapperMock.selectUserRoleByLogin("user1")).andAnswer(new IAnswer<UserRoleDTO>() {
+        expect(userRoleMapperMock.selectByLogin("user1")).andAnswer(new IAnswer<UserRoleDTO>() {
             @Override
             public UserRoleDTO answer() throws Throwable {
                 return userRoleDTO1;
@@ -134,7 +134,7 @@ public class UserRoleServiceTest {
     @Test
     public void addUserRoleTest(){
 
-        expect(userMapperMock.selectUserByLogin("user1")).andAnswer(new IAnswer<UserDTO>() {
+        expect(userMapperMock.selectByLogin("user1")).andAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO1;
@@ -177,7 +177,7 @@ public class UserRoleServiceTest {
     @Test
     public void updateUserRoleTest(){
 
-        expect(userMapperMock.selectUserByLogin("user1")).andAnswer(new IAnswer<UserDTO>() {
+        expect(userMapperMock.selectByLogin("user1")).andAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO1;

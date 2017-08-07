@@ -43,14 +43,14 @@ public class PaymentServiceImpl implements PaymentService{
 
         exceptionService.checkPaymentNumberFrom(number, from);
 
-        return paymentMapper.selectPayments(number, from);
+        return paymentMapper.selects(number, from);
     }
 
     @Override
     public Long getPaymentCount() {
         LOG.debug("getPaymentCount");
 
-        return paymentMapper.selectPaymentsCount();
+        return paymentMapper.selectCount();
     }
 
     @Override
@@ -60,7 +60,7 @@ public class PaymentServiceImpl implements PaymentService{
 
         exceptionService.checkPaymentUserId(userId);
 
-        return paymentMapper.selectPaymentsByUser(userId);
+        return paymentMapper.selectsByUser(userId);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class PaymentServiceImpl implements PaymentService{
 
         exceptionService.checkPaymentFilmId(filmId);
 
-        return paymentMapper.selectPaymentsByFilm(filmId);
+        return paymentMapper.selectsByFilm(filmId);
     }
 
     @Override
@@ -80,7 +80,7 @@ public class PaymentServiceImpl implements PaymentService{
 
         exceptionService.checkPaymentId(id);
 
-        return paymentMapper.selectPayment(id);
+        return paymentMapper.select(id);
     }
 
     @Override
@@ -91,7 +91,7 @@ public class PaymentServiceImpl implements PaymentService{
         exceptionService.checkPaymentWithoutId(basketDTO);
 
         Long time = System.currentTimeMillis();
-        List<OrderDTO> orderDTOS = orderMapper.selectOrdersByBasketIsMark(basketDTO.getId());
+        List<OrderDTO> orderDTOS = orderMapper.selectsByBasketIsMark(basketDTO.getId());
         for (OrderDTO orderDTO : orderDTOS){
             Integer totalPrice;
             if (orderDTO.getDiscountDTO() != null){
@@ -99,15 +99,15 @@ public class PaymentServiceImpl implements PaymentService{
                 totalPrice = orderDTO.getPriceByDiscount();
 
                 // set 'used' in UserDiscount
-                UserDiscountDTO userDiscountDTO = userDiscountMapper.selectUserDiscountByDiscount(orderDTO.getDiscountDTO().getId());
+                UserDiscountDTO userDiscountDTO = userDiscountMapper.selectByDiscount(orderDTO.getDiscountDTO().getId());
                 if (userDiscountDTO == null){
 
                     // create new UserDiscount
                     userDiscountDTO = new UserDiscountDTO(orderDTO.getBasketDTO().getUserDTO(), orderDTO.getDiscountDTO(), true);
-                    userDiscountMapper.insertUserDiscount(userDiscountDTO);
+                    userDiscountMapper.insert(userDiscountDTO);
                 } else {
                     userDiscountDTO.setUsed(true);
-                    userDiscountMapper.updateUserDiscount(userDiscountDTO);
+                    userDiscountMapper.update(userDiscountDTO);
                 }
             }
             else {
@@ -118,10 +118,10 @@ public class PaymentServiceImpl implements PaymentService{
                     orderDTO.getDiscountDTO(),
                     totalPrice,
                     new Timestamp(time));
-            paymentMapper.insertPayment(paymentDTO);
+            paymentMapper.insert(paymentDTO);
 
             // delete order that just payed
-            orderMapper.deleteOrder(orderDTO.getId());
+            orderMapper.delete(orderDTO.getId());
         }
     }
 }

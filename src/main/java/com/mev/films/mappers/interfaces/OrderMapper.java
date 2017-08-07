@@ -6,12 +6,12 @@ import java.util.List;
 
 public interface OrderMapper {
     List<OrderDTO> selectAll();
-    List<OrderDTO> selectOrders(Long limit, Long offset);
-    Long selectOrdersCount();
-    OrderDTO selectOrder(Long id);
-    List<OrderDTO> selectOrdersByBasket(Long basketId);
-    List<OrderDTO> selectOrdersByBasketIsMark(Long basketId);
-    void insertOrder(OrderDTO orderDTO);
-    void deleteOrder(Long id);
-    void deleteOrderByBasket(Long basketId);
+    List<OrderDTO> selects(Long limit, Long offset);
+    Long selectsCount();
+    OrderDTO select(Long id);
+    List<OrderDTO> selectsByBasket(Long basketId);
+    List<OrderDTO> selectsByBasketIsMark(Long basketId);
+    void insert(OrderDTO orderDTO);
+    void delete(Long id);
+    void deleteByBasket(Long basketId);
 }

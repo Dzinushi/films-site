@@ -13,18 +13,18 @@
         <result property="time" column="time"/>
     </resultMap>
 
-    <select id="selectUsers" resultMap="userDTO">
+    <select id="selects" resultMap="userDTO">
         SELECT * FROM users;
     </select>
 
-    <select id="selectUser" parameterType="map" resultMap="userDTO">
+    <select id="select" parameterType="map" resultMap="userDTO">
         SELECT * FROM
             users
         WHERE
             id = #{0}
     </select>
 
-    <select id="selectUserIdLogin" parameterType="map" resultMap="userDTO">
+    <select id="selectIdLogin" parameterType="map" resultMap="userDTO">
         SELECT
             id, login
         FROM
@@ -33,34 +33,34 @@
             id = #{0}
     </select>
 
-    <select id="selectUsersIdLogin" resultMap="userDTO">
+    <select id="selectsIdLogin" resultMap="userDTO">
         SELECT
             id,login
         FROM
             users;
     </select>
 
-    <select id="selectUsersSortByLogin" resultMap="userDTO">
+    <select id="selectsSortByLogin" resultMap="userDTO">
         SELECT * FROM
             users
         ORDER BY
             login;
     </select>
 
-    <select id="selectUserByLogin" parameterType="map" resultMap="userDTO">
+    <select id="selectByLogin" parameterType="map" resultMap="userDTO">
         SELECT * FROM
             users
         WHERE
             login = #{0};
     </select>
 
-    <insert id="insertUser" parameterType="com.mev.films.model.UserDTO">
+    <insert id="insert" parameterType="com.mev.films.model.UserDTO">
         INSERT INTO
             users (login, password, enabled, time)
         VALUES (#{login}, #{password}, #{enabled}, clock_timestamp());
     </insert>
 
-    <update id="updateUser" parameterType="com.mev.films.model.UserDTO">
+    <update id="update" parameterType="com.mev.films.model.UserDTO">
         UPDATE
             users
         SET
@@ -71,7 +71,7 @@
             id = #{id};
     </update>
 
-    <delete id="deleteUserByLogin" parameterType="map">
+    <delete id="deleteByLogin" parameterType="map">
         DELETE FROM
             user_roles ur
         USING users u

@@ -6,9 +6,9 @@ import com.mev.films.model.UserRoleDTO;
 import java.util.List;
 
 public interface UserRoleMapper {
-    List<UserRoleDTO> selectUserRoles();
-    UserRoleDTO selectUserRole(Long id);
-    UserRoleDTO selectUserRoleByLogin(String login);
-    void insertUserRole(UserRoleDTO userRoleDTO);
-    void updateUserRole(UserRoleDTO userRoleDTO);
+    List<UserRoleDTO> select();
+    UserRoleDTO select(Long id);
+    UserRoleDTO selectByLogin(String login);
+    void insert(UserRoleDTO userRoleDTO);
+    void update(UserRoleDTO userRoleDTO);
 }

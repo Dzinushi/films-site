@@ -55,7 +55,7 @@ public class FilmServiceTest {
     @Test
     public void getFilmTest(){
 
-        expect(filmMapperMock.selectFilm(filmDTO2.getId())).andAnswer(new IAnswer<FilmDTO>() {
+        expect(filmMapperMock.select(filmDTO2.getId())).andAnswer(new IAnswer<FilmDTO>() {
             @Override
             public FilmDTO answer() throws Throwable {
                 return filmDTO2;
@@ -96,7 +96,7 @@ public class FilmServiceTest {
     @Test
     public void getFilmByNameTest(){
 
-        expect(filmMapperMock.selectFilmsByName(filmDTO1.getName())).andAnswer(new IAnswer<List<FilmDTO>>() {
+        expect(filmMapperMock.selectsByName(filmDTO1.getName())).andAnswer(new IAnswer<List<FilmDTO>>() {
             @Override
             public List<FilmDTO> answer() throws Throwable {
                 List<FilmDTO> filmDTOS = new ArrayList<>();
@@ -127,7 +127,7 @@ public class FilmServiceTest {
     @Test
     public void getFilmByImage(){
 
-        expect(filmMapperMock.selectFilmByImage(filmDTO2.getImage())).andAnswer(new IAnswer<FilmDTO>() {
+        expect(filmMapperMock.selectByImage(filmDTO2.getImage())).andAnswer(new IAnswer<FilmDTO>() {
             @Override
             public FilmDTO answer() throws Throwable {
                 return filmDTO2;

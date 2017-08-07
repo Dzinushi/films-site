@@ -13,7 +13,7 @@
         <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO" columnPrefix="dsc_"/>
     </resultMap>
 
-    <select id="selectUserDiscounts" resultMap="userDiscountDTO">
+    <select id="selects" resultMap="userDiscountDTO">
         SELECT
             ud.id AS id,
             ud.used AS used,
@@ -30,7 +30,7 @@
             LEFT JOIN discounts AS d ON ud.discount_id = d.id
     </select>
 
-    <select id="selectUserDiscount" parameterType="map" resultMap="userDiscountDTO">
+    <select id="select" parameterType="map" resultMap="userDiscountDTO">
         SELECT
             ud.id AS id,
             ud.used AS used,
@@ -49,7 +49,7 @@
             ud.id = #{0}
     </select>
 
-    <select id="selectUserDiscountsByUser" parameterType="map" resultMap="userDiscountDTO">
+    <select id="selectsByUser" parameterType="map" resultMap="userDiscountDTO">
         SELECT
             ud.id AS id,
             ud.used AS used,
@@ -68,7 +68,7 @@
             u.id = #{0}
     </select>
 
-    <select id="selectUserDiscountByDiscount" parameterType="map" resultMap="userDiscountDTO">
+    <select id="selectByDiscount" parameterType="map" resultMap="userDiscountDTO">
         SELECT
             ud.id AS id,
             ud.used AS used,
@@ -87,13 +87,13 @@
             d.id = #{0}
     </select>
 
-    <insert id="insertUserDiscount" parameterType="com.mev.films.model.UserDiscountDTO">
+    <insert id="insert" parameterType="com.mev.films.model.UserDiscountDTO">
         INSERT INTO
             user_discounts (user_id, discount_id, used, time)
         VALUES (#{userDTO.id}, #{discountDTO.id}, #{used}, clock_timestamp())
     </insert>
 
-    <update id="updateUserDiscount" parameterType="com.mev.films.model.UserDiscountDTO">
+    <update id="update" parameterType="com.mev.films.model.UserDiscountDTO">
         UPDATE
             user_discounts
         SET
@@ -103,21 +103,21 @@
             time = clock_timestamp()
     </update>
 
-    <delete id="deleteUserDiscount" parameterType="map">
+    <delete id="delete" parameterType="map">
         DELETE FROM
             user_discounts
         WHERE
             id = #{0}
     </delete>
 
-    <delete id="deleteUserDiscountByDiscount" parameterType="map">
+    <delete id="deleteByDiscount" parameterType="map">
         DELETE FROM
             user_discounts
         WHERE
             discount_id = #{0}
     </delete>
 
-    <delete id="deleteUserDiscountByUser" parameterType="map">
+    <delete id="deleteByUser" parameterType="map">
         DELETE FROM
             user_discounts
         WHERE

@@ -8,7 +8,6 @@ import com.mev.films.service.interfaces.ExceptionService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +35,7 @@ public class DiscountServiceImpl implements DiscountService{
     public List<DiscountDTO> getDiscounts() {
         LOG.debug("getDiscounts");
 
-        return discountMapper.selectDiscounts();
+        return discountMapper.selects();
     }
 
     @Override
@@ -46,7 +45,7 @@ public class DiscountServiceImpl implements DiscountService{
 
         exceptionService.checkDiscountId(id);
 
-        return discountMapper.selectDiscount(id);
+        return discountMapper.select(id);
     }
 
     @Override
@@ -56,7 +55,7 @@ public class DiscountServiceImpl implements DiscountService{
 
         exceptionService.checkDiscountCode(code);
 
-        return discountMapper.selectDiscountByCode(code);
+        return discountMapper.selectByCode(code);
     }
 
     @Override
@@ -66,36 +65,36 @@ public class DiscountServiceImpl implements DiscountService{
 
         exceptionService.checkDiscountWithoutId(discountDTO);
 
-        discountMapper.insertDiscount(discountDTO);
+        discountMapper.insert(discountDTO);
     }
 
     @Override
     public void updateDiscount(DiscountDTO discountDTO) {
-        LOG.debug("updateDiscount: discountDTO = {}",
+        LOG.debug("update: discountDTO = {}",
                 discountDTO);
 
         exceptionService.checkDiscount(discountDTO);
 
-        discountMapper.updateDiscount(discountDTO);
+        discountMapper.update(discountDTO);
     }
 
     @Override
     public void deleteDiscount(Long id) {
-        LOG.debug("deleteDiscount: id = {}",
+        LOG.debug("delete: id = {}",
                 id);
 
         exceptionService.checkDiscountId(id);
 
-        discountMapper.deleteDiscount(id);
+        discountMapper.delete(id);
     }
 
     @Override
     public void deleteDiscountByCode(String code) {
-        LOG.debug("deleteDiscountByCode: code = {}",
+        LOG.debug("deleteByCode: code = {}",
                 code);
 
         exceptionService.checkDiscountCode(code);
 
-        discountMapper.deleteDiscountByCode(code);
+        discountMapper.deleteByCode(code);
     }
 }

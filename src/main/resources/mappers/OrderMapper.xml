@@ -44,7 +44,7 @@
             LEFT JOIN discounts AS d ON o.discount_id = d.id
     </select>
 
-    <select id="selectOrders" resultType="map" resultMap="orderDTO">
+    <select id="selects" resultType="map" resultMap="orderDTO">
         SELECT
             o.id AS id,
             o.mark AS mark,
@@ -75,11 +75,11 @@
         OFFSET #{1}
     </select>
 
-    <select id="selectOrdersCount" resultType="long">
+    <select id="selectsCount" resultType="long">
         SELECT count(id) FROM orders
     </select>
 
-    <select id="selectOrder" parameterType="map" resultMap="orderDTO">
+    <select id="select" parameterType="map" resultMap="orderDTO">
         SELECT
             o.id AS id,
             o.mark AS mark,
@@ -110,7 +110,7 @@
             o.id = #{0}
     </select>
 
-    <select id="selectOrdersByBasket" parameterType="map" resultMap="orderDTO">
+    <select id="selectsByBasket" parameterType="map" resultMap="orderDTO">
         SELECT
             o.id AS id,
             o.mark AS mark,
@@ -141,7 +141,7 @@
             o.basket_id = #{0}
     </select>
 
-    <select id="selectOrderByBasketIsMark" parameterType="map" resultMap="orderDTO">
+    <select id="selectByBasketIsMark" parameterType="map" resultMap="orderDTO">
         SELECT
             o.id AS id,
             o.mark AS mark,
@@ -174,21 +174,21 @@
             o.mark = TRUE
     </select>
 
-    <insert id="insertOrder" parameterType="com.mev.films.model.OrderDTO">
+    <insert id="insert" parameterType="com.mev.films.model.OrderDTO">
         INSERT INTO
             orders (basket_id, film_id, discount_id, price_by_discount, mark, time)
         VALUES
             (#{basketDTO.id}, #{filmDTO.id}, #{discountDTO.id}, #{priceByDiscount}, #{mark}, clock_timestamp())
     </insert>
 
-    <delete id="deleteOrder" parameterType="map">
+    <delete id="delete" parameterType="map">
         DELETE FROM
             orders
         WHERE
             id = #{0}
     </delete>
 
-    <delete id="deleteOrderByBasket" parameterType="map">
+    <delete id="deleteByBasket" parameterType="map">
         DELETE FROM
             orders
         WHERE

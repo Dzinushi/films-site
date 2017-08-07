@@ -124,7 +124,7 @@ public class PaymentServiceTest {
     @Test
     public void getPaymentsTest(){
 
-        expect(paymentMapperMock.selectPayments(2L, 1L)).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
+        expect(paymentMapperMock.selects(2L, 1L)).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
             @Override
             public List<PaymentDTO> answer() throws Throwable {
                 List<PaymentDTO> paymentDTOS = new ArrayList<>();
@@ -193,7 +193,7 @@ public class PaymentServiceTest {
     @Test
     public void getPaymentsByUserTest(){
 
-        expect(paymentMapperMock.selectPaymentsByUser(userDTO1.getId())).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
+        expect(paymentMapperMock.selectsByUser(userDTO1.getId())).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
             @Override
             public List<PaymentDTO> answer() throws Throwable {
                 List<PaymentDTO> paymentDTOS = new ArrayList<>();
@@ -237,7 +237,7 @@ public class PaymentServiceTest {
     @Test
     public void getPaymentsByFilmTest(){
 
-        expect(paymentMapperMock.selectPaymentsByFilm(filmDTO2.getId())).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
+        expect(paymentMapperMock.selectsByFilm(filmDTO2.getId())).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
             @Override
             public List<PaymentDTO> answer() throws Throwable {
                 List<PaymentDTO> paymentDTOS = new ArrayList<>();
@@ -281,7 +281,7 @@ public class PaymentServiceTest {
     @Test
     public void getPaymentTest(){
 
-        expect(paymentMapperMock.selectPayment(payments.get(1).getId())).andReturn(payments.get(1));
+        expect(paymentMapperMock.select(payments.get(1).getId())).andReturn(payments.get(1));
 
         replay(paymentMapperMock);
 
@@ -313,10 +313,10 @@ public class PaymentServiceTest {
     @Test
     public void addPaymentTest(){
 
-        expect(basketMapperMock.selectBasket(baskets.get(0).getId())).andStubReturn(baskets.get(0));
-        expect(basketMapperMock.selectBasket(baskets.get(1).getId())).andStubReturn(baskets.get(1));
-        expect(basketMapperMock.selectBasket(baskets.get(2).getId())).andStubReturn(baskets.get(2));
-        expect(orderMapperMock.selectOrdersByBasketIsMark(userDTO1.getId())).andStubAnswer(new IAnswer<List<OrderDTO>>() {
+        expect(basketMapperMock.select(baskets.get(0).getId())).andStubReturn(baskets.get(0));
+        expect(basketMapperMock.select(baskets.get(1).getId())).andStubReturn(baskets.get(1));
+        expect(basketMapperMock.select(baskets.get(2).getId())).andStubReturn(baskets.get(2));
+        expect(orderMapperMock.selectsByBasketIsMark(userDTO1.getId())).andStubAnswer(new IAnswer<List<OrderDTO>>() {
             @Override
             public List<OrderDTO> answer() throws Throwable {
                 List<OrderDTO> orderDTOS = new ArrayList<>();
@@ -324,7 +324,7 @@ public class PaymentServiceTest {
                 return orderDTOS;
             }
         });
-        expect(orderMapperMock.selectOrdersByBasketIsMark(userDTO2.getId())).andStubAnswer(new IAnswer<List<OrderDTO>>() {
+        expect(orderMapperMock.selectsByBasketIsMark(userDTO2.getId())).andStubAnswer(new IAnswer<List<OrderDTO>>() {
             @Override
             public List<OrderDTO> answer() throws Throwable {
                 List<OrderDTO> orderDTOS = new ArrayList<>();
@@ -332,10 +332,10 @@ public class PaymentServiceTest {
                 return orderDTOS;
             }
         });
-        expect(discountMapperMock.selectDiscount(discountDTO1.getId())).andStubReturn(discountDTO1);
-        expect(discountMapperMock.selectDiscount(discountDTO2.getId())).andStubReturn(discountDTO2);
-        expect(userDiscountMapperMock.selectUserDiscountByDiscount(discountDTO1.getId())).andStubReturn(userDiscountDTO1);
-        expect(userDiscountMapperMock.selectUserDiscountByDiscount(discountDTO2.getId())).andStubReturn(userDiscountDTO2);
+        expect(discountMapperMock.select(discountDTO1.getId())).andStubReturn(discountDTO1);
+        expect(discountMapperMock.select(discountDTO2.getId())).andStubReturn(discountDTO2);
+        expect(userDiscountMapperMock.selectByDiscount(discountDTO1.getId())).andStubReturn(userDiscountDTO1);
+        expect(userDiscountMapperMock.selectByDiscount(discountDTO2.getId())).andStubReturn(userDiscountDTO2);
 
         replay(basketMapperMock);
         replay(orderMapperMock);

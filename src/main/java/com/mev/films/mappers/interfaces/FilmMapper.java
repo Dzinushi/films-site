@@ -5,13 +5,13 @@ import com.mev.films.model.FilmDTO;
 import java.util.List;
 
 public interface FilmMapper {
-    List<FilmDTO> selectFilms();
-    FilmDTO selectFilm(Long id);
-    List<FilmDTO> selectFilmsSortByName();
-    List<FilmDTO> selectFilmsByName(String name);
-    FilmDTO selectFilmByImage(String image);
-    void insertFilm(FilmDTO filmDTO);
-    void updateFilm(FilmDTO filmDTO);
-    void deleteFilm(Long id);
-    void deleteFilmByImage(String image);
+    List<FilmDTO> selects();
+    FilmDTO select(Long id);
+    List<FilmDTO> selectsSortByName();
+    List<FilmDTO> selectsByName(String name);
+    FilmDTO selectByImage(String image);
+    void insert(FilmDTO filmDTO);
+    void update(FilmDTO filmDTO);
+    void delete(Long id);
+    void deleteByImage(String image);
 }

@@ -15,42 +15,42 @@
         <result property="time" column="time"/>
     </resultMap>
 
-    <select id="selectFilms" resultMap="filmDTO">
+    <select id="selects" resultMap="filmDTO">
         SELECT * FROM films;
     </select>
 
-    <select id="selectFilm" parameterType="map" resultMap="filmDTO">
+    <select id="select" parameterType="map" resultMap="filmDTO">
         SELECT * FROM
             films
         WHERE
             id = #{0}
     </select>
 
-    <select id="selectFilmsSortByName" resultMap="filmDTO">
+    <select id="selectsSortByName" resultMap="filmDTO">
         SELECT * FROM films ORDER BY name;
     </select>
 
-    <select id="selectFilmsByName" parameterType="map" resultMap="filmDTO">
+    <select id="selectsByName" parameterType="map" resultMap="filmDTO">
         SELECT * FROM
             films
         WHERE
             name = #{0}
     </select>
 
-    <select id="selectFilmByImage" parameterType="map" resultMap="filmDTO">
+    <select id="selectByImage" parameterType="map" resultMap="filmDTO">
         SELECT * FROM
             films
         WHERE
             image = #{0}
     </select>
 
-    <insert id="insertFilm" parameterType="com.mev.films.model.FilmDTO">
+    <insert id="insert" parameterType="com.mev.films.model.FilmDTO">
         INSERT INTO
             films (name, genre, duration, price, image, time)
         VALUES (#{name}, #{genre}, #{duration}, #{price}, #{image}, clock_timestamp())
     </insert>
 
-    <update id="updateFilm" parameterType="com.mev.films.model.FilmDTO">
+    <update id="update" parameterType="com.mev.films.model.FilmDTO">
         UPDATE
             films
         SET
@@ -64,14 +64,14 @@
             id = #{id}
     </update>
 
-    <delete id="deleteFilm" parameterType="map">
+    <delete id="delete" parameterType="map">
         DELETE FROM
             films
         WHERE
             id = #{0}
     </delete>
 
-    <delete id="deleteFilmByImage" parameterType="map">
+    <delete id="deleteByImage" parameterType="map">
         DELETE FROM
             films
         WHERE

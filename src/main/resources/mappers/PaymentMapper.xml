@@ -47,7 +47,7 @@
             LEFT JOIN discounts AS d ON p.discount_id = d.id
     </select>
 
-    <select id="selectPayments" parameterType="map" resultMap="paymentDTO">
+    <select id="selects" parameterType="map" resultMap="paymentDTO">
         SELECT
             p.id AS id,
             p.time AS time,
@@ -75,11 +75,11 @@
         OFFSET #{1}
     </select>
 
-    <select id="selectPaymentsCount" resultType="long">
+    <select id="selectCount" resultType="long">
         SELECT count(id) FROM payments;
     </select>
 
-    <select id="selectPaymentsByUser" parameterType="map" resultMap="paymentDTO">
+    <select id="selectsByUser" parameterType="map" resultMap="paymentDTO">
         SELECT
             p.id AS id,
             p.time AS time,
@@ -107,7 +107,7 @@
             p.user_id = #{0}
     </select>
 
-    <select id="selectPaymentsByFilm" parameterType="map" resultMap="paymentDTO">
+    <select id="selectsByFilm" parameterType="map" resultMap="paymentDTO">
         SELECT
             p.id AS id,
             p.time AS time,
@@ -135,7 +135,7 @@
             p.film_id = #{0}
     </select>
 
-    <select id="selectPayment" parameterType="map" resultMap="paymentDTO">
+    <select id="select" parameterType="map" resultMap="paymentDTO">
         SELECT
             p.id AS id,
             p.time AS time,
@@ -194,7 +194,7 @@
             avg(bought) DESC
     </select>
 
-    <select id="selectPaymentsSortByUsersOrders" resultMap="paymentDTO">
+    <select id="selectsSortByUsersOrders" resultMap="paymentDTO">
         SELECT
             p.id AS id,
             p.time AS time,
@@ -214,7 +214,7 @@
             u.login, f.name, p.time
     </select>
 
-    <select id="selectTop5BestOrders" resultMap="userDTO">
+    <select id="selectsTop5Orders" resultMap="userDTO">
         SELECT
             u2.id,
             u2.login,
@@ -238,13 +238,13 @@
         LIMIT 5
     </select>
 
-    <insert id="insertPayment" parameterType="com.mev.films.model.PaymentDTO">
+    <insert id="insert" parameterType="com.mev.films.model.PaymentDTO">
         INSERT INTO
             payments (user_id, film_id, discount_id, total_price, time)
         VALUES (#{userDTO.id}, #{filmDTO.id}, #{discountDTO.id}, #{totalPrice}, #{time});
     </insert>
 
-    <delete id="deletePayment" parameterType="map">
+    <delete id="delete" parameterType="map">
         DELETE FROM
             "films_test".public.payments
         WHERE

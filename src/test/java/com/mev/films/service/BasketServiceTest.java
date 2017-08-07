@@ -62,7 +62,7 @@ public class BasketServiceTest {
     @Test
     public void getBasketsTest(){
 
-        expect(basketMapperMock.selectBaskets(2L, 0L)).andStubAnswer(new IAnswer<List<BasketDTO>>() {
+        expect(basketMapperMock.selects(2L, 0L)).andStubAnswer(new IAnswer<List<BasketDTO>>() {
             @Override
             public List<BasketDTO> answer() throws Throwable {
                 List<BasketDTO> basketDTOS = new ArrayList<>();
@@ -135,7 +135,7 @@ public class BasketServiceTest {
     @Test
     public void getBasketTest(){
 
-        expect(basketMapperMock.selectBasket(basketDTO2.getId())).andReturn(basketDTO2);
+        expect(basketMapperMock.select(basketDTO2.getId())).andReturn(basketDTO2);
 
         replay(basketMapperMock);
 
@@ -167,7 +167,7 @@ public class BasketServiceTest {
     @Test
     public void getBasketByUserTest() {
 
-        expect(basketMapperMock.selectBasketByUser(basketDTO1.getUserDTO().getId())).andReturn(basketDTO1);
+        expect(basketMapperMock.selectByUser(basketDTO1.getUserDTO().getId())).andReturn(basketDTO1);
 
         replay(basketMapperMock);
 

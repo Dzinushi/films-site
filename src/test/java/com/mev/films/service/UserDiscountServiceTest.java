@@ -78,7 +78,7 @@ public class UserDiscountServiceTest {
     @Test
     public void getUserDiscountTest() {
 
-        expect(userDiscountMapperMock.selectUserDiscount(userDiscountDTO1.getId())).andAnswer(new IAnswer<UserDiscountDTO>() {
+        expect(userDiscountMapperMock.select(userDiscountDTO1.getId())).andAnswer(new IAnswer<UserDiscountDTO>() {
             @Override
             public UserDiscountDTO answer() throws Throwable {
                 return userDiscountDTO1;
@@ -115,7 +115,7 @@ public class UserDiscountServiceTest {
     @Test
     public void getUserDiscountsByUserTest() {
 
-        expect(userDiscountMapperMock.selectUserDiscountsByUser(userDiscountDTO1.getUserDTO().getId())).andAnswer(new IAnswer<List<UserDiscountDTO>>() {
+        expect(userDiscountMapperMock.selectsByUser(userDiscountDTO1.getUserDTO().getId())).andAnswer(new IAnswer<List<UserDiscountDTO>>() {
             @Override
             public List<UserDiscountDTO> answer() throws Throwable {
                 List<UserDiscountDTO> userDiscountDTOS = new ArrayList<>();
@@ -156,7 +156,7 @@ public class UserDiscountServiceTest {
     @Test
     public void getUserDiscountByDiscountTest() {
 
-        expect(userDiscountMapperMock.selectUserDiscountByDiscount(userDiscountDTO1.getDiscountDTO().getId())).andAnswer(new IAnswer<UserDiscountDTO>() {
+        expect(userDiscountMapperMock.selectByDiscount(userDiscountDTO1.getDiscountDTO().getId())).andAnswer(new IAnswer<UserDiscountDTO>() {
             @Override
             public UserDiscountDTO answer() throws Throwable {
                 return userDiscountDTO1;
@@ -193,8 +193,8 @@ public class UserDiscountServiceTest {
     @Test
     public void addUserDiscountTest() {
 
-        expect(userMapperMock.selectUserIdLogin(userDiscountDTO1.getUserDTO().getId())).andStubReturn(userDTO1);
-        expect(discountMapperMock.selectDiscount(userDiscountDTO1.getDiscountDTO().getId())).andStubReturn(discountDTO1);
+        expect(userMapperMock.selectIdLogin(userDiscountDTO1.getUserDTO().getId())).andStubReturn(userDTO1);
+        expect(discountMapperMock.select(userDiscountDTO1.getDiscountDTO().getId())).andStubReturn(discountDTO1);
 
         replay(userDiscountMapperMock);
         replay(userMapperMock);
@@ -312,8 +312,8 @@ public class UserDiscountServiceTest {
     @Test
     public void updateUserDiscountTest() {
 
-        expect(userMapperMock.selectUserIdLogin(userDiscountDTO1.getUserDTO().getId())).andStubReturn(userDTO1);
-        expect(discountMapperMock.selectDiscount(userDiscountDTO1.getDiscountDTO().getId())).andStubReturn(discountDTO1);
+        expect(userMapperMock.selectIdLogin(userDiscountDTO1.getUserDTO().getId())).andStubReturn(userDTO1);
+        expect(discountMapperMock.select(userDiscountDTO1.getDiscountDTO().getId())).andStubReturn(discountDTO1);
 
         replay(userDiscountMapperMock);
         replay(userMapperMock);

@@ -50,7 +50,7 @@ public class UserServiceTest {
     @Test
     public void getUserTest(){
 
-        expect(userMapperMock.selectUser(userDTO2.getId())).andStubAnswer(new IAnswer<UserDTO>() {
+        expect(userMapperMock.select(userDTO2.getId())).andStubAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO2;
@@ -92,7 +92,7 @@ public class UserServiceTest {
     @Test
     public void getUserByLoginTest(){
 
-        expect(userMapperMock.selectUserByLogin(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
+        expect(userMapperMock.selectByLogin(userDTO2.getLogin())).andStubAnswer(new IAnswer<UserDTO>() {
             @Override
             public UserDTO answer() throws Throwable {
                 return userDTO2;

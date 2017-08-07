@@ -74,7 +74,7 @@ public class OrderController {
     @RequestMapping(value = {"/admin/api/order"}, method = RequestMethod.DELETE)
     public void deleteOrder(@RequestParam Long id){
 
-        LOG.debug("deleteOrder: order_id = {}",
+        LOG.debug("delete: order_id = {}",
                 id);
 
         orderService.deleteOrder(id);
@@ -83,7 +83,7 @@ public class OrderController {
     @RequestMapping(value = {"/admin/api/basket/order"})
     public void deleteOrderByBasket(@RequestParam Long basketId){
 
-        LOG.debug("deleteOrderByBasket: basket_id = {}",
+        LOG.debug("deleteByBasket: basket_id = {}",
                 basketId);
 
         orderService.deleteOrderByBasket(basketId);

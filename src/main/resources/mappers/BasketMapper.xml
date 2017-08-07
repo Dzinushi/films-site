@@ -23,7 +23,7 @@
             INNER JOIN users AS u ON b.user_id = u.id
     </select>
 
-    <select id="selectBaskets" parameterType="map" resultMap="basketDTO">
+    <select id="selects" parameterType="map" resultMap="basketDTO">
         SELECT
             b.id AS id,
             b.time AS time,
@@ -37,11 +37,11 @@
         OFFSET #{1}
     </select>
 
-    <select id="selectBasketsCount" resultType="long">
+    <select id="selectsCount" resultType="long">
         SELECT count(id) FROM baskets
     </select>
 
-    <select id="selectBasket" parameterType="map" resultMap="basketDTO">
+    <select id="select" parameterType="map" resultMap="basketDTO">
         SELECT
             b.id AS id,
             b.time AS time,
@@ -55,7 +55,7 @@
             b.id = #{0}
     </select>
 
-    <select id="selectBasketByUser" parameterType="map" resultMap="basketDTO">
+    <select id="selectByUser" parameterType="map" resultMap="basketDTO">
         SELECT
             b.id AS id,
             b.time AS time,
@@ -69,21 +69,21 @@
             u.id = #{0}
     </select>
 
-    <insert id="insertBasket" parameterType="com.mev.films.model.BasketDTO">
+    <insert id="insert" parameterType="com.mev.films.model.BasketDTO">
         INSERT INTO
             baskets (user_id, time)
         VALUES
             (#{userDTO.id}, clock_timestamp())
     </insert>
 
-    <delete id="deleteBasket" parameterType="map">
+    <delete id="delete" parameterType="map">
         DELETE FROM
             baskets
         WHERE
             id = #{0}
     </delete>
 
-    <delete id="deleteBasketByUser" parameterType="map">
+    <delete id="deleteByUser" parameterType="map">
         DELETE FROM
             baskets
         WHERE

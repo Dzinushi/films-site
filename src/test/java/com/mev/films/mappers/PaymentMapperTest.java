@@ -51,39 +51,39 @@ public class PaymentMapperTest {
 
         List<PaymentDTO> payments = paymentMapper.selectAll();
         for (PaymentDTO paymentDTO : payments){
-            paymentMapper.deletePayment(paymentDTO.getId());
+            paymentMapper.delete(paymentDTO.getId());
         }
 
-        List<DiscountDTO> discountDTOS = discountMapper.selectDiscounts();
+        List<DiscountDTO> discountDTOS = discountMapper.selects();
         for (DiscountDTO discountDTO : discountDTOS){
-            discountMapper.deleteDiscountByCode(discountDTO.getCode());
+            discountMapper.deleteByCode(discountDTO.getCode());
         }
 
-        List<FilmDTO> filmDTOS = filmMapper.selectFilms();
+        List<FilmDTO> filmDTOS = filmMapper.selects();
         for (FilmDTO filmDTO : filmDTOS){
-            filmMapper.deleteFilmByImage(filmDTO.getImage());
+            filmMapper.deleteByImage(filmDTO.getImage());
         }
 
-        List<UserDTO> userDTOS = userMapper.selectUsers();
+        List<UserDTO> userDTOS = userMapper.selects();
         for (UserDTO userDTO : userDTOS){
-            userMapper.deleteUserByLogin(userDTO.getLogin());
+            userMapper.deleteByLogin(userDTO.getLogin());
         }
 
-        discountMapper.insertDiscount(discountDTO1);
-        discountMapper.insertDiscount(discountDTO2);
-        discountMapper.insertDiscount(discountDTO3);
+        discountMapper.insert(discountDTO1);
+        discountMapper.insert(discountDTO2);
+        discountMapper.insert(discountDTO3);
 
-        filmMapper.insertFilm(filmDTO1);
-        filmMapper.insertFilm(filmDTO2);
-        filmMapper.insertFilm(filmDTO3);
+        filmMapper.insert(filmDTO1);
+        filmMapper.insert(filmDTO2);
+        filmMapper.insert(filmDTO3);
 
-        userMapper.insertUser(userDTO1);
-        userMapper.insertUser(userDTO2);
-        userMapper.insertUser(userDTO3);
+        userMapper.insert(userDTO1);
+        userMapper.insert(userDTO2);
+        userMapper.insert(userDTO3);
 
-        discountDTOS = discountMapper.selectDiscounts();
-        filmDTOS = filmMapper.selectFilms();
-        userDTOS = userMapper.selectUsersIdLogin();
+        discountDTOS = discountMapper.selects();
+        filmDTOS = filmMapper.selects();
+        userDTOS = userMapper.selectsIdLogin();
 
         // added baskets
         basketDTOS = new ArrayList<>();
@@ -92,7 +92,7 @@ public class PaymentMapperTest {
         basketDTOS.add(new BasketDTO(userDTOS.get(2)));
 
         for (BasketDTO basketDTO : basketDTOS){
-            basketMapper.insertBasket(basketDTO);
+            basketMapper.insert(basketDTO);
         }
 
         basketDTOS = basketMapper.selectAll();
@@ -114,7 +114,7 @@ public class PaymentMapperTest {
                 Integer priceByDiscount = Math.round(price - (price * discount));
                 orderDTO.setPriceByDiscount(priceByDiscount);
             }
-            orderMapper.insertOrder(orderDTO);
+            orderMapper.insert(orderDTO);
         }
 
         // create payments (3 payments)
@@ -122,7 +122,7 @@ public class PaymentMapperTest {
         paymentDTOS = new ArrayList<>();
         for (BasketDTO basketDTO : basketDTOS){
             Long time = System.currentTimeMillis();
-            List<OrderDTO> orders = orderMapper.selectOrdersByBasket(basketDTO.getId());
+            List<OrderDTO> orders = orderMapper.selectsByBasket(basketDTO.getId());
             for (OrderDTO orderDTO : orders){
                 if (orderDTO.isMark()){
                     if (orderDTO.getBasketDTO().getUserDTO().getId() == 2 && user2Add != 0){
@@ -150,10 +150,10 @@ public class PaymentMapperTest {
     public void selectPaymentsTest(){
 
         for (PaymentDTO paymentDTO : paymentDTOS){
-            paymentMapper.insertPayment(paymentDTO);
+            paymentMapper.insert(paymentDTO);
         }
 
-        List<PaymentDTO> payments = paymentMapper.selectPayments(3L, 0L);
+        List<PaymentDTO> payments = paymentMapper.selects(3L, 0L);
         assertTrue("count = 3",
                 payments.size() == 3);
         assertTrue("paymentDTO1 = " + paymentDTOS.get(0).toString(),
@@ -163,7 +163,7 @@ public class PaymentMapperTest {
         assertTrue("paymentDTO3 = " + paymentDTOS.get(2).toString(),
                 payments.get(2).equals(paymentDTOS.get(2)));
 
-        payments = paymentMapper.selectPayments(3L, 3L);
+        payments = paymentMapper.selects(3L, 3L);
         assertTrue("count = 3",
                 payments.size() == 3);
         assertTrue("paymentDTO4 = " + paymentDTOS.get(3).toString(),
@@ -177,15 +177,15 @@ public class PaymentMapperTest {
     @Test
     public void selectPaymentsCount(){
 
-        Long count = paymentMapper.selectPaymentsCount();
+        Long count = paymentMapper.selectCount();
         assertTrue("count = 0",
                 count == 0);
 
         for (PaymentDTO paymentDTO : paymentDTOS){
-            paymentMapper.insertPayment(paymentDTO);
+            paymentMapper.insert(paymentDTO);
         }
 
-        count = paymentMapper.selectPaymentsCount();
+        count = paymentMapper.selectCount();
         assertTrue("count = 6",
                 count == 6);
     }
@@ -194,10 +194,10 @@ public class PaymentMapperTest {
     public void selectPaymentsByUserTest(){
 
         for (PaymentDTO paymentDTO : paymentDTOS){
-            paymentMapper.insertPayment(paymentDTO);
+            paymentMapper.insert(paymentDTO);
         }
 
-        List<PaymentDTO> payments = paymentMapper.selectPaymentsByUser(paymentDTOS.get(1).getUserDTO().getId());
+        List<PaymentDTO> payments = paymentMapper.selectsByUser(paymentDTOS.get(1).getUserDTO().getId());
         assertTrue("count = 3",
                 payments.size() == 3);
         assertTrue("paymentDTO2 = " + paymentDTOS.get(1).toString(),
@@ -212,10 +212,10 @@ public class PaymentMapperTest {
     public void selectPaymentsByFilmTest(){
 
         for (PaymentDTO paymentDTO : paymentDTOS){
-            paymentMapper.insertPayment(paymentDTO);
+            paymentMapper.insert(paymentDTO);
         }
 
-        List<PaymentDTO> payments = paymentMapper.selectPaymentsByFilm(paymentDTOS.get(0).getFilmDTO().getId());
+        List<PaymentDTO> payments = paymentMapper.selectsByFilm(paymentDTOS.get(0).getFilmDTO().getId());
 
         assertTrue("count = 3",
                 payments.size() == 3);
@@ -231,11 +231,11 @@ public class PaymentMapperTest {
     public void selectPaymentTest(){
 
         for (PaymentDTO paymentDTO : paymentDTOS){
-            paymentMapper.insertPayment(paymentDTO);
+            paymentMapper.insert(paymentDTO);
         }
 
         List<PaymentDTO> payments = paymentMapper.selectAll();
-        PaymentDTO paymentDTO = paymentMapper.selectPayment(payments.get(2).getId());
+        PaymentDTO paymentDTO = paymentMapper.select(payments.get(2).getId());
         assertTrue("paymentDTO1 = " + payments.get(2).toString(),
                 paymentDTO.equals(payments.get(2)));
     }
@@ -245,7 +245,7 @@ public class PaymentMapperTest {
     public void selectUsersPayingAboveMedianForLastMonthTest(){
 
         for (PaymentDTO paymentDTO : paymentDTOS){
-            paymentMapper.insertPayment(paymentDTO);
+            paymentMapper.insert(paymentDTO);
 //            System.out.printf("login=%s, price=%d, time=%s\n", paymentDTO.getUserDTO().getLogin(), paymentDTO.getTotalPrice(), paymentDTO.getTime());
         }
 
@@ -277,10 +277,10 @@ public class PaymentMapperTest {
     public void selectPaymentsSortByUsersOrders(){
 
         for (PaymentDTO paymentDTO : paymentDTOS){
-            paymentMapper.insertPayment(paymentDTO);
+            paymentMapper.insert(paymentDTO);
         }
 
-        List<PaymentDTO> paymentDTOS = paymentMapper.selectPaymentsSortByUsersOrders();
+        List<PaymentDTO> paymentDTOS = paymentMapper.selectsSortByUsersOrders();
         for (PaymentDTO paymentDTO : paymentDTOS){
             System.out.printf("%s, total_price=%d, time=%s\n", paymentDTO.getUserDTO(), paymentDTO.getTotalPrice(), paymentDTO.getTime());
         }
@@ -291,10 +291,10 @@ public class PaymentMapperTest {
     public void selectTop5BestOrders(){
 
         for (PaymentDTO paymentDTO : paymentDTOS){
-            paymentMapper.insertPayment(paymentDTO);
+            paymentMapper.insert(paymentDTO);
         }
 
-        List<UserDTO> userDTOS = paymentMapper.selectTop5BestOrders();
+        List<UserDTO> userDTOS = paymentMapper.selectsTop5Orders();
         for (UserDTO userDTO : userDTOS){
             System.out.println(userDTO);
         }
@@ -303,7 +303,7 @@ public class PaymentMapperTest {
     @Test
     public void insertPaymentTest(){
 
-        paymentMapper.insertPayment(paymentDTOS.get(0));
+        paymentMapper.insert(paymentDTOS.get(0));
 
         List<PaymentDTO> payments = paymentMapper.selectAll();
         assertTrue("count = 1",
@@ -311,7 +311,7 @@ public class PaymentMapperTest {
         assertTrue("paymentDTO1 = " + paymentDTOS.get(0).toString(),
                 payments.get(0).equals(paymentDTOS.get(0)));
 
-        paymentMapper.insertPayment(paymentDTOS.get(1));
+        paymentMapper.insert(paymentDTOS.get(1));
 
         payments = paymentMapper.selectAll();
         assertTrue("count = 2",
@@ -326,33 +326,33 @@ public class PaymentMapperTest {
     public void deletePaymentTest(){
 
         // add 1 delete 1
-        paymentMapper.insertPayment(paymentDTOS.get(0));
+        paymentMapper.insert(paymentDTOS.get(0));
 
         List<PaymentDTO> payments = paymentMapper.selectAll();
-        paymentMapper.deletePayment(payments.get(0).getId());
+        paymentMapper.delete(payments.get(0).getId());
 
-        Long count = paymentMapper.selectPaymentsCount();
+        Long count = paymentMapper.selectCount();
         assertTrue("count = 0",
                 count == 0);
 
         // add 2 delete 2
-        paymentMapper.insertPayment(paymentDTOS.get(0));
-        paymentMapper.insertPayment(paymentDTOS.get(1));
+        paymentMapper.insert(paymentDTOS.get(0));
+        paymentMapper.insert(paymentDTOS.get(1));
 
         payments = paymentMapper.selectAll();
-        paymentMapper.deletePayment(payments.get(0).getId());
-        paymentMapper.deletePayment(payments.get(1).getId());
+        paymentMapper.delete(payments.get(0).getId());
+        paymentMapper.delete(payments.get(1).getId());
 
-        count = paymentMapper.selectPaymentsCount();
+        count = paymentMapper.selectCount();
         assertTrue("count = 0",
                 count == 0);
 
         // add 2 delete 1
-        paymentMapper.insertPayment(paymentDTOS.get(0));
-        paymentMapper.insertPayment(paymentDTOS.get(1));
+        paymentMapper.insert(paymentDTOS.get(0));
+        paymentMapper.insert(paymentDTOS.get(1));
 
         payments = paymentMapper.selectAll();
-        paymentMapper.deletePayment(payments.get(0).getId());
+        paymentMapper.delete(payments.get(0).getId());
 
         payments = paymentMapper.selectAll();
         assertTrue("count = 1",

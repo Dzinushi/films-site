@@ -12,28 +12,28 @@
         <result property="time" column="time"/>
     </resultMap>
 
-    <select id="selectDataValidates" parameterType="map" resultMap="dataValidateDTO">
+    <select id="selects" parameterType="map" resultMap="dataValidateDTO">
         SELECT * FROM data_validates
         LIMIT #{0}
         OFFSET #{1}
     </select>
 
-    <select id="selectDataValidate" parameterType="map" resultMap="dataValidateDTO">
+    <select id="select" parameterType="map" resultMap="dataValidateDTO">
         SELECT * FROM data_validates
         WHERE
             id = #{0}
     </select>
 
-    <select id="selectDataValidateCount" parameterType="map" resultType="long">
+    <select id="selectsCount" parameterType="map" resultType="long">
         SELECT count(id) FROM data_validates
     </select>
 
-    <insert id="insertDataValidate" parameterType="com.mev.films.model.DataValidateDTO">
+    <insert id="insert" parameterType="com.mev.films.model.DataValidateDTO">
         INSERT INTO data_validates (field, store, time)
         VALUES (#{field}, #{store}, clock_timestamp())
     </insert>
 
-    <update id="updateDataValidate" parameterType="com.mev.films.model.DataValidateDTO">
+    <update id="update" parameterType="com.mev.films.model.DataValidateDTO">
         UPDATE data_validates
         SET
             store = #{store}
@@ -41,7 +41,7 @@
             id = #{id}
     </update>
 
-    <delete id="deleteDataValidate" parameterType="map">
+    <delete id="delete" parameterType="map">
         DELETE FROM data_validates
         WHERE
             id = #{0}

@@ -57,7 +57,7 @@ public class UserDiscountController {
 
     @RequestMapping(value = {"/admin/api/user_discounts"}, method = RequestMethod.PUT)
     public void updateUserDiscount(@RequestBody UserDiscountDTO userDiscountDTO) {
-        LOG.debug("updateUserDiscount: userDiscountDTO = {}",
+        LOG.debug("update: userDiscountDTO = {}",
                 userDiscountDTO);
 
         userDiscountService.updateUserDiscount(userDiscountDTO);
@@ -65,7 +65,7 @@ public class UserDiscountController {
 
     @RequestMapping(value = {"/admin/api/user_discounts"}, method = RequestMethod.DELETE)
     public void deleteUserDiscount(@RequestParam Long id) {
-        LOG.debug("deleteUserDiscount: id = {}",
+        LOG.debug("delete: id = {}",
                 id);
 
         userDiscountService.deleteUserDiscount(id);
@@ -73,7 +73,7 @@ public class UserDiscountController {
 
     @RequestMapping(value = {"/admin/api/user_discounts/discount"}, method = RequestMethod.DELETE)
     public void deleteUserDiscountByDiscount(@RequestParam Long discountId) {
-        LOG.debug("deleteUserDiscountByDiscount: discount_id = {}",
+        LOG.debug("deleteByDiscount: discount_id = {}",
                 discountId);
 
         userDiscountService.deleteUserDiscountByDiscount(discountId);
@@ -81,7 +81,7 @@ public class UserDiscountController {
 
     @RequestMapping(value = {"/admin/api/user_discounts/user"}, method = RequestMethod.DELETE)
     public void deleteUserDiscountByUser(@RequestParam Long userId) {
-        LOG.debug("deleteUserDiscountByUser: user_id = {}",
+        LOG.debug("deleteByUser: user_id = {}",
                 userId);
 
         userDiscountService.deleteUserDiscountByUser(userId);

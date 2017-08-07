@@ -12,32 +12,32 @@
         <result property="time" column="time"/>
     </resultMap>
 
-    <select id="selectDiscounts" resultMap="discountDTO">
+    <select id="selects" resultMap="discountDTO">
         SELECT * FROM
             discounts
     </select>
 
-    <select id="selectDiscount" parameterType="map" resultMap="discountDTO">
+    <select id="select" parameterType="map" resultMap="discountDTO">
         SELECT * FROM
             discounts
         WHERE
             id = #{0}
     </select>
 
-    <select id="selectDiscountByCode" parameterType="map" resultMap="discountDTO">
+    <select id="selectByCode" parameterType="map" resultMap="discountDTO">
         SELECT * FROM
             discounts
         WHERE
             code = #{0}
     </select>
 
-    <insert id="insertDiscount" parameterType="com.mev.films.model.DiscountDTO">
+    <insert id="insert" parameterType="com.mev.films.model.DiscountDTO">
         INSERT INTO
             discounts (code, value, time)
         VALUES (#{code}, #{value}, clock_timestamp())
     </insert>
 
-    <update id="updateDiscount" parameterType="com.mev.films.model.DiscountDTO">
+    <update id="update" parameterType="com.mev.films.model.DiscountDTO">
         UPDATE discounts SET
             code = #{code},
             value = #{value},
@@ -46,14 +46,14 @@
             id = #{id}
     </update>
 
-    <delete id="deleteDiscountByCode" parameterType="map">
+    <delete id="deleteByCode" parameterType="map">
         DELETE FROM
             discounts
         WHERE
             code = #{0}
     </delete>
 
-    <delete id="deleteDiscount" parameterType="map">
+    <delete id="delete" parameterType="map">
         DELETE FROM
             discounts
         WHERE
