@@ -94,12 +94,11 @@ public class BasketMapperTest {
 
     @Test
     public void selectBasketTest(){
+
         basketMapper.insertBasket(basketDTO1);
         basketMapper.insertBasket(basketDTO2);
 
-        Long count = basketMapper.selectBasketsCount();
-
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets(count, 0L);
+        List<BasketDTO> basketDTOS = basketMapper.selectAll();
         BasketDTO basketDTO = basketMapper.selectBasket(basketDTOS.get(1).getId());
         assertTrue("basketDTO2 = " + basketDTO2.toString(),
                 basketDTO.equals(basketDTOS.get(1)));
@@ -122,9 +121,7 @@ public class BasketMapperTest {
 
         basketMapper.insertBasket(basketDTO1);
 
-        Long count = basketMapper.selectBasketsCount();
-
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets(count, 0L);
+        List<BasketDTO> basketDTOS = basketMapper.selectAll();
         assertTrue("count = 1",
                 basketDTOS.size() == 1);
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
@@ -132,9 +129,7 @@ public class BasketMapperTest {
 
         basketMapper.insertBasket(basketDTO2);
 
-        count = basketMapper.selectBasketsCount();
-
-        basketDTOS = basketMapper.selectBaskets(count, 0L);
+        basketDTOS = basketMapper.selectAll();
         assertTrue("count = 2",
                 basketDTOS.size() == 2);
         assertTrue("basketDTO1 = " + basketDTO1.toString(),

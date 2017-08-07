@@ -15,6 +15,35 @@
         <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO" columnPrefix="dsc_" />
     </resultMap>
 
+    <select id="selectAll" resultMap="orderDTO">
+        SELECT
+            o.id AS id,
+            o.mark AS mark,
+            o.time AS time,
+            o.price_by_discount AS priceByDiscount,
+
+            b.id AS bsk_id,
+            u.id AS bsk_usr_id,
+            u.login AS bsk_usr_login,
+
+            f.id AS flm_id,
+            f.name AS flm_name,
+            f.genre AS flm_genre,
+            f.price AS flm_price,
+            f.duration AS flm_duration,
+            f.image AS flm_image,
+
+            d.id AS dsc_id,
+            d.code AS dsc_code,
+            d.value AS dsc_value
+        FROM
+            orders AS o
+            INNER JOIN baskets AS b ON o.basket_id = b.id
+            INNER JOIN users AS u ON b.user_id = u.id
+            INNER JOIN films AS f ON o.film_id = f.id
+            LEFT JOIN discounts AS d ON o.discount_id = d.id
+    </select>
+
     <select id="selectOrders" resultType="map" resultMap="orderDTO">
         SELECT
             o.id AS id,

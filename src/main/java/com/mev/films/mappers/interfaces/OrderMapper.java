@@ -5,6 +5,7 @@ import com.mev.films.model.OrderDTO;
 import java.util.List;
 
 public interface OrderMapper {
+    List<OrderDTO> selectAll();
     List<OrderDTO> selectOrders(Long limit, Long offset);
     Long selectOrdersCount();
     OrderDTO selectOrder(Long id);

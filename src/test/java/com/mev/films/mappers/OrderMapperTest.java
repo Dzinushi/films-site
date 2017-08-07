@@ -52,9 +52,7 @@ public class OrderMapperTest {
     @Before
     public void setup(){
 
-        Long count = orderMapper.selectOrdersCount();
-
-        List<OrderDTO> orderDTOS = orderMapper.selectOrders(count, 0L);
+        List<OrderDTO> orderDTOS = orderMapper.selectAll();
         for (OrderDTO orderDTO : orderDTOS){
             orderMapper.deleteOrder(orderDTO.getId());
         }
@@ -102,8 +100,7 @@ public class OrderMapperTest {
         basketMapper.insertBasket(basketDTO2);
         basketMapper.insertBasket(basketDTO3);
 
-        count = basketMapper.selectBasketsCount();
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets(count, 0L);
+        List<BasketDTO> basketDTOS = basketMapper.selectAll();
 
         orderDTO1 = new OrderDTO(basketDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), false);
         orderDTO2 = new OrderDTO(basketDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1), false);
@@ -136,9 +133,13 @@ public class OrderMapperTest {
     @Test
     public void selectOrdersCountTest(){
 
+        Long count = orderMapper.selectOrdersCount();
+        assertTrue("count = 0",
+                count == 0);
+
         orderMapper.insertOrder(orderDTO1);
 
-        Long count = orderMapper.selectOrdersCount();
+        count = orderMapper.selectOrdersCount();
         assertTrue("count = 1",
                 count == 1);
 
@@ -157,12 +158,10 @@ public class OrderMapperTest {
         orderMapper.insertOrder(orderDTO3);
         orderMapper.insertOrder(orderDTO2);
 
-        Long count = orderMapper.selectOrdersCount();
-
-        List<OrderDTO> orderDTOS = orderMapper.selectOrders(count, 0L);
+        List<OrderDTO> orderDTOS = orderMapper.selectAll();
         OrderDTO orderDTO = orderMapper.selectOrder(orderDTOS.get(1).getId());
-        assertTrue("orderDTO2 = " + orderDTO2.toString(),
-                orderDTO.equals(orderDTO2));
+        assertTrue("orderDTO3 = " + orderDTO3.toString(),
+                orderDTO.equals(orderDTO3));
     }
 
     @Test
@@ -187,9 +186,7 @@ public class OrderMapperTest {
 
         orderMapper.insertOrder(orderDTO1);
 
-        Long count = orderMapper.selectOrdersCount();
-
-        List<OrderDTO> orderDTOS = orderMapper.selectOrders(count, 0L);
+        List<OrderDTO> orderDTOS = orderMapper.selectAll();
         assertTrue("count = 1",
                 orderDTOS.size() == 1);
         assertTrue("orderDTO1 = " + orderDTO1.toString(),
@@ -197,9 +194,7 @@ public class OrderMapperTest {
 
         orderMapper.insertOrder(orderDTO2);
 
-        count = orderMapper.selectOrdersCount();
-
-        orderDTOS = orderMapper.selectOrders(count, 0L);
+        orderDTOS = orderMapper.selectAll();
         assertTrue("count = 2",
                 orderDTOS.size() == 2);
         assertTrue("orderDTO1 = " + orderDTO1.toString(),
@@ -214,12 +209,10 @@ public class OrderMapperTest {
         // add 1 and delete 1
         orderMapper.insertOrder(orderDTO1);
 
-        Long count = orderMapper.selectOrdersCount();
-
-        List<OrderDTO> orderDTOS = orderMapper.selectOrders(count, 0L);
+        List<OrderDTO> orderDTOS = orderMapper.selectAll();
         orderMapper.deleteOrder(orderDTOS.get(0).getId());
 
-        count = orderMapper.selectOrdersCount();
+        Long count = orderMapper.selectOrdersCount();
         assertTrue("count = 0",
                 count == 0);
 
@@ -227,9 +220,7 @@ public class OrderMapperTest {
         orderMapper.insertOrder(orderDTO1);
         orderMapper.insertOrder(orderDTO2);
 
-        count = orderMapper.selectOrdersCount();
-
-        orderDTOS = orderMapper.selectOrders(count, 0L);
+        orderDTOS = orderMapper.selectAll();
         orderMapper.deleteOrder(orderDTOS.get(0).getId());
         orderMapper.deleteOrder(orderDTOS.get(1).getId());
 
@@ -241,14 +232,10 @@ public class OrderMapperTest {
         orderMapper.insertOrder(orderDTO1);
         orderMapper.insertOrder(orderDTO2);
 
-        count = orderMapper.selectOrdersCount();
-
-        orderDTOS = orderMapper.selectOrders(count, 0L);
+        orderDTOS = orderMapper.selectAll();
         orderMapper.deleteOrder(orderDTOS.get(0).getId());
 
-        count = orderMapper.selectOrdersCount();
-
-        orderDTOS = orderMapper.selectOrders(count, 0L);
+        orderDTOS = orderMapper.selectAll();
         assertTrue("count = 1",
                 orderDTOS.size() == 1);
         assertTrue("orderDTO2 = " + orderDTO2.toString(),
@@ -261,12 +248,10 @@ public class OrderMapperTest {
         // add 1 and delete 1
         orderMapper.insertOrder(orderDTO1);
 
-        Long count = orderMapper.selectOrdersCount();
-
-        List<OrderDTO> orderDTOS = orderMapper.selectOrders(count, 0L);
+        List<OrderDTO> orderDTOS = orderMapper.selectAll();
         orderMapper.deleteOrderByBasket(orderDTOS.get(0).getBasketDTO().getId());
 
-        count = orderMapper.selectOrdersCount();
+        Long count = orderMapper.selectOrdersCount();
         assertTrue("count = 0",
                 count == 0);
 
@@ -274,9 +259,7 @@ public class OrderMapperTest {
         orderMapper.insertOrder(orderDTO1);
         orderMapper.insertOrder(orderDTO2);
 
-        count = orderMapper.selectOrdersCount();
-
-        orderDTOS = orderMapper.selectOrders(count, 0L);
+        orderDTOS = orderMapper.selectAll();
         orderMapper.deleteOrderByBasket(orderDTOS.get(0).getBasketDTO().getId());
         orderMapper.deleteOrderByBasket(orderDTOS.get(1).getBasketDTO().getId());
 
@@ -288,14 +271,10 @@ public class OrderMapperTest {
         orderMapper.insertOrder(orderDTO1);
         orderMapper.insertOrder(orderDTO2);
 
-        count = orderMapper.selectOrdersCount();
-
-        orderDTOS = orderMapper.selectOrders(count, 0L);
+        orderDTOS = orderMapper.selectAll();
         orderMapper.deleteOrderByBasket(orderDTOS.get(0).getBasketDTO().getId());
 
-        count = orderMapper.selectOrdersCount();
-
-        orderDTOS = orderMapper.selectOrders(count, 0L);
+        orderDTOS = orderMapper.selectAll();
         assertTrue("count = 1",
                 orderDTOS.size() == 1);
         assertTrue("orderDTO2 = " + orderDTO2.toString(),

@@ -21,6 +21,32 @@
         <result property="totalOrdersPrice" column="totalOrdersPrice"/>
     </resultMap>
 
+    <select id="selectAll" resultMap="paymentDTO">
+        SELECT
+            p.id AS id,
+            p.time AS time,
+            p.total_price AS totalPrice,
+
+            p.user_id AS usr_id,
+            u.login AS usr_login,
+
+            p.film_id AS flm_id,
+            f.name AS flm_name,
+            f.genre AS flm_genre,
+            f.duration AS flm_duration,
+            f.price AS flm_price,
+            f.image AS flm_image,
+
+            p.discount_id AS dsc_id,
+            d.code AS dsc_code,
+            d.value AS dsc_value
+        FROM
+            payments AS p
+            INNER JOIN users AS u ON p.user_id = u.id
+            INNER JOIN films AS f ON p.film_id = f.id
+            LEFT JOIN discounts AS d ON p.discount_id = d.id
+    </select>
+
     <select id="selectPayments" parameterType="map" resultMap="paymentDTO">
         SELECT
             p.id AS id,
