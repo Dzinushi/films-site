@@ -98,6 +98,75 @@ public class OrderServiceTest {
 
     @Test
     public void getOrdersTest(){
+
+        expect(orderMapperMock.selectOrders(2L, 1L)).andStubAnswer(new IAnswer<List<OrderDTO>>() {
+            @Override
+            public List<OrderDTO> answer() throws Throwable {
+                List<OrderDTO> orderDTOS = new ArrayList<>();
+                orderDTOS.add(orderDTO2);
+                orderDTOS.add(orderDTO3);
+                return orderDTOS;
+            }
+        });
+
+        replay(orderMapperMock);
+
+        List<OrderDTO> orderDTOS = orderService.getOrders(2L, 1L);
+        assertTrue("count = 2",
+                orderDTOS.size() == 2);
+        assertTrue("orderDTO1 = " + orderDTO2.toString(),
+                orderDTOS.get(0).equals(orderDTO2));
+        assertTrue("orderDTO2 = " + orderDTO3.toString(),
+                orderDTOS.get(1).equals(orderDTO3));
+
+        // check number null
+        try{
+            orderService.getOrders(null, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number < 0
+        try{
+            orderService.getOrders(-7L, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = -7",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number > 100
+        try{
+            orderService.getOrders(101L, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_NUMBER_VALUE_MORE_THAN_100).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 101",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_NUMBER_VALUE_MORE_THAN_100).getMessage()));
+        }
+
+        // check from null
+        try{
+            orderService.getOrders(2L, null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_WRONG_FROM_PROVIDED).getMessage()));
+        }
+
+        // check from < 0
+        try{
+            orderService.getOrders(2L, -6L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = -6",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.ORDER_ERROR_WRONG_FROM_PROVIDED).getMessage()));
+        }
+    }
+
+    @Test
+    public void getOrdersCountTest(){
     }
 
     @Test

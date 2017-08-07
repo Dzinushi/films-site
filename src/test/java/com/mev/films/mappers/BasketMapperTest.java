@@ -33,7 +33,7 @@ public class BasketMapperTest {
     @Before
     public void setup(){
 
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
+        List<BasketDTO> basketDTOS = basketMapper.selectAll();
         for (BasketDTO basketDTO : basketDTOS){
             basketMapper.deleteBasket(basketDTO.getId());
         }
@@ -61,13 +61,35 @@ public class BasketMapperTest {
         basketMapper.insertBasket(basketDTO1);
         basketMapper.insertBasket(basketDTO2);
 
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
-        assertTrue("count = 2",
-                basketDTOS.size() == 2);
+        List<BasketDTO> basketDTOS = basketMapper.selectBaskets(1L, 0L);
+        assertTrue("count = 1",
+                basketDTOS.size() == 1);
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
                 basketDTOS.get(0).equals(basketDTO1));
+
+        basketDTOS = basketMapper.selectBaskets(1L, 1L);
+        assertTrue("count = 1",
+                basketDTOS.size() == 1);
         assertTrue("basketDTO2 = " + basketDTO2.toString(),
-                basketDTOS.get(1).equals(basketDTO2));
+                basketDTOS.get(0).equals(basketDTO2));
+    }
+
+    @Test
+    public void selectBasketsCountTest(){
+
+        Long count = basketMapper.selectBasketsCount();
+        assertTrue("count = 0",
+                count == 0);
+
+        basketMapper.insertBasket(basketDTO2);
+        count = basketMapper.selectBasketsCount();
+        assertTrue("count = 1",
+                count == 1);
+
+        basketMapper.insertBasket(basketDTO1);
+        count = basketMapper.selectBasketsCount();
+        assertTrue("count = 2",
+                count == 2);
     }
 
     @Test
@@ -75,7 +97,9 @@ public class BasketMapperTest {
         basketMapper.insertBasket(basketDTO1);
         basketMapper.insertBasket(basketDTO2);
 
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
+        Long count = basketMapper.selectBasketsCount();
+
+        List<BasketDTO> basketDTOS = basketMapper.selectBaskets(count, 0L);
         BasketDTO basketDTO = basketMapper.selectBasket(basketDTOS.get(1).getId());
         assertTrue("basketDTO2 = " + basketDTO2.toString(),
                 basketDTO.equals(basketDTOS.get(1)));
@@ -98,7 +122,9 @@ public class BasketMapperTest {
 
         basketMapper.insertBasket(basketDTO1);
 
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
+        Long count = basketMapper.selectBasketsCount();
+
+        List<BasketDTO> basketDTOS = basketMapper.selectBaskets(count, 0L);
         assertTrue("count = 1",
                 basketDTOS.size() == 1);
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
@@ -106,7 +132,9 @@ public class BasketMapperTest {
 
         basketMapper.insertBasket(basketDTO2);
 
-        basketDTOS = basketMapper.selectBaskets();
+        count = basketMapper.selectBasketsCount();
+
+        basketDTOS = basketMapper.selectBaskets(count, 0L);
         assertTrue("count = 2",
                 basketDTOS.size() == 2);
         assertTrue("basketDTO1 = " + basketDTO1.toString(),
@@ -121,33 +149,35 @@ public class BasketMapperTest {
         // insert 1 delete 1
         basketMapper.insertBasket(basketDTO1);
 
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
+        List<BasketDTO> basketDTOS = basketMapper.selectAll();
         basketMapper.deleteBasket(basketDTOS.get(0).getId());
 
-        basketDTOS = basketMapper.selectBaskets();
+        Long count = basketMapper.selectBasketsCount();
+        System.out.println("count = " + count);
         assertTrue("count = 0",
-                basketDTOS.size() == 0);
+                count == 0);
 
         // insert 2 delete 2
         basketMapper.insertBasket(basketDTO1);
         basketMapper.insertBasket(basketDTO2);
 
-        basketDTOS = basketMapper.selectBaskets();
+        basketDTOS = basketMapper.selectAll();
         basketMapper.deleteBasket(basketDTOS.get(0).getId());
         basketMapper.deleteBasket(basketDTOS.get(1).getId());
 
-        basketDTOS = basketMapper.selectBaskets();
+        count = basketMapper.selectBasketsCount();
+        System.out.println("count = " + count);
         assertTrue("count = 0",
-                basketDTOS.size() == 0);
+                count == 0);
 
         // insert 2 delete 1
         basketMapper.insertBasket(basketDTO1);
         basketMapper.insertBasket(basketDTO2);
 
-        basketDTOS = basketMapper.selectBaskets();
+        basketDTOS = basketMapper.selectAll();
         basketMapper.deleteBasket(basketDTOS.get(0).getId());
 
-        basketDTOS = basketMapper.selectBaskets();
+        basketDTOS = basketMapper.selectAll();
         assertTrue("count = 1",
                 basketDTOS.size() == 1);
         assertTrue("basketDTO2 = " + basketDTO2.toString(),
@@ -160,33 +190,33 @@ public class BasketMapperTest {
         // insert 1 delete 1
         basketMapper.insertBasket(basketDTO1);
 
-        List<BasketDTO> basketDTOS = basketMapper.selectBaskets();
+        List<BasketDTO> basketDTOS = basketMapper.selectAll();
         basketMapper.deleteBasketByUser(basketDTOS.get(0).getUserDTO().getId());
 
-        basketDTOS = basketMapper.selectBaskets();
+        Long count = basketMapper.selectBasketsCount();
         assertTrue("count = 0",
-                basketDTOS.size() == 0);
+                count == 0);
 
         // insert 2 delete 2
         basketMapper.insertBasket(basketDTO1);
         basketMapper.insertBasket(basketDTO2);
 
-        basketDTOS = basketMapper.selectBaskets();
+        basketDTOS = basketMapper.selectAll();
         basketMapper.deleteBasketByUser(basketDTOS.get(0).getUserDTO().getId());
         basketMapper.deleteBasketByUser(basketDTOS.get(1).getUserDTO().getId());
 
-        basketDTOS = basketMapper.selectBaskets();
+        count = basketMapper.selectBasketsCount();
         assertTrue("count = 0",
-                basketDTOS.size() == 0);
+                count == 0);
 
         // insert 2 delete 1
         basketMapper.insertBasket(basketDTO1);
         basketMapper.insertBasket(basketDTO2);
 
-        basketDTOS = basketMapper.selectBaskets();
+        basketDTOS = basketMapper.selectAll();
         basketMapper.deleteBasketByUser(basketDTOS.get(0).getUserDTO().getId());
 
-        basketDTOS = basketMapper.selectBaskets();
+        basketDTOS = basketMapper.selectAll();
         assertTrue("count = 1",
                 basketDTOS.size() == 1);
         assertTrue("basketDTO2 = " + basketDTO2.toString(),

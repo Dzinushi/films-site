@@ -18,11 +18,21 @@ public class OrderController {
 
     // for admin
     @RequestMapping(value = {"/admin/api/orders"}, method = RequestMethod.GET)
-    public List<OrderDTO> getOrders(){
+    public List<OrderDTO> getOrders(@RequestParam Long number,
+                                    @RequestParam Long from){
 
-        LOG.debug("getOrders");
+        LOG.debug("getOrders: number = {}, from = {}",
+                number, from);
 
-        return orderService.getOrders();
+        return orderService.getOrders(number, from);
+    }
+
+    @RequestMapping(value = {"/admin/api/orders/count"}, method = RequestMethod.GET)
+    public Long getOrdersCount(){
+
+        LOG.debug("getOrdersCount");
+
+        return orderService.getOrdersCount();
     }
 
     @RequestMapping(value = {"/admin/api/order"}, method = RequestMethod.GET)

@@ -27,12 +27,18 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         // UserRoleService
         USER_ROLE_ERROR_NULL_POINTER_EXCEPTION,
         USER_ROLE_ERROR_WRONG_ID_PROVIDED,
+        USER_ROLE_ERROR_WRONG_NUMBER_PROVIDED,
+        USER_ROLE_ERROR_NUMBER_VALUE_MORE_THAN_100,
+        USER_ROLE_ERROR_WRONG_FROM_PROVIDED,
         USER_ROLE_ERROR_WRONG_LOGIN_PROVIDED,
         USER_ROLE_ERROR_WRONG_ROLE,
 
         // UserService
         USER_ERROR_NULL_POINTER_EXCEPTION,
         USER_ERROR_WRONG_ID_PROVIDED,
+        USER_ERROR_WRONG_NUMBER_PROVIDED,
+        USER_ERROR_NUMBER_VALUE_MORE_THAN_100,
+        USER_ERROR_WRONG_FROM_PROVIDED,
         USER_ERROR_WRONG_LOGIN_PROVIDED,
         USER_ERROR_WRONG_PASSWORD_PROVIDED,
         USER_ERROR_WRONG_ENABLE_PROVIDED,
@@ -40,12 +46,18 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         // DiscountService
         DISCOUNT_ERROR_NULL_POINTER_EXCEPTION,
         DISCOUNT_ERROR_WRONG_ID_PROVIDED,
+        DISCOUNT_ERROR_WRONG_NUMBER_PROVIDED,
+        DISCOUNT_ERROR_NUMBER_VALUE_MORE_THAN_100,
+        DISCOUNT_ERROR_WRONG_FROM_PROVIDED,
         DISCOUNT_ERROR_WRONG_CODE_PROVIDED,
         DISCOUNT_ERROR_WRONG_VALUE_PROVIDED,
 
         // FilmService
         FILM_ERROR_NULL_POINTER_EXCEPTION,
         FILM_ERROR_WRONG_ID_PROVIDED,
+        FILM_ERROR_WRONG_NUMBER_PROVIDED,
+        FILM_ERROR_NUMBER_VALUE_MORE_THAN_1O0,
+        FILM_ERROR_WRONG_FROM_PROVIDED,
         FILM_ERROR_WRONG_NAME_PROVIDED,
         FILM_ERROR_WRONG_GENRE_PROVIDED,
         FILM_ERROR_WRONG_DURATION_PROVIDED,
@@ -54,6 +66,9 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
         // UserDiscountService
         USER_DISCOUNT_ERROR_NULL_POINTER_EXCEPTION,
+        USER_DISCOUNT_WRONG_NUMBER_PROVIDED,
+        USER_DISCOUNT_NUMBER_VALUE_MORE_THAN_100,
+        USER_DISCOUNT_WRONG_FROM_PROVIDED,
         USER_DISCOUNT_ERROR_USER_NULL_POINTER_EXCEPTION,
         USER_DISCOUNT_ERROR_DISCOUNT_NULL_POINTER_EXCEPTION,
         USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED,
@@ -68,6 +83,9 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         // OrderService
         ORDER_ERROR_NULL_POINTER_EXCEPTION,
         ORDER_ERROR_WRONG_ID_PROVIDED,
+        ORDER_ERROR_WRONG_NUMBER_PROVIDED,
+        ORDER_ERROR_NUMBER_VALUE_MORE_THAN_100,
+        ORDER_ERROR_WRONG_FROM_PROVIDED,
         ORDER_ERROR_BASKET_NULL_POINTER_EXCEPTION,
         ORDER_ERROR_BASKET_WRONG_ID_PROVIDED,
         ORDER_ERROR_USER_NULL_POINTER_EXCEPTION,
@@ -84,13 +102,16 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
         // BasketService
         BASKET_ERROR_WRONG_ID_PROVIDED,
+        BASKET_ERROR_WRONG_NUMBER_PROVIDED,
+        BASKET_ERROR_NUMBER_VALUE_MORE_THAN_100,
+        BASKET_ERROR_WRONG_FROM_PROVIDED,
         BASKET_ERROR_USER_WRONG_ID_PROVIDED,
 
         // PaymentService need to update
         PAYMENT_ERROR_WRONG_ID_PROVIDED,
         PAYMENT_ERROR_WRONG_NUMBER_PROVIDED,
         PAYMENT_ERROR_NUMBER_VALUE_MORE_THAN_100,
-        PAYMENT_ERROR_FROM_WRONG_PROVIDED,
+        PAYMENT_ERROR_WRONG_FROM_PROVIDED,
         PAYMENT_ERROR_USER_NULL_POINTER_EXCEPTION,
         PAYMENT_ERROR_USER_WRONG_ID_PROVIDED,
         PAYMENT_ERROR_BASKET_NULL_POINTER_EXCEPTION,
@@ -156,6 +177,22 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
     }
 
     @Override
+    public void checkUserRolesNumberFrom(Long number, Long from) {
+        LOG.debug("checkUserRolesNumberFrom: number = {}, from = {}",
+                number, from);
+
+        if (number == null || number < 0){
+            throw new ExceptionServiceImpl(Errors.USER_ROLE_ERROR_WRONG_NUMBER_PROVIDED);
+        } else if (number > 100){
+            throw new ExceptionServiceImpl(Errors.USER_ROLE_ERROR_NUMBER_VALUE_MORE_THAN_100);
+        }
+
+        if (from == null || from < 0){
+            throw new ExceptionServiceImpl(Errors.USER_ROLE_ERROR_WRONG_FROM_PROVIDED);
+        }
+    }
+
+    @Override
     public void checkUserRoleLogin(String login) {
         LOG.debug("checkUserRoleLogin: user_role_login = {}",
                 login);
@@ -216,6 +253,22 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
     }
 
     @Override
+    public void checkUserNumberFrom(Long number, Long from) {
+        LOG.debug("checkUserNumberFrom: number = {}, from = {}",
+                number, from);
+
+        if (number == null || number < 1){
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_NUMBER_PROVIDED);
+        } else if (number > 100){
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_NUMBER_VALUE_MORE_THAN_100);
+        }
+
+        if (from == null || from < 0){
+            throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_FROM_PROVIDED);
+        }
+    }
+
+    @Override
     public void checkUserLogin(String login) {
         LOG.debug("checkUserLogin: user_login = {}",
                 login);
@@ -270,6 +323,22 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
     }
 
     @Override
+    public void checkDiscountNumberFrom(Long number, Long from) {
+        LOG.debug("checkDiscountNumberFrom: number = {}, from = {}",
+                number, from);
+
+        if (number == null || number < 1){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_NUMBER_PROVIDED);
+        } else if (number > 100){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_NUMBER_VALUE_MORE_THAN_100);
+        }
+
+        if (from == null || from < 0){
+            throw new ExceptionServiceImpl(Errors.DISCOUNT_ERROR_WRONG_FROM_PROVIDED);
+        }
+    }
+
+    @Override
     public void checkDiscountCode(String code) {
         LOG.debug("checkDiscountCode: discount_code = {}",
                 code);
@@ -320,6 +389,22 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
         if (id == null || id < 0){
             throw new ExceptionServiceImpl(Errors.FILM_ERROR_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkFilmNumberFrom(Long number, Long from) {
+        LOG.debug("checkFilmNumberFrom: number = {}, from = {}",
+                number, from);
+
+        if (number == null || number < 1){
+            throw new ExceptionServiceImpl(Errors.FILM_ERROR_WRONG_NUMBER_PROVIDED);
+        } else if (number > 100){
+            throw new ExceptionServiceImpl(Errors.FILM_ERROR_NUMBER_VALUE_MORE_THAN_1O0);
+        }
+
+        if (from == null || from < 0){
+            throw new ExceptionServiceImpl(Errors.FILM_ERROR_WRONG_FROM_PROVIDED);
         }
     }
 
@@ -414,6 +499,22 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
         if (id == null || id < 0){
             throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_ERROR_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkUserDiscountNumberFrom(Long number, Long from) {
+        LOG.debug("checkUserDiscountNumberFrom: number = {}, from = {}",
+                number, from);
+
+        if (number == null || number < 1){
+            throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_WRONG_NUMBER_PROVIDED);
+        } else if (number > 100){
+            throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_NUMBER_VALUE_MORE_THAN_100);
+        }
+
+        if (from == null || from < 0){
+            throw new ExceptionServiceImpl(Errors.USER_DISCOUNT_WRONG_FROM_PROVIDED);
         }
     }
 
@@ -540,6 +641,22 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
     }
 
     @Override
+    public void checkOrderNumberFrom(Long number, Long from) {
+        LOG.debug("checkOrderNumberFrom: number = {}, from = {}",
+                number, from);
+
+        if (number == null || number < 1) {
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_WRONG_NUMBER_PROVIDED);
+        } else if (number > 100){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_NUMBER_VALUE_MORE_THAN_100);
+        }
+
+        if (from == null || from < 0){
+            throw new ExceptionServiceImpl(Errors.ORDER_ERROR_WRONG_FROM_PROVIDED);
+        }
+    }
+
+    @Override
     public void checkOrderBasketId(Long basketId) {
         LOG.debug("checkOrderBasketId: order_basket_id = {}",
                 basketId);
@@ -618,6 +735,22 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
     }
 
     @Override
+    public void checkBasketNumberFrom(Long number, Long from) {
+        LOG.debug("checkBasketNumberFrom: number = {}, from = {}",
+                number, from);
+
+        if (number == null || number < 1){
+            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_WRONG_NUMBER_PROVIDED);
+        } else if (number > 100){
+            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_NUMBER_VALUE_MORE_THAN_100);
+        }
+
+        if (from == null || from < 0){
+            throw new ExceptionServiceImpl(Errors.BASKET_ERROR_WRONG_FROM_PROVIDED);
+        }
+    }
+
+    @Override
     public void checkBasketUserId(Long userId) {
         LOG.debug("checkBasketUserId: basket_user_id = {}",
                 userId);
@@ -664,14 +797,14 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         LOG.debug("checkPaymentLimitOffset: number = {}, from = {}",
                 number, from);
 
-        if (number == null || number < 0){
+        if (number == null || number < 1){
             throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_WRONG_NUMBER_PROVIDED);
         } else if (number > 100){
             throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_NUMBER_VALUE_MORE_THAN_100);
         }
 
         if (from == null || from < 0){
-            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_FROM_WRONG_PROVIDED);
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_WRONG_FROM_PROVIDED);
         }
     }
 

@@ -6,7 +6,8 @@ import com.mev.films.model.UserDTO;
 import java.util.List;
 
 public interface OrderService {
-    List<OrderDTO> getOrders();
+    List<OrderDTO> getOrders(Long number, Long from);
+    Long getOrdersCount();
     OrderDTO getOrder(Long id);
     List<OrderDTO> getOrderByBasket(Long basketId);
     List<OrderDTO> getOrderByBasketIsMark(Long basketId);

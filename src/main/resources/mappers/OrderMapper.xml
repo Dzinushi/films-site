@@ -15,7 +15,7 @@
         <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO" columnPrefix="dsc_" />
     </resultMap>
 
-    <select id="selectOrders" resultMap="orderDTO">
+    <select id="selectOrders" resultType="map" resultMap="orderDTO">
         SELECT
             o.id AS id,
             o.mark AS mark,
@@ -42,6 +42,12 @@
             INNER JOIN users AS u ON b.user_id = u.id
             INNER JOIN films AS f ON o.film_id = f.id
             LEFT JOIN discounts AS d ON o.discount_id = d.id
+        LIMIT #{0}
+        OFFSET #{1}
+    </select>
+
+    <select id="selectOrdersCount" resultType="long">
+        SELECT count(id) FROM orders
     </select>
 
     <select id="selectOrder" parameterType="map" resultMap="orderDTO">

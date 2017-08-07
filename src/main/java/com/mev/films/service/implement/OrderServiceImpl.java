@@ -47,18 +47,20 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public List<OrderDTO> getOrders() {
+    public List<OrderDTO> getOrders(Long number, Long from) {
+        LOG.debug("getOrders: number = {}, from = {}",
+                number, from);
 
-        LOG.debug("getOrders:");
+        exceptionService.checkOrderNumberFrom(number, from);
 
-        List<OrderDTO> orderDTOS = orderMapper.selectOrders();
-        if (orderDTOS != null){
-            for (OrderDTO orderDTO : orderDTOS){
-                priceByDiscount(orderDTO);
-            }
-        }
+        return orderMapper.selectOrders(number, from);
+    }
 
-        return orderDTOS;
+    @Override
+    public Long getOrdersCount() {
+        LOG.debug("getOrdersCount");
+
+        return orderMapper.selectOrdersCount();
     }
 
     @Override

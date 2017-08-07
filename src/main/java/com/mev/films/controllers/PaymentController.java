@@ -19,7 +19,8 @@ public class PaymentController {
 
     // for admin
     @RequestMapping(value = "/admin/api/payments", method = RequestMethod.GET)
-    public List<PaymentDTO> getPaymentsDTO(@RequestParam Long number, Long from) {
+    public List<PaymentDTO> getPaymentsDTO(@RequestParam Long number,
+                                           @RequestParam Long from) {
         LOG.debug("getPayments: number = {}, from = {}");
 
         return paymentService.getPayments(number, from);

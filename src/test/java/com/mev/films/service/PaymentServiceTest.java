@@ -174,19 +174,19 @@ public class PaymentServiceTest {
         // check from null
         try{
             paymentService.getPayments(2L, null);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_FROM_WRONG_PROVIDED).getMessage());
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_WRONG_FROM_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("from = null",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_FROM_WRONG_PROVIDED).getMessage()));
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_WRONG_FROM_PROVIDED).getMessage()));
         }
 
         // check from < 0
         try{
             paymentService.getPayments(2L, -5L);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_FROM_WRONG_PROVIDED).getMessage());
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_WRONG_FROM_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("from = -5",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_FROM_WRONG_PROVIDED).getMessage()));
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_WRONG_FROM_PROVIDED).getMessage()));
         }
     }
 

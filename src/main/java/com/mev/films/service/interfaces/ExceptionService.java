@@ -6,24 +6,28 @@ public interface ExceptionService {
 
     // UserRoleService
     void checkUserRoleId(Long id);
+    void checkUserRolesNumberFrom(Long number, Long from);
     void checkUserRoleLogin(String login);
     void checkUserRoleWithoutId(UserRoleDTO userRoleDTO);
     void checkUserRole(UserRoleDTO userRoleDTO);
 
     // UserService
     void checkUserId(Long id);
+    void checkUserNumberFrom(Long number, Long from);
     void checkUserLogin(String login);
     void checkUserWithoutId(UserDTO userDTO);
     void checkUser(UserDTO userDTO);
 
     // DiscountService
     void checkDiscountId(Long id);
+    void checkDiscountNumberFrom(Long number, Long from);
     void checkDiscountCode(String code);
     void checkDiscountWithoutId(DiscountDTO discountDTO);
     void checkDiscount(DiscountDTO discountDTO);
 
     // FilmService
     void checkFilmId(Long id);
+    void checkFilmNumberFrom(Long number, Long from);
     void checkFilmName(String name);
     void checkFilmImage(String image);
     void checkFilmWithoutId(FilmDTO filmDTO);
@@ -31,6 +35,7 @@ public interface ExceptionService {
 
     // UserDiscountService
     void checkUserDiscountId(Long id);
+    void checkUserDiscountNumberFrom(Long number, Long from);
     void checkUserDiscountUserId(Long userId);
     void checkUserDiscountDiscountId(Long discountId);
     void checkUserDiscountWithoutId(UserDiscountDTO userDiscountDTO);
@@ -38,11 +43,13 @@ public interface ExceptionService {
 
     // OrderService
     void checkOrderId(Long id);
+    void checkOrderNumberFrom(Long number, Long from);
     void checkOrderBasketId(Long userId);
     void checkOrderWithoutId(OrderDTO orderDTO);
 
     // BasketService
     void checkBasketId(Long id);
+    void checkBasketNumberFrom(Long number, Long from);
     void checkBasketUserId(Long userId);
 //    void checkBasketWithoutId(BasketDTO basketDTO);
 

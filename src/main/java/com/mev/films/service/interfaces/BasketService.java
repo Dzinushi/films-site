@@ -6,7 +6,8 @@ import com.mev.films.model.BasketDTO;
 import java.util.List;
 
 public interface BasketService {
-    List<BasketDTO> getBaskets();
+    List<BasketDTO> getBaskets(Long number, Long from);
+    Long getBasketsCount();
     BasketDTO getBasket(Long id);
     BasketDTO getBasketByUser(Long userId);
 //    void addBasket(BasketDTO basketDTO);

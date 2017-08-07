@@ -5,12 +5,16 @@ import com.mev.films.mappers.interfaces.*;
 import com.mev.films.model.*;
 import com.mev.films.service.implement.*;
 import com.mev.films.service.interfaces.*;
+import org.easymock.IAnswer;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
@@ -57,6 +61,75 @@ public class BasketServiceTest {
 
     @Test
     public void getBasketsTest(){
+
+        expect(basketMapperMock.selectBaskets(2L, 0L)).andStubAnswer(new IAnswer<List<BasketDTO>>() {
+            @Override
+            public List<BasketDTO> answer() throws Throwable {
+                List<BasketDTO> basketDTOS = new ArrayList<>();
+                basketDTOS.add(basketDTO1);
+                basketDTOS.add(basketDTO2);
+                return basketDTOS;
+            }
+        });
+
+        replay(basketMapperMock);
+
+        List<BasketDTO> basketDTOS = basketService.getBaskets(2L, 0L);
+        assertTrue("count = 2",
+                basketDTOS.size() == 2);
+        assertTrue("basketDTO1 = " + basketDTO1.toString(),
+                basketDTOS.get(0).equals(basketDTO1));
+        assertTrue("basketDTO2 = " + basketDTO2.toString(),
+                basketDTOS.get(1).equals(basketDTO2));
+
+        // check number null
+        try {
+            basketService.getBaskets(null, 0L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.BASKET_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.BASKET_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number < 1
+        try {
+            basketService.getBaskets(0L, 0L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.BASKET_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 0",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.BASKET_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number > 100
+        try {
+            basketService.getBaskets(101L, 0L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.BASKET_ERROR_NUMBER_VALUE_MORE_THAN_100).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 101",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.BASKET_ERROR_NUMBER_VALUE_MORE_THAN_100).getMessage()));
+        }
+
+        // check from null
+        try {
+            basketService.getBaskets(2L, null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.BASKET_ERROR_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 101",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.BASKET_ERROR_WRONG_FROM_PROVIDED).getMessage()));
+        }
+
+        // check from < 0
+        try {
+            basketService.getBaskets(2L, -1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.BASKET_ERROR_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = -1",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.BASKET_ERROR_WRONG_FROM_PROVIDED).getMessage()));
+        }
+    }
+
+    @Test
+    public void getBasketsCountTest(){
     }
 
     @Test

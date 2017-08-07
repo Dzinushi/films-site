@@ -5,7 +5,9 @@ import com.mev.films.model.BasketDTO;
 import java.util.List;
 
 public interface BasketMapper {
-    List<BasketDTO> selectBaskets();
+    List<BasketDTO> selectAll();
+    List<BasketDTO> selectBaskets(Long limit, Long offset);
+    Long selectBasketsCount();
     BasketDTO selectBasket(Long id);
     BasketDTO selectBasketByUser(Long id);
     void insertBasket(BasketDTO basketDTO);

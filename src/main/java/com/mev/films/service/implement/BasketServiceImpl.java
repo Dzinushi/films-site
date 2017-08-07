@@ -33,10 +33,20 @@ public class BasketServiceImpl implements BasketService{
     }
 
     @Override
-    public List<BasketDTO> getBaskets() {
-        LOG.debug("getBaskets");
+    public List<BasketDTO> getBaskets(Long number, Long from) {
+        LOG.debug("getBaskets: number = {}, from = {}",
+                number, from);
 
-        return basketMapper.selectBaskets();
+        exceptionService.checkBasketNumberFrom(number, from);
+
+        return basketMapper.selectBaskets(number, from);
+    }
+
+    @Override
+    public Long getBasketsCount() {
+        LOG.debug("getBasketsCount");
+
+        return basketMapper.selectBasketsCount();
     }
 
     @Override

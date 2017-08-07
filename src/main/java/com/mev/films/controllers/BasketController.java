@@ -17,10 +17,18 @@ public class BasketController {
 
     // for admin
     @RequestMapping(value = {"/admin/api/baskets"}, method = RequestMethod.GET)
-    public List<BasketDTO> getBaskets() {
+    public List<BasketDTO> getBaskets(@RequestParam Long number,
+                                      @RequestParam Long from) {
         LOG.debug("getBaskets");
 
-        return basketService.getBaskets();
+        return basketService.getBaskets(number, from);
+    }
+
+    @RequestMapping(value = "/admin/api/baskets/count", method = RequestMethod.GET)
+    public Long getBasketsCount(){
+        LOG.debug("getBasketsCount");
+
+        return basketService.getBasketsCount();
     }
 
     @RequestMapping(value = {"/admin/api/basket", "/api/basket"}, method = RequestMethod.GET)

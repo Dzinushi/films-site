@@ -97,7 +97,8 @@ public class PaymentMapperTest {
             basketMapper.insertBasket(basketDTO);
         }
 
-        basketDTOS = basketMapper.selectBaskets();
+        count = basketMapper.selectBasketsCount();
+        basketDTOS = basketMapper.selectBaskets(count, 0L);
 
         // added orders
         orderDTOS = new ArrayList<>();
@@ -233,7 +234,9 @@ public class PaymentMapperTest {
             paymentMapper.insertPayment(paymentDTO);
         }
 
-        List<PaymentDTO> payments = paymentMapper.selectPayments((long) paymentDTOS.size(), 0L);
+        Long count = paymentMapper.selectPaymentsCount();
+
+        List<PaymentDTO> payments = paymentMapper.selectPayments(count, 0L);
         PaymentDTO paymentDTO = paymentMapper.selectPayment(payments.get(2).getId());
         assertTrue("paymentDTO1 = " + payments.get(2).toString(),
                 paymentDTO.equals(payments.get(2)));
@@ -304,14 +307,19 @@ public class PaymentMapperTest {
 
         paymentMapper.insertPayment(paymentDTOS.get(0));
 
-        List<PaymentDTO> payments = paymentMapper.selectPayments((long) paymentDTOS.size(), 0L);
+        Long count = paymentMapper.selectPaymentsCount();
+
+        List<PaymentDTO> payments = paymentMapper.selectPayments(count, 0L);
         assertTrue("count = 1",
                 payments.size() == 1);
         assertTrue("paymentDTO1 = " + paymentDTOS.get(0).toString(),
                 payments.get(0).equals(paymentDTOS.get(0)));
 
         paymentMapper.insertPayment(paymentDTOS.get(1));
-        payments = paymentMapper.selectPayments((long) paymentDTOS.size(), 0L);
+
+        count = paymentMapper.selectPaymentsCount();
+
+        payments = paymentMapper.selectPayments(count, 0L);
         assertTrue("count = 2",
                 payments.size() == 2);
         assertTrue("paymentDTO1 = " + paymentDTOS.get(0).toString(),
@@ -326,10 +334,12 @@ public class PaymentMapperTest {
         // add 1 delete 1
         paymentMapper.insertPayment(paymentDTOS.get(0));
 
-        List<PaymentDTO> payments = paymentMapper.selectPayments((long) paymentDTOS.size(), 0L);
+        Long count = paymentMapper.selectPaymentsCount();
+
+        List<PaymentDTO> payments = paymentMapper.selectPayments(count, 0L);
         paymentMapper.deletePayment(payments.get(0).getId());
 
-        Long count = paymentMapper.selectPaymentsCount();
+        count = paymentMapper.selectPaymentsCount();
         assertTrue("count = 0",
                 count == 0);
 
@@ -337,7 +347,9 @@ public class PaymentMapperTest {
         paymentMapper.insertPayment(paymentDTOS.get(0));
         paymentMapper.insertPayment(paymentDTOS.get(1));
 
-        payments = paymentMapper.selectPayments((long) paymentDTOS.size(), 0L);
+        count = paymentMapper.selectPaymentsCount();
+
+        payments = paymentMapper.selectPayments(count, 0L);
         paymentMapper.deletePayment(payments.get(0).getId());
         paymentMapper.deletePayment(payments.get(1).getId());
 
@@ -349,10 +361,14 @@ public class PaymentMapperTest {
         paymentMapper.insertPayment(paymentDTOS.get(0));
         paymentMapper.insertPayment(paymentDTOS.get(1));
 
-        payments = paymentMapper.selectPayments((long) paymentDTOS.size(), 0L);
+        count = paymentMapper.selectPaymentsCount();
+
+        payments = paymentMapper.selectPayments(count, 0L);
         paymentMapper.deletePayment(payments.get(0).getId());
 
-        payments = paymentMapper.selectPayments((long) paymentDTOS.size(), 0L);
+        count = paymentMapper.selectPaymentsCount();
+
+        payments = paymentMapper.selectPayments(count, 0L);
         assertTrue("count = 1",
                 payments.size() == 1);
         assertTrue("paymentDTO1 = " + paymentDTOS.get(1).toString(),
