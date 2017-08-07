@@ -21,7 +21,7 @@
         <result property="totalOrdersPrice" column="totalOrdersPrice"/>
     </resultMap>
 
-    <select id="selectPayments" resultMap="paymentDTO">
+    <select id="selectPayments" parameterType="map" resultMap="paymentDTO">
         SELECT
             p.id AS id,
             p.time AS time,
@@ -45,6 +45,12 @@
             INNER JOIN users AS u ON p.user_id = u.id
             INNER JOIN films AS f ON p.film_id = f.id
             LEFT JOIN discounts AS d ON p.discount_id = d.id
+        LIMIT #{0}
+        OFFSET #{1}
+    </select>
+
+    <select id="selectPaymentsCount" resultType="long">
+        SELECT count(id) FROM payments;
     </select>
 
     <select id="selectPaymentsByUser" parameterType="map" resultMap="paymentDTO">
@@ -214,7 +220,7 @@
 
     <delete id="deletePayment" parameterType="map">
         DELETE FROM
-            "postgres-test".public.payments
+            "films_test".public.payments
         WHERE
             id = #{0}
     </delete>

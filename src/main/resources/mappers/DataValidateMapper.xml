@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mev.films.mappers.interfaces.DataValidateMapper">
+
+    <resultMap id="dataValidateDTO" type="com.mev.films.model.DataValidateDTO">
+        <id property="id" column="id"/>
+        <result property="field" column="field"/>
+        <result property="store" column="store"/>
+        <result property="time" column="time"/>
+    </resultMap>
+
+    <select id="selectDataValidates" parameterType="map" resultMap="dataValidateDTO">
+        SELECT * FROM data_validates
+        LIMIT #{0}
+        OFFSET #{1}
+    </select>
+
+    <select id="selectDataValidate" parameterType="map" resultMap="dataValidateDTO">
+        SELECT * FROM data_validates
+        WHERE
+            id = #{0}
+    </select>
+
+    <select id="selectDataValidateCount" parameterType="map" resultType="long">
+        SELECT count(id) FROM data_validates
+    </select>
+
+    <insert id="insertDataValidate" parameterType="com.mev.films.model.DataValidateDTO">
+        INSERT INTO data_validates (field, store, time)
+        VALUES (#{field}, #{store}, clock_timestamp())
+    </insert>
+
+    <update id="updateDataValidate" parameterType="com.mev.films.model.DataValidateDTO">
+        UPDATE data_validates
+        SET
+            store = #{store}
+        WHERE
+            id = #{id}
+    </update>
+
+    <delete id="deleteDataValidate" parameterType="map">
+        DELETE FROM data_validates
+        WHERE
+            id = #{0}
+    </delete>
+
+</mapper>

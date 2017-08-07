@@ -19,10 +19,17 @@ public class PaymentController {
 
     // for admin
     @RequestMapping(value = "/admin/api/payments", method = RequestMethod.GET)
-    public List<PaymentDTO> getPaymentsDTO() {
-        LOG.debug("getPayments");
+    public List<PaymentDTO> getPaymentsDTO(@RequestParam Long number, Long from) {
+        LOG.debug("getPayments: number = {}, from = {}");
 
-        return paymentService.getPayments();
+        return paymentService.getPayments(number, from);
+    }
+
+    @RequestMapping(value = {"/admin/api/payments/count", "/api/payments/count"}, method = RequestMethod.GET)
+    public Long getPaymentCount(){
+        LOG.debug("getPaymentCount");
+
+        return paymentService.getPaymentCount();
     }
 
     @RequestMapping(value = {"/api/payments/user", "/admin/api/payments/user"}, method = RequestMethod.GET)

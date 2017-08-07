@@ -76,3 +76,13 @@ CREATE TABLE payments(
   total_price INT,
   time TIMESTAMP
 );
+
+
+CREATE SEQUENCE data_validates_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+CREATE TABLE data_validates(
+  id BIGINT PRIMARY KEY DEFAULT nextval('data_validates_id_seq'::regclass),
+  field text,
+  store text,
+  time TIMESTAMP,
+  unique (field, store)
+);

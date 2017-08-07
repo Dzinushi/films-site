@@ -48,6 +48,7 @@ public interface ExceptionService {
 
     // PaymentService
     void checkPaymentId(Long id);
+    void checkPaymentNumberFrom(Long number, Long from);
     void checkPaymentUserId(Long userId);
     void checkPaymentFilmId(Long filmId);
     void checkPaymentWithoutId(BasketDTO basketDTO);

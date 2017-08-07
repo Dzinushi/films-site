@@ -88,6 +88,9 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
         // PaymentService need to update
         PAYMENT_ERROR_WRONG_ID_PROVIDED,
+        PAYMENT_ERROR_WRONG_NUMBER_PROVIDED,
+        PAYMENT_ERROR_NUMBER_VALUE_MORE_THAN_100,
+        PAYMENT_ERROR_FROM_WRONG_PROVIDED,
         PAYMENT_ERROR_USER_NULL_POINTER_EXCEPTION,
         PAYMENT_ERROR_USER_WRONG_ID_PROVIDED,
         PAYMENT_ERROR_BASKET_NULL_POINTER_EXCEPTION,
@@ -653,6 +656,22 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
         if (id == null || id < 0){
             throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_WRONG_ID_PROVIDED);
+        }
+    }
+
+    @Override
+    public void checkPaymentNumberFrom(Long number, Long from) {
+        LOG.debug("checkPaymentLimitOffset: number = {}, from = {}",
+                number, from);
+
+        if (number == null || number < 0){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_WRONG_NUMBER_PROVIDED);
+        } else if (number > 100){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_NUMBER_VALUE_MORE_THAN_100);
+        }
+
+        if (from == null || from < 0){
+            throw new ExceptionServiceImpl(Errors.PAYMENT_ERROR_FROM_WRONG_PROVIDED);
         }
     }
 

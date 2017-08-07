@@ -37,10 +37,20 @@ public class PaymentServiceImpl implements PaymentService{
     }
 
     @Override
-    public List<PaymentDTO> getPayments() {
-        LOG.debug("getPayments");
+    public List<PaymentDTO> getPayments(Long number, Long from) {
+        LOG.debug("getPayments: number = {}, from = {}",
+                number, from);
 
-        return paymentMapper.selectPayments();
+        exceptionService.checkPaymentNumberFrom(number, from);
+
+        return paymentMapper.selectPayments(number, from);
+    }
+
+    @Override
+    public Long getPaymentCount() {
+        LOG.debug("getPaymentCount");
+
+        return paymentMapper.selectPaymentsCount();
     }
 
     @Override

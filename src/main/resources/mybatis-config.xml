@@ -12,5 +12,6 @@
         <mapper resource="mappers/UserDiscountMapper.xml"/>
         <mapper resource="mappers/PaymentMapper.xml"/>
         <mapper resource="mappers/OrderMapper.xml"/>
+        <mapper resource="mappers/DataValidateMapper.xml"/>
     </mappers>
 </configuration>

@@ -7,7 +7,8 @@ import com.mev.films.model.UserDTO;
 import java.util.List;
 
 public interface PaymentMapper {
-    List<PaymentDTO> selectPayments();
+    List<PaymentDTO> selectPayments(Long limit, Long offset);
+    Long selectPaymentsCount();
     List<PaymentDTO> selectPaymentsByUser(Long userId);
     List<PaymentDTO> selectPaymentsByFilm(Long filmId);
     PaymentDTO selectPayment(Long id);

@@ -35,4 +35,8 @@
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
         <property name="mapperInterface" value="com.mev.films.mappers.interfaces.OrderMapper"/>
     </bean>
+    <bean id="dataValidateMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+        <property name="mapperInterface" value="com.mev.films.mappers.interfaces.DataValidateMapper"/>
+    </bean>
 </beans>

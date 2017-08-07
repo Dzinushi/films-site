@@ -123,6 +123,71 @@ public class PaymentServiceTest {
 
     @Test
     public void getPaymentsTest(){
+
+        expect(paymentMapperMock.selectPayments(2L, 1L)).andStubAnswer(new IAnswer<List<PaymentDTO>>() {
+            @Override
+            public List<PaymentDTO> answer() throws Throwable {
+                List<PaymentDTO> paymentDTOS = new ArrayList<>();
+                paymentDTOS.add(payments.get(1));
+                paymentDTOS.add(payments.get(2));
+                return paymentDTOS;
+            }
+        });
+
+        replay(paymentMapperMock);
+
+        List<PaymentDTO> paymentDTOS = paymentService.getPayments(2L, 1L);
+        assertTrue("count = 2",
+                paymentDTOS.size() == 2);
+        assertTrue("paymentDTO1 = " + payments.get(1).toString(),
+                paymentDTOS.get(0).equals(payments.get(1)));
+        assertTrue("paymentDTO2 = " + payments.get(2).toString(),
+                paymentDTOS.get(1).equals(payments.get(2)));
+
+        // check number null
+        try{
+            paymentService.getPayments(null, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number < 0
+        try{
+            paymentService.getPayments(-5L, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = -5L",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number > 100
+        try{
+            paymentService.getPayments(101L, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_NUMBER_VALUE_MORE_THAN_100).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 101",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_NUMBER_VALUE_MORE_THAN_100).getMessage()));
+        }
+
+        // check from null
+        try{
+            paymentService.getPayments(2L, null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_FROM_WRONG_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_FROM_WRONG_PROVIDED).getMessage()));
+        }
+
+        // check from < 0
+        try{
+            paymentService.getPayments(2L, -5L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_FROM_WRONG_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = -5",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.PAYMENT_ERROR_FROM_WRONG_PROVIDED).getMessage()));
+        }
     }
 
     @Test
