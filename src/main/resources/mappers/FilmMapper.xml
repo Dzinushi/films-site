@@ -19,6 +19,16 @@
         SELECT * FROM films;
     </select>
 
+    <select id="selects" parameterType="map" resultMap="filmDTO">
+        SELECT * from films
+        LIMIT #{0}
+        OFFSET #{1}
+    </select>
+
+    <select id="selectsCount" resultType="long">
+        SELECT count(id) FROM films
+    </select>
+
     <select id="select" parameterType="map" resultMap="filmDTO">
         SELECT * FROM
             films

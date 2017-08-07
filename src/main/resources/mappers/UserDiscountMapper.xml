@@ -30,6 +30,29 @@
             LEFT JOIN discounts AS d ON ud.discount_id = d.id
     </select>
 
+    <select id="selects" parameterType="map" resultMap="userDiscountDTO">
+        SELECT
+            ud.id AS id,
+            ud.used AS used,
+
+            u.id AS usr_id,
+            u.login AS usr_login,
+
+            d.id AS dsc_id,
+            d.code AS dsc_code
+
+        FROM
+            user_discounts AS ud
+            INNER JOIN users AS u ON ud.user_id = u.id
+            LEFT JOIN discounts AS d ON ud.discount_id = d.id
+        LIMIT #{0}
+        OFFSET #{1}
+    </select>
+
+    <select id="selectsCount" resultType="long">
+        SELECT count(id) FROM user_discounts
+    </select>
+
     <select id="select" parameterType="map" resultMap="userDiscountDTO">
         SELECT
             ud.id AS id,

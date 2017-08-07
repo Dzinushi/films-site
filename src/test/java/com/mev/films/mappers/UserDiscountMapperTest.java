@@ -76,13 +76,35 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO1);
         userDiscountMapper.insert(userDiscountDTO2);
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
-        assertTrue("count = 2",
-                userDiscountDTOS.size() == 2);
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects(1L, 0L);
+        assertTrue("count = 1",
+                userDiscountDTOS.size() == 1);
         assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
                 userDiscountDTOS.get(0).equals(userDiscountDTO1));
+
+        userDiscountDTOS = userDiscountMapper.selects(1L, 1L);
+        assertTrue("count = 1",
+                userDiscountDTOS.size() == 1);
         assertTrue("userDiscountDTO2 = " + userDiscountDTO2.toString(),
-                userDiscountDTOS.get(1).equals(userDiscountDTO2));
+                userDiscountDTOS.get(0).equals(userDiscountDTO2));
+    }
+
+    @Test
+    public void selectUserDiscountsCountTest(){
+
+        Long count = userDiscountMapper.selectsCount();
+        assertTrue("count = 0",
+                count == 0);
+
+        userDiscountMapper.insert(userDiscountDTO1);
+        count = userDiscountMapper.selectsCount();
+        assertTrue("count = 1",
+                count == 1);
+
+        userDiscountMapper.insert(userDiscountDTO3);
+        count = userDiscountMapper.selectsCount();
+        assertTrue("count = 2",
+                count == 2);
     }
 
     @Test

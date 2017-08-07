@@ -31,10 +31,20 @@ public class FilmServiceImpl implements FilmService{
     }
 
     @Override
-    public List<FilmDTO> getFilms() {
-        LOG.debug("getFilms");
+    public List<FilmDTO> getFilms(Long number, Long from) {
+        LOG.debug("getFilms: number = {}, from = {}",
+                number, from);
 
-        return filmMapper.selectsAll();
+        exceptionService.checkFilmNumberFrom(number, from);
+
+        return filmMapper.selects(number, from);
+    }
+
+    @Override
+    public Long getFilmsCount() {
+        LOG.debug("getFilmsCount");
+
+        return filmMapper.selectsCount();
     }
 
     @Override

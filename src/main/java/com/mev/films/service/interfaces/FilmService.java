@@ -7,7 +7,8 @@ import com.mev.films.model.UserDTO;
 import java.util.List;
 
 public interface FilmService {
-    List<FilmDTO> getFilms();
+    List<FilmDTO> getFilms(Long number, Long from);
+    Long getFilmsCount();
     FilmDTO getFilm(Long id);
     List<FilmDTO> getFilmsSortByName();
     List<FilmDTO> getFilmByName(String name);

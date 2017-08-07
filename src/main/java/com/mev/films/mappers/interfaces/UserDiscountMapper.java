@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface UserDiscountMapper {
     List<UserDiscountDTO> selectsAll();
+    List<UserDiscountDTO> selects(Long limit, Long offset);
+    Long selectsCount();
     UserDiscountDTO select(Long id);
     List<UserDiscountDTO> selectsByUser(Long userId);
     UserDiscountDTO selectByDiscount(Long discountId);

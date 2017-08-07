@@ -18,10 +18,19 @@ public class FilmController {
 
 
     @RequestMapping(value = {"/api/films", "/admin/api/films"}, method = RequestMethod.GET)
-    public List<FilmDTO> getFilms(){
-        LOG.debug("getFilms");
+    public List<FilmDTO> getFilms(@RequestParam Long number,
+                                  @RequestParam Long from){
+        LOG.debug("getFilms: number = {}, from = {}",
+                number, from);
 
-        return filmService.getFilms();
+        return filmService.getFilms(number, from);
+    }
+
+    @RequestMapping(value = {"/api/filmsCount", "admin/api/films/Count"}, method = RequestMethod.GET)
+    public Long getFilmsCount(){
+        LOG.debug("getFilmsCount");
+
+        return filmService.getFilmsCount();
     }
 
     @RequestMapping(value = {"/api/film", "/admin/api/film"}, method = RequestMethod.GET)

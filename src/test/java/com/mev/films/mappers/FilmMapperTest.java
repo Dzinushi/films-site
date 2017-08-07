@@ -39,13 +39,30 @@ public class FilmMapperTest {
         filmMapper.insert(filmDTO1);
         filmMapper.insert(filmDTO2);
 
-        List<FilmDTO> filmDTOS = filmMapper.selectsAll();
-        assertTrue("count = 2",
-                filmDTOS.size() == 2);
+        List<FilmDTO> filmDTOS = filmMapper.selects(1L, 0L);
+        assertTrue("count = 1",
+                filmDTOS.size() == 1);
         assertTrue("FilmDTO1 = " + filmDTO1,
                 filmDTOS.get(0).equals(filmDTO1));
+
+        filmDTOS = filmMapper.selects(1L, 1L);
+        assertTrue("count = 1",
+                filmDTOS.size() == 1);
         assertTrue("FilmDTO2 = " + filmDTO2,
-                filmDTOS.get(1).equals(filmDTO2));
+                filmDTOS.get(0).equals(filmDTO2));
+    }
+
+    @Test
+    public void selectFilmsCountTest(){
+
+        Long count = filmMapper.selectsCount();
+        assertTrue("count = 0",
+                count == 0);
+
+        filmMapper.insert(filmDTO1);
+        count = filmMapper.selectsCount();
+        assertTrue("count = 1",
+                count == 1);
     }
 
     @Test

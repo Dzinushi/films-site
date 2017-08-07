@@ -17,10 +17,19 @@ public class UserDiscountController {
     @Autowired private UserDiscountService userDiscountService;
 
     @RequestMapping(value = {"/admin/api/user_discounts"}, method = RequestMethod.GET)
-    public List<UserDiscountDTO> getUserDiscounts() {
-        LOG.debug("getUserDiscounts");
+    public List<UserDiscountDTO> getUserDiscounts(@RequestParam Long number,
+                                                  @RequestParam Long from) {
+        LOG.debug("getUserDiscounts: number = {}, from = {}",
+                number, from);
 
-        return userDiscountService.getUserDiscounts();
+        return userDiscountService.getUserDiscounts(number, from);
+    }
+
+    @RequestMapping(value = "/admin/api/user_discounts/count", method = RequestMethod.GET)
+    public Long getUserDiscountsCount(){
+        LOG.debug("getUserDiscountsCount");
+
+        return userDiscountService.getUserDiscountsCount();
     }
 
     @RequestMapping(value = {"/admin/api/user_discount"}, method = RequestMethod.GET)

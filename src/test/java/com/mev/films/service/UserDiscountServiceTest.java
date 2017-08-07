@@ -73,6 +73,73 @@ public class UserDiscountServiceTest {
 
     @Test
     public void getUserDiscountsTest() {
+
+        expect(userDiscountMapperMock.selects(2L, 0L)).andStubAnswer(new IAnswer<List<UserDiscountDTO>>() {
+            @Override
+            public List<UserDiscountDTO> answer() throws Throwable {
+                List<UserDiscountDTO> userDiscountDTOS = new ArrayList<>();
+                userDiscountDTOS.add(userDiscountDTO1);
+                userDiscountDTOS.add(userDiscountDTO2);
+                return userDiscountDTOS;
+            }
+        });
+
+        replay(userDiscountMapperMock);
+
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountService.getUserDiscounts(2L, 0L);
+        assertTrue("count = 2",
+                userDiscountDTOS.size() == 2);
+        assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
+                userDiscountDTOS.get(0).equals(userDiscountDTO1));
+        assertTrue("userDiscountDTO2 = " + userDiscountDTO2.toString(),
+                userDiscountDTOS.get(1).equals(userDiscountDTO2));
+
+        // check number null
+        try {
+            userDiscountService.getUserDiscounts(null, 0L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number < 1
+        try {
+            userDiscountService.getUserDiscounts(0L, 0L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number < 1",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number > 100
+        try {
+            userDiscountService.getUserDiscounts(101L, 0L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_NUMBER_VALUE_MORE_THAN_100).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 101",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_NUMBER_VALUE_MORE_THAN_100).getMessage()));
+        }
+
+        // check from null
+        try {
+            userDiscountService.getUserDiscounts(2L, null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_WRONG_FROM_PROVIDED).getMessage()));
+        }
+
+        // check from < 0
+        try {
+            userDiscountService.getUserDiscounts(2L, -1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = -1",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_DISCOUNT_WRONG_FROM_PROVIDED).getMessage()));
+        }
+
+        verify(userDiscountMapperMock);
     }
 
     @Test

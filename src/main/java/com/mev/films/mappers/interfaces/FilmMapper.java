@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface FilmMapper {
     List<FilmDTO> selectsAll();
+    List<FilmDTO> selects(Long limit, Long offset);
+    Long selectsCount();
     FilmDTO select(Long id);
     List<FilmDTO> selectsSortByName();
     List<FilmDTO> selectsByName(String name);

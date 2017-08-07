@@ -6,7 +6,8 @@ import com.mev.films.model.UserDiscountDTO;
 import java.util.List;
 
 public interface UserDiscountService {
-    List<UserDiscountDTO> getUserDiscounts();
+    List<UserDiscountDTO> getUserDiscounts(Long number, Long from);
+    Long getUserDiscountsCount();
     UserDiscountDTO getUserDiscount(Long id);
     List<UserDiscountDTO> getUserDiscountsByUser(Long userId);
     UserDiscountDTO getUserDiscountByDiscount(Long discountId);

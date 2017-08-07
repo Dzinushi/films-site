@@ -50,6 +50,77 @@ public class FilmServiceTest {
 
     @Test
     public void getFilmsTest(){
+
+        expect(filmMapperMock.selects(2L, 1L)).andStubAnswer(new IAnswer<List<FilmDTO>>() {
+            @Override
+            public List<FilmDTO> answer() throws Throwable {
+                List<FilmDTO> filmDTOS = new ArrayList<>();
+                filmDTOS.add(filmDTO2);
+                filmDTOS.add(filmDTO3);
+                return filmDTOS;
+            }
+        });
+
+        replay(filmMapperMock);
+
+        List<FilmDTO> filmDTOS = filmService.getFilms(2L, 1L);
+        assertTrue("count = 2",
+                filmDTOS.size() == 2);
+        assertTrue("filmDTO1 = " + filmDTO2.toString(),
+                filmDTOS.get(0).equals(filmDTO2));
+        assertTrue("filmDTO2 = " + filmDTO3.toString(),
+                filmDTOS.get(1).equals(filmDTO3));
+
+        // check number null
+        try {
+            filmService.getFilms(null, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.FILM_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.FILM_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number < 1
+        try {
+            filmService.getFilms(0L, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.FILM_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.FILM_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number > 100
+        try {
+            filmService.getFilms(101L, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.FILM_ERROR_NUMBER_VALUE_MORE_THAN_1O0).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 101",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.FILM_ERROR_NUMBER_VALUE_MORE_THAN_1O0).getMessage()));
+        }
+
+        // check from null
+        try {
+            filmService.getFilms(2L, null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.FILM_ERROR_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.FILM_ERROR_WRONG_FROM_PROVIDED).getMessage()));
+        }
+
+        // check from < 0
+        try {
+            filmService.getFilms(2L, -1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.FILM_ERROR_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = -1",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.FILM_ERROR_WRONG_FROM_PROVIDED).getMessage()));
+        }
+
+        verify(filmMapperMock);
+    }
+
+    @Test
+    public void getFilmsCountTest(){
     }
 
     @Test

@@ -31,10 +31,20 @@ public class UserDiscountServiceImpl implements UserDiscountService{
     }
 
     @Override
-    public List<UserDiscountDTO> getUserDiscounts() {
-        LOG.debug("getUserDiscounts");
+    public List<UserDiscountDTO> getUserDiscounts(Long number, Long from) {
+        LOG.debug("getUserDiscounts: number = {}, from = {}",
+                number, from);
 
-        return userDiscountMapper.selectsAll();
+        exceptionService.checkUserDiscountNumberFrom(number, from);
+
+        return userDiscountMapper.selects(number, from);
+    }
+
+    @Override
+    public Long getUserDiscountsCount() {
+        LOG.debug("getUserDiscountsCount");
+
+        return userDiscountMapper.selectsCount();
     }
 
     @Override
