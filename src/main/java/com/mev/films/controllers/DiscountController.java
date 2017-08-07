@@ -22,10 +22,20 @@ public class DiscountController {
 
     // for admin
     @RequestMapping(value = {"/admin/api/discounts"}, method = RequestMethod.GET)
-    public List<DiscountDTO> getDiscounts() {
-        LOG.debug("getDiscounts");
+    public List<DiscountDTO> getDiscounts(@RequestParam Long number,
+                                          @RequestParam Long from) {
+        LOG.debug("getDiscounts: number = {}, from = {}",
+                number, from);
 
-        return discountService.getDiscounts();
+        return discountService.getDiscounts(number, from);
+    }
+
+    // for admin
+    @RequestMapping(value = "/admin/api/discounts/count", method = RequestMethod.GET)
+    public Long getDiscountsCount(){
+        LOG.debug("getDiscountCount");
+
+        return discountService.getDiscountCount();
     }
 
     // for admin

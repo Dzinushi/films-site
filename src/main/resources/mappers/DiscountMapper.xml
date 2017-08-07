@@ -17,6 +17,17 @@
             discounts
     </select>
 
+    <select id="selects" parameterType="map" resultMap="discountDTO">
+        SELECT * FROM
+            discounts
+        LIMIT #{0}
+        OFFSET #{1}
+    </select>
+
+    <select id="selectsCount" resultType="long">
+        SELECT count(id) FROM discounts
+    </select>
+
     <select id="select" parameterType="map" resultMap="discountDTO">
         SELECT * FROM
             discounts

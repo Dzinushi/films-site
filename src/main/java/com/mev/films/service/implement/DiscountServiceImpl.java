@@ -32,10 +32,20 @@ public class DiscountServiceImpl implements DiscountService{
     }
 
     @Override
-    public List<DiscountDTO> getDiscounts() {
-        LOG.debug("getDiscounts");
+    public List<DiscountDTO> getDiscounts(Long number, Long from) {
+        LOG.debug("getDiscounts: number = {}, from = {}",
+                number, from);
 
-        return discountMapper.selectsAll();
+        exceptionService.checkDiscountNumberFrom(number, from);
+
+        return discountMapper.selects(number, from);
+    }
+
+    @Override
+    public Long getDiscountCount() {
+        LOG.debug("getDiscountCount");
+
+        return discountMapper.selectsCount();
     }
 
     @Override
