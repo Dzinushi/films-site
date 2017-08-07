@@ -17,6 +17,16 @@
         SELECT * FROM users;
     </select>
 
+    <select id="selects" parameterType="map" resultMap="userDTO">
+        SELECT * FROM users
+        LIMIT #{0}
+        OFFSET #{1}
+    </select>
+
+    <select id="selectsCount" resultType="long">
+        SELECT count(id) FROM users
+    </select>
+
     <select id="select" parameterType="map" resultMap="userDTO">
         SELECT * FROM
             users

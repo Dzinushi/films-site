@@ -31,10 +31,20 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<UserDTO> getUsers() {
-        LOG.debug("getUsers");
+    public List<UserDTO> getUsers(Long number, Long from) {
+        LOG.debug("getUsers: number = {}, from = {}",
+                number, from);
 
-        return userMapper.selectsAll();
+        exceptionService.checkUserNumberFrom(number, from);
+
+        return userMapper.selects(number, from);
+    }
+
+    @Override
+    public Long getUsersCount() {
+        LOG.debug("getUsersCount");
+
+        return userMapper.selectsCount();
     }
 
     @Override

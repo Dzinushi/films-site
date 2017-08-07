@@ -21,10 +21,21 @@ public class UserController {
 
     // for admin
     @RequestMapping(value = {"/admin/api/users"}, method = RequestMethod.GET)
-    public List<UserDTO> getUsers() {
-        LOG.debug("getUsers");
+    public List<UserDTO> getUsers(@RequestParam Long number,
+                                  @RequestParam Long from) {
+        LOG.debug("getUsers: number = {}, from = {}",
+                number, from);
 
-        return userService.getUsers();
+        return userService.getUsers(number, from);
+    }
+
+    // for admin
+    @RequestMapping(value = "/admin/api/users/count", method = RequestMethod.GET)
+    public Long getUsersCount(){
+
+        LOG.debug("getUsersCount");
+
+        return userService.getUsersCount();
     }
 
     // for admin
@@ -47,10 +58,21 @@ public class UserController {
 
     // for admin
     @RequestMapping(value = {"/admin/api/users/roles"}, method = RequestMethod.GET)
-    public List<UserRoleDTO> getUserRoles() {
-        LOG.debug("getUserRoles");
+    public List<UserRoleDTO> getUserRoles(@RequestParam Long number,
+                                          @RequestParam Long from) {
+        LOG.debug("getUserRoles: number = {}, from = {}",
+                number, from);
 
-        return userRoleService.getUserRoles();
+        return userRoleService.getUserRoles(number, from);
+    }
+
+    // for admin
+    @RequestMapping(value = "/admin/api/users/roles/count", method = RequestMethod.GET)
+    public Long getUserRolesCount(){
+
+        LOG.debug("getUserRolesCount");
+
+        return userRoleService.getUserRolesCount();
     }
 
     // for admin

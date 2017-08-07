@@ -35,11 +35,20 @@ public class UserRoleServiceImpl implements UserRoleService{
     }
 
     @Override
-    public List<UserRoleDTO> getUserRoles() {
+    public List<UserRoleDTO> getUserRoles(Long number, Long from) {
+        LOG.debug("getUserRoles: number = {}, from = {}",
+                number, from);
 
-        LOG.debug("getUserRoles");
+        exceptionService.checkUserRolesNumberFrom(number, from);
 
-        return userRoleMapper.selectsAll();
+        return userRoleMapper.selects(number, from);
+    }
+
+    @Override
+    public Long getUserRolesCount() {
+        LOG.debug("getUserRolesCount");
+
+        return userRoleMapper.selectsCount();
     }
 
     @Override

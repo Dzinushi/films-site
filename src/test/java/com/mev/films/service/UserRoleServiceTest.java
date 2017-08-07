@@ -18,6 +18,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.mev.films.service.implement.ExceptionServiceImpl.Errors.*;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
@@ -62,6 +65,74 @@ public class UserRoleServiceTest {
 
     @Test
     public void getUserRolesTest(){
+
+        expect(userRoleMapperMock.selects(1L, 1L)).andStubAnswer(new IAnswer<List<UserRoleDTO>>() {
+            @Override
+            public List<UserRoleDTO> answer() throws Throwable {
+                List<UserRoleDTO> userRoleDTOS = new ArrayList<>();
+                userRoleDTOS.add(userRoleDTO2);
+                return userRoleDTOS;
+            }
+        });
+
+        replay(userRoleMapperMock);
+
+        List<UserRoleDTO> userRoleDTOS = userRoleService.getUserRoles(1L, 1L);
+        assertTrue("count = 1",
+                userRoleDTOS.size() == 1);
+        assertTrue("userRoleDTO1 = " + userRoleDTO2.toString(),
+                userRoleDTOS.get(0).equals(userRoleDTO2));
+
+        // check number null
+        try {
+            userRoleService.getUserRoles(null, 1L);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number < 1
+        try {
+            userRoleService.getUserRoles(0L, 1L);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 0",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number > 100
+        try {
+            userRoleService.getUserRoles(101L, 1L);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_NUMBER_VALUE_MORE_THAN_100).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 101",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_NUMBER_VALUE_MORE_THAN_100).getMessage()));
+        }
+
+        // check from null
+        try {
+            userRoleService.getUserRoles(1L, null);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_FROM_PROVIDED).getMessage()));
+        }
+
+        // check from < 0
+        try {
+            userRoleService.getUserRoles(1L, -1L);
+            fail(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = -1",
+                    e.getMessage().equals(new ExceptionServiceImpl(USER_ROLE_ERROR_WRONG_FROM_PROVIDED).getMessage()));
+        }
+
+        verify(userRoleMapperMock);
+    }
+
+    @Test
+    public void getUserRolesCountTest(){
     }
 
     @Test

@@ -46,14 +46,33 @@ public class UserRoleMapperTest {
         userRoleMapper.insert(userRoleDTO1);
         userRoleMapper.insert(userRoleDTO2);
 
-        List<UserRoleDTO> userRoleDTOS = userRoleMapper.selectsAll();
-        assertTrue("count = 2",
-                userRoleDTOS.size() == 2);
+        List<UserRoleDTO> userRoleDTOS = userRoleMapper.selects(1L, 0L);
+        assertTrue("count = 1",
+                userRoleDTOS.size() == 1);
         assertTrue("userRoleDTO1 = " + userRoleDTO1.toString(),
                 userRoleDTOS.get(0).equals(userRoleDTO1));
+
+        userRoleDTOS = userRoleMapper.selects(1L, 1L);
+        assertTrue("count = 1",
+                userRoleDTOS.size() == 1);
         assertTrue("userRoleDTO2 = " + userRoleDTO2.toString(),
-                userRoleDTOS.get(1).equals(userRoleDTO2));
+                userRoleDTOS.get(0).equals(userRoleDTO2));
     }
+
+    @Test
+    public void selectUserRolesCountTest(){
+
+        Long count = userRoleMapper.selectsCount();
+        assertTrue("count = 0",
+                count == 0);
+
+        userMapper.insert(userDTO2);
+        userRoleMapper.insert(userRoleDTO2);
+        count = userRoleMapper.selectsCount();
+        assertTrue("count = 1",
+                count == 1);
+    }
+
 
     @Test
     public void selectUserRole(){

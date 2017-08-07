@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
 import static org.easymock.EasyMock.*;
@@ -45,6 +48,74 @@ public class UserServiceTest {
 
     @Test
     public void getUsersTest(){
+
+        expect(userMapperMock.selects(1L, 1L)).andStubAnswer(new IAnswer<List<UserDTO>>() {
+            @Override
+            public List<UserDTO> answer() throws Throwable {
+                List<UserDTO> userDTOS = new ArrayList<>();
+                userDTOS.add(userDTO2);
+                return userDTOS;
+            }
+        });
+
+        replay(userMapperMock);
+
+        List<UserDTO> userDTOS = userService.getUsers(1L, 1L);
+        assertTrue("count = 1",
+                userDTOS.size() == 1);
+        assertTrue("userDTO1 = " + userDTO2.toString(),
+                userDTOS.get(0).equals(userDTO2));
+
+        // check number null
+        try {
+            userService.getUsers(null, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number < 1
+        try {
+            userService.getUsers(0L, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_NUMBER_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 0",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_NUMBER_PROVIDED).getMessage()));
+        }
+
+        // check number > 100
+        try {
+            userService.getUsers(101L, 1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_NUMBER_VALUE_MORE_THAN_100).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("number = 101",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_NUMBER_VALUE_MORE_THAN_100).getMessage()));
+        }
+
+        // check from null
+        try {
+            userService.getUsers(1L, null);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_FROM_PROVIDED).getMessage()));
+        }
+
+        // check from < 0
+        try {
+            userService.getUsers(1L, -1L);
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_FROM_PROVIDED).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("from = -1",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_FROM_PROVIDED).getMessage()));
+        }
+
+        verify(userMapperMock);
+    }
+
+    @Test
+    public void getUsersCountTest(){
     }
 
     @Test

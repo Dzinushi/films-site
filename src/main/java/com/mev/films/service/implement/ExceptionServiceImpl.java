@@ -181,7 +181,7 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         LOG.debug("checkUserRolesNumberFrom: number = {}, from = {}",
                 number, from);
 
-        if (number == null || number < 0){
+        if (number == null || number < 1){
             throw new ExceptionServiceImpl(Errors.USER_ROLE_ERROR_WRONG_NUMBER_PROVIDED);
         } else if (number > 100){
             throw new ExceptionServiceImpl(Errors.USER_ROLE_ERROR_NUMBER_VALUE_MORE_THAN_100);

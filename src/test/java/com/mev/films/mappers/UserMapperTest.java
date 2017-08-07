@@ -41,13 +41,30 @@ public class UserMapperTest {
         userMapper.insert(userDTO1);
         userMapper.insert(userDTO2);
 
-        List<UserDTO> users = userMapper.selectsAll();
-        assertTrue("count = 2",
-                users.size() == 2);
-        assertTrue("userDTO1 = " + users.get(0),
+        List<UserDTO> users = userMapper.selects(1L, 0L);
+        assertTrue("count = 1",
+                users.size() == 1);
+        assertTrue("userDTO1 = " + userDTO1,
                 users.get(0).equals(userDTO1));
-        assertTrue("userDTO2 = " + users.get(1),
-                users.get(1).equals(userDTO2));
+
+        users = userMapper.selects(1L, 1L);
+        assertTrue("count = 1",
+                users.size() == 1);
+        assertTrue("userDTO2 = " + userDTO2,
+                users.get(0).equals(userDTO2));
+    }
+
+    @Test
+    public void selectUsersCountTest(){
+
+        Long count = userMapper.selectsCount();
+        assertTrue("count = 0",
+                count == 0);
+
+        userMapper.insert(userDTO2);
+        count = userMapper.selectsCount();
+        assertTrue("count = 1",
+                count == 1);
     }
 
     @Test

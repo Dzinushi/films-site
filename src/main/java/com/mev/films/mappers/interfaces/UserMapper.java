@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface UserMapper {
     List<UserDTO> selectsAll();
+    List<UserDTO> selects(Long limit, Long offset);
+    Long selectsCount();
     UserDTO select(Long id);
     UserDTO selectIdLogin(Long id);
     List<UserDTO> selectsIdLogin();
