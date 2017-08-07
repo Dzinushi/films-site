@@ -39,7 +39,7 @@ public class UserRoleServiceImpl implements UserRoleService{
 
         LOG.debug("getUserRoles");
 
-        return userRoleMapper.select();
+        return userRoleMapper.selectsAll();
     }
 
     @Override

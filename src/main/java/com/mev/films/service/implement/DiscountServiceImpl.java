@@ -35,7 +35,7 @@ public class DiscountServiceImpl implements DiscountService{
     public List<DiscountDTO> getDiscounts() {
         LOG.debug("getDiscounts");
 
-        return discountMapper.selects();
+        return discountMapper.selectsAll();
     }
 
     @Override

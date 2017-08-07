@@ -57,17 +57,17 @@ public class OrderMapperTest {
             orderMapper.delete(orderDTO.getId());
         }
 
-        List<DiscountDTO> discountDTOS = discountMapper.selects();
+        List<DiscountDTO> discountDTOS = discountMapper.selectsAll();
         for (DiscountDTO discountDTO : discountDTOS){
             discountMapper.delete(discountDTO.getId());
         }
 
-        List<FilmDTO> filmDTOS = filmMapper.selects();
+        List<FilmDTO> filmDTOS = filmMapper.selectsAll();
         for (FilmDTO filmDTO : filmDTOS){
             filmMapper.delete(filmDTO.getId());
         }
 
-        List<UserDTO> userDTOS = userMapper.selects();
+        List<UserDTO> userDTOS = userMapper.selectsAll();
         for (UserDTO userDTO : userDTOS){
             userMapper.deleteByLogin(userDTO.getLogin());
         }
@@ -89,8 +89,8 @@ public class OrderMapperTest {
         discountMapper.insert(discountDTO3);
 
         userDTOS = userMapper.selectsIdLogin();
-        filmDTOS = filmMapper.selects();
-        discountDTOS = discountMapper.selects();
+        filmDTOS = filmMapper.selectsAll();
+        discountDTOS = discountMapper.selectsAll();
 
         basketDTO1 = new BasketDTO(userDTOS.get(0));
         basketDTO2 = new BasketDTO(userDTOS.get(1));

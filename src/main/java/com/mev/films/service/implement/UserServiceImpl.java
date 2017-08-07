@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService{
     public List<UserDTO> getUsers() {
         LOG.debug("getUsers");
 
-        return userMapper.selects();
+        return userMapper.selectsAll();
     }
 
     @Override

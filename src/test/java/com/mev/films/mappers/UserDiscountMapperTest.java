@@ -39,17 +39,17 @@ public class UserDiscountMapperTest {
     @Before
     public void setup(){
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
         for (UserDiscountDTO userDiscountDTO : userDiscountDTOS){
             userDiscountMapper.delete(userDiscountDTO.getId());
         }
 
-        List<UserDTO> userDTOS = userMapper.selects();
+        List<UserDTO> userDTOS = userMapper.selectsAll();
         for (UserDTO userDTO : userDTOS){
             userMapper.deleteByLogin(userDTO.getLogin());
         }
 
-        List<DiscountDTO> discountDTOS = discountMapper.selects();
+        List<DiscountDTO> discountDTOS = discountMapper.selectsAll();
         for (DiscountDTO discountDTO : discountDTOS){
             discountMapper.deleteByCode(discountDTO.getCode());
         }
@@ -63,7 +63,7 @@ public class UserDiscountMapperTest {
         discountMapper.insert(discountDTO3);
 
         userDTOS = userMapper.selectsIdLogin();
-        discountDTOS = discountMapper.selects();
+        discountDTOS = discountMapper.selectsAll();
 
         userDiscountDTO1 = new UserDiscountDTO(userDTOS.get(0), discountDTOS.get(0), true);
         userDiscountDTO2 = new UserDiscountDTO(userDTOS.get(1), discountDTOS.get(1), false);
@@ -76,7 +76,7 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO1);
         userDiscountMapper.insert(userDiscountDTO2);
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 2",
                 userDiscountDTOS.size() == 2);
         assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
@@ -91,7 +91,7 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO1);
         userDiscountMapper.insert(userDiscountDTO2);
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
         UserDiscountDTO userDiscountDTO = userDiscountMapper.select(userDiscountDTOS.get(0).getId());
 
         assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
@@ -105,7 +105,7 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO2);
         userDiscountMapper.insert(userDiscountDTO3);
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
 
         userDiscountDTOS = userDiscountMapper.selectsByUser(userDiscountDTOS.get(0).getUserDTO().getId());
         assertTrue("count = 2",
@@ -122,7 +122,7 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO1);
         userDiscountMapper.insert(userDiscountDTO2);
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
 
         UserDiscountDTO userDiscountDTO = userDiscountMapper.selectByDiscount(userDiscountDTOS.get(1).getDiscountDTO().getId());
 
@@ -135,7 +135,7 @@ public class UserDiscountMapperTest {
 
         userDiscountMapper.insert(userDiscountDTO1);
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 1",
                 userDiscountDTOS.size() == 1);
         assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
@@ -143,7 +143,7 @@ public class UserDiscountMapperTest {
 
         userDiscountMapper.insert(userDiscountDTO2);
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 2",
                 userDiscountDTOS.size() == 2);
         assertTrue("userDiscountDTO1 = " + userDiscountDTO1.toString(),
@@ -157,14 +157,14 @@ public class UserDiscountMapperTest {
 
         userDiscountMapper.insert(userDiscountDTO1);
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
         userDiscountDTOS.get(0).setUserDTO(userDiscountDTO2.getUserDTO());
         userDiscountDTOS.get(0).setDiscountDTO(userDiscountDTO2.getDiscountDTO());
         userDiscountDTOS.get(0).setUsed(userDiscountDTO2.isUsed());
 
         userDiscountMapper.update(userDiscountDTOS.get(0));
 
-        List<UserDiscountDTO> userDiscountDTOSUpdate = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOSUpdate = userDiscountMapper.selectsAll();
         assertTrue("userDiscountDTO2 = " + userDiscountDTOS.get(0).toString(),
                 userDiscountDTOSUpdate.get(0).equals(userDiscountDTOS.get(0)));
     }
@@ -175,10 +175,10 @@ public class UserDiscountMapperTest {
         // insert 1 delete 1
         userDiscountMapper.insert(userDiscountDTO1);
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
         userDiscountMapper.delete(userDiscountDTOS.get(0).getId());
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 0",
                 userDiscountDTOS.size() == 0);
 
@@ -186,11 +186,11 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO1);
         userDiscountMapper.insert(userDiscountDTO2);
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         userDiscountMapper.delete(userDiscountDTOS.get(0).getId());
         userDiscountMapper.delete(userDiscountDTOS.get(1).getId());
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 0",
                 userDiscountDTOS.size() == 0);
 
@@ -198,10 +198,10 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO1);
         userDiscountMapper.insert(userDiscountDTO2);
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         userDiscountMapper.delete(userDiscountDTOS.get(0).getId());
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 1",
                 userDiscountDTOS.size() == 1);
         assertTrue("userDiscountDTO2 = " + userDiscountDTO2.toString(),
@@ -214,10 +214,10 @@ public class UserDiscountMapperTest {
         // insert 1 delete 1
         userDiscountMapper.insert(userDiscountDTO1);
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
         userDiscountMapper.deleteByDiscount(userDiscountDTOS.get(0).getDiscountDTO().getId());
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 0",
                 userDiscountDTOS.size() == 0);
 
@@ -225,11 +225,11 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO1);
         userDiscountMapper.insert(userDiscountDTO2);
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         userDiscountMapper.deleteByDiscount(userDiscountDTOS.get(0).getDiscountDTO().getId());
         userDiscountMapper.deleteByDiscount(userDiscountDTOS.get(1).getDiscountDTO().getId());
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 0",
                 userDiscountDTOS.size() == 0);
 
@@ -237,10 +237,10 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO1);
         userDiscountMapper.insert(userDiscountDTO2);
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         userDiscountMapper.deleteByDiscount(userDiscountDTOS.get(0).getDiscountDTO().getId());
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 1",
                 userDiscountDTOS.size() == 1);
         assertTrue("userDiscountDTO2 = " + userDiscountDTO2.toString(),
@@ -253,10 +253,10 @@ public class UserDiscountMapperTest {
         // insert 1 delete 1
         userDiscountMapper.insert(userDiscountDTO1);
 
-        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selects();
+        List<UserDiscountDTO> userDiscountDTOS = userDiscountMapper.selectsAll();
         userDiscountMapper.deleteByUser(userDiscountDTOS.get(0).getUserDTO().getId());
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 0",
                 userDiscountDTOS.size() == 0);
 
@@ -264,11 +264,11 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO1);
         userDiscountMapper.insert(userDiscountDTO2);
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         userDiscountMapper.deleteByUser(userDiscountDTOS.get(0).getUserDTO().getId());
         userDiscountMapper.deleteByUser(userDiscountDTOS.get(1).getUserDTO().getId());
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 0",
                 userDiscountDTOS.size() == 0);
 
@@ -276,10 +276,10 @@ public class UserDiscountMapperTest {
         userDiscountMapper.insert(userDiscountDTO1);
         userDiscountMapper.insert(userDiscountDTO2);
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         userDiscountMapper.deleteByUser(userDiscountDTOS.get(0).getUserDTO().getId());
 
-        userDiscountDTOS = userDiscountMapper.selects();
+        userDiscountDTOS = userDiscountMapper.selectsAll();
         assertTrue("count = 1",
                 userDiscountDTOS.size() == 1);
         assertTrue("userDiscountDTO2 = " + userDiscountDTO2.toString(),

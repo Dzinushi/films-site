@@ -27,7 +27,7 @@ public class FilmMapperTest {
     @Before
     public void setup(){
 
-        List<FilmDTO> filmDTOS = filmMapper.selects();
+        List<FilmDTO> filmDTOS = filmMapper.selectsAll();
         for (FilmDTO filmDTO: filmDTOS){
             filmMapper.delete(filmDTO.getId());
         }
@@ -39,7 +39,7 @@ public class FilmMapperTest {
         filmMapper.insert(filmDTO1);
         filmMapper.insert(filmDTO2);
 
-        List<FilmDTO> filmDTOS = filmMapper.selects();
+        List<FilmDTO> filmDTOS = filmMapper.selectsAll();
         assertTrue("count = 2",
                 filmDTOS.size() == 2);
         assertTrue("FilmDTO1 = " + filmDTO1,
@@ -54,7 +54,7 @@ public class FilmMapperTest {
         filmMapper.insert(filmDTO2);
         filmMapper.insert(filmDTO1);
 
-        List<FilmDTO> filmDTOS = filmMapper.selects();
+        List<FilmDTO> filmDTOS = filmMapper.selectsAll();
         FilmDTO filmDTO = filmMapper.select(filmDTOS.get(1).getId());
         assertTrue("filmDTO1 = " + filmDTO1.toString(),
                 filmDTO.equals(filmDTO1));
@@ -107,7 +107,7 @@ public class FilmMapperTest {
 
         filmMapper.insert(filmDTO2);
 
-        List<FilmDTO> filmDTOS = filmMapper.selects();
+        List<FilmDTO> filmDTOS = filmMapper.selectsAll();
         assertTrue("count = 1",
                 filmDTOS.size() == 1);
         assertTrue("FilmDTO2 = " + filmDTO2,
@@ -116,7 +116,7 @@ public class FilmMapperTest {
 
         filmMapper.insert(filmDTO1);
 
-        filmDTOS = filmMapper.selects();
+        filmDTOS = filmMapper.selectsAll();
         assertTrue("count = 2",
                 filmDTOS.size() == 2);
         assertTrue("filmDTO2 = " + filmDTO2,
@@ -150,9 +150,9 @@ public class FilmMapperTest {
         // insert 1 delete 1
         filmMapper.insert(filmDTO1);
 
-        List<FilmDTO> filmDTOS = filmMapper.selects();
+        List<FilmDTO> filmDTOS = filmMapper.selectsAll();
         filmMapper.delete(filmDTOS.get(0).getId());
-        filmDTOS = filmMapper.selects();
+        filmDTOS = filmMapper.selectsAll();
         assertTrue("count = 0",
                 filmDTOS.size() == 0);
 
@@ -160,10 +160,10 @@ public class FilmMapperTest {
         filmMapper.insert(filmDTO1);
         filmMapper.insert(filmDTO2);
 
-        filmDTOS = filmMapper.selects();
+        filmDTOS = filmMapper.selectsAll();
         filmMapper.delete(filmDTOS.get(1).getId());
         filmMapper.delete(filmDTOS.get(0).getId());
-        filmDTOS = filmMapper.selects();
+        filmDTOS = filmMapper.selectsAll();
         assertTrue("count = 0",
                 filmDTOS.size() == 0);
 
@@ -171,9 +171,9 @@ public class FilmMapperTest {
         filmMapper.insert(filmDTO1);
         filmMapper.insert(filmDTO2);
 
-        filmDTOS = filmMapper.selects();
+        filmDTOS = filmMapper.selectsAll();
         filmMapper.delete(filmDTOS.get(1).getId());
-        filmDTOS = filmMapper.selects();
+        filmDTOS = filmMapper.selectsAll();
         assertTrue("count = 1",
                 filmDTOS.size() == 1);
         assertTrue("filmDTO1 = " + filmDTO1.toString(),
@@ -187,7 +187,7 @@ public class FilmMapperTest {
         filmMapper.insert(filmDTO1);
 
         filmMapper.deleteByImage(filmDTO1.getImage());
-        List<FilmDTO> filmDTOS = filmMapper.selects();
+        List<FilmDTO> filmDTOS = filmMapper.selectsAll();
         assertTrue("count = 0",
                 filmDTOS.size() == 0);
 
@@ -197,7 +197,7 @@ public class FilmMapperTest {
 
         filmMapper.deleteByImage(filmDTO1.getImage());
         filmMapper.deleteByImage(filmDTO2.getImage());
-        filmDTOS = filmMapper.selects();
+        filmDTOS = filmMapper.selectsAll();
         assertTrue("count = 0",
                 filmDTOS.size() == 0);
 
@@ -206,7 +206,7 @@ public class FilmMapperTest {
         filmMapper.insert(filmDTO2);
 
         filmMapper.deleteByImage(filmDTO2.getImage());
-        filmDTOS = filmMapper.selects();
+        filmDTOS = filmMapper.selectsAll();
         assertTrue("count = 1",
                 filmDTOS.size() == 1);
         assertTrue("filmDTO1 = " + filmDTO1.toString(),

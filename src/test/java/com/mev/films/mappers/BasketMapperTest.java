@@ -38,7 +38,7 @@ public class BasketMapperTest {
             basketMapper.delete(basketDTO.getId());
         }
 
-        List<UserDTO> userDTOS = userMapper.selects();
+        List<UserDTO> userDTOS = userMapper.selectsAll();
         for (UserDTO userDTO : userDTOS){
             userMapper.deleteByLogin(userDTO.getLogin());
         }

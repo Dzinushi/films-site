@@ -29,7 +29,7 @@ public class UserMapperTest {
     @Before
     public void setup(){
 
-        List<UserDTO> userDTOS = userMapper.selects();
+        List<UserDTO> userDTOS = userMapper.selectsAll();
         for (UserDTO userDTO : userDTOS) {
             userMapper.deleteByLogin(userDTO.getLogin());
         }
@@ -41,7 +41,7 @@ public class UserMapperTest {
         userMapper.insert(userDTO1);
         userMapper.insert(userDTO2);
 
-        List<UserDTO> users = userMapper.selects();
+        List<UserDTO> users = userMapper.selectsAll();
         assertTrue("count = 2",
                 users.size() == 2);
         assertTrue("userDTO1 = " + users.get(0),
@@ -56,7 +56,7 @@ public class UserMapperTest {
         userMapper.insert(userDTO1);
         userMapper.insert(userDTO2);
 
-        List<UserDTO> users = userMapper.selects();
+        List<UserDTO> users = userMapper.selectsAll();
         UserDTO userDTO = userMapper.select(users.get(1).getId());
 
         assertTrue("userDTO2 = " + users.get(1),
@@ -114,7 +114,7 @@ public class UserMapperTest {
 
         userMapper.insert(userDTO1);
 
-        List<UserDTO> userDTOS = userMapper.selects();
+        List<UserDTO> userDTOS = userMapper.selectsAll();
         assertTrue("count = 1",
                 userDTOS.size() == 1);
         assertTrue("UserDTO1 = " + userDTO1,
@@ -122,7 +122,7 @@ public class UserMapperTest {
 
         userMapper.insert(userDTO2);
 
-        userDTOS = userMapper.selects();
+        userDTOS = userMapper.selectsAll();
         assertTrue("count = 2",
                 userDTOS.size() == 2);
         assertTrue("userDTO1 = " + userDTO1,
@@ -160,11 +160,11 @@ public class UserMapperTest {
 
         userMapper.deleteByLogin(userDTO2.getLogin());
 
-        List<UserDTO> userDTOS = userMapper.selects();
+        List<UserDTO> userDTOS = userMapper.selectsAll();
         assertTrue("count = 0",
                 userDTOS.size() == 0);
 
-        List<UserRoleDTO> userRoleDTOS = userRoleMapper.select();
+        List<UserRoleDTO> userRoleDTOS = userRoleMapper.selectsAll();
         assertTrue("count = 0",
                 userRoleDTOS.size() == 0);
 
@@ -177,11 +177,11 @@ public class UserMapperTest {
         userMapper.deleteByLogin(userDTO2.getLogin());
         userMapper.deleteByLogin(userDTO1.getLogin());
 
-        userDTOS = userMapper.selects();
+        userDTOS = userMapper.selectsAll();
         assertTrue("count = 0",
                 userDTOS.size() == 0);
 
-        userRoleDTOS = userRoleMapper.select();
+        userRoleDTOS = userRoleMapper.selectsAll();
         assertTrue("count = 0",
                 userRoleDTOS.size() == 0);
 
@@ -193,13 +193,13 @@ public class UserMapperTest {
 
         userMapper.deleteByLogin(userDTO2.getLogin());
 
-        userDTOS = userMapper.selects();
+        userDTOS = userMapper.selectsAll();
         assertTrue("count = 1",
                 userDTOS.size() == 1);
         assertTrue("userDTO1 = " + userDTO1.toString(),
                 userDTOS.get(0).equals(userDTO1));
 
-        userRoleDTOS = userRoleMapper.select();
+        userRoleDTOS = userRoleMapper.selectsAll();
         assertTrue("count = 1",
                 userRoleDTOS.size() == 1);
         assertTrue("userRoleDTO1 = " + userRoleDTOS.get(0).toString(),

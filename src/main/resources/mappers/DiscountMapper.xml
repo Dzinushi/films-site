@@ -12,7 +12,7 @@
         <result property="time" column="time"/>
     </resultMap>
 
-    <select id="selects" resultMap="discountDTO">
+    <select id="selectsAll" resultMap="discountDTO">
         SELECT * FROM
             discounts
     </select>

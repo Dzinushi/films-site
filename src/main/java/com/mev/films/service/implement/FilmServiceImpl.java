@@ -34,7 +34,7 @@ public class FilmServiceImpl implements FilmService{
     public List<FilmDTO> getFilms() {
         LOG.debug("getFilms");
 
-        return filmMapper.selects();
+        return filmMapper.selectsAll();
     }
 
     @Override

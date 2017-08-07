@@ -5,7 +5,7 @@ import com.mev.films.model.DiscountDTO;
 import java.util.List;
 
 public interface DiscountMapper {
-    List<DiscountDTO> selects();
+    List<DiscountDTO> selectsAll();
     DiscountDTO select(Long id);
     DiscountDTO selectByCode(String code);
     void insert(DiscountDTO discountDTO);

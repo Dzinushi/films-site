@@ -5,7 +5,7 @@ import com.mev.films.model.FilmDTO;
 import java.util.List;
 
 public interface FilmMapper {
-    List<FilmDTO> selects();
+    List<FilmDTO> selectsAll();
     FilmDTO select(Long id);
     List<FilmDTO> selectsSortByName();
     List<FilmDTO> selectsByName(String name);

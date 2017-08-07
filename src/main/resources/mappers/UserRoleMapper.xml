@@ -12,32 +12,32 @@
         <result property="time" column="time"/>
     </resultMap>
 
-    <select id="selectUserRoles" resultMap="userRoleDTO">
+    <select id="selectsAll" resultMap="userRoleDTO">
         SELECT * FROM
             user_roles
     </select>
 
-    <select id="selectUserRole" parameterType="map" resultMap="userRoleDTO">
+    <select id="select" parameterType="map" resultMap="userRoleDTO">
         SELECT * FROM
             user_roles
         WHERE
             id = #{0}
     </select>
 
-    <select id="selectUserRoleByLogin" parameterType="map" resultMap="userRoleDTO">
+    <select id="selectByLogin" parameterType="map" resultMap="userRoleDTO">
         SELECT * FROM
             user_roles
         WHERE
             login = #{0}
     </select>
 
-    <insert id="insertUserRole" parameterType="com.mev.films.model.UserRoleDTO">
+    <insert id="insert" parameterType="com.mev.films.model.UserRoleDTO">
         INSERT INTO
             user_roles (login, role, time)
                 VALUES (#{login}, #{role}, clock_timestamp())
     </insert>
 
-    <update id="updateUserRole" parameterType="com.mev.films.model.UserRoleDTO">
+    <update id="update" parameterType="com.mev.films.model.UserRoleDTO">
         UPDATE
             user_roles
         SET

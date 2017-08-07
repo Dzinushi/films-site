@@ -15,7 +15,7 @@
         <result property="time" column="time"/>
     </resultMap>
 
-    <select id="selects" resultMap="filmDTO">
+    <select id="selectsAll" resultMap="filmDTO">
         SELECT * FROM films;
     </select>
 

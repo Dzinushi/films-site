@@ -5,7 +5,7 @@ import com.mev.films.model.UserDTO;
 import java.util.List;
 
 public interface UserMapper {
-    List<UserDTO> selects();
+    List<UserDTO> selectsAll();
     UserDTO select(Long id);
     UserDTO selectIdLogin(Long id);
     List<UserDTO> selectsIdLogin();

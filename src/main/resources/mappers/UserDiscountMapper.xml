@@ -13,7 +13,7 @@
         <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO" columnPrefix="dsc_"/>
     </resultMap>
 
-    <select id="selects" resultMap="userDiscountDTO">
+    <select id="selectsAll" resultMap="userDiscountDTO">
         SELECT
             ud.id AS id,
             ud.used AS used,

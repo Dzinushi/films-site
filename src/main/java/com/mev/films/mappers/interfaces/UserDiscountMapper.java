@@ -6,7 +6,7 @@ import com.mev.films.model.UserDiscountDTO;
 import java.util.List;
 
 public interface UserDiscountMapper {
-    List<UserDiscountDTO> selects();
+    List<UserDiscountDTO> selectsAll();
     UserDiscountDTO select(Long id);
     List<UserDiscountDTO> selectsByUser(Long userId);
     UserDiscountDTO selectByDiscount(Long discountId);

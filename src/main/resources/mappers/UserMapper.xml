@@ -13,7 +13,7 @@
         <result property="time" column="time"/>
     </resultMap>
 
-    <select id="selects" resultMap="userDTO">
+    <select id="selectsAll" resultMap="userDTO">
         SELECT * FROM users;
     </select>
 
