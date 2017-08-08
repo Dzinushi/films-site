@@ -148,7 +148,6 @@ public class BasketMapperTest {
         basketMapper.delete(basketDTOS.get(0).getId());
 
         Long count = basketMapper.selectsCount();
-        System.out.println("count = " + count);
         assertTrue("count = 0",
                 count == 0);
 
@@ -161,7 +160,6 @@ public class BasketMapperTest {
         basketMapper.delete(basketDTOS.get(1).getId());
 
         count = basketMapper.selectsCount();
-        System.out.println("count = " + count);
         assertTrue("count = 0",
                 count == 0);
 

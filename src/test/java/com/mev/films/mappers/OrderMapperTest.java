@@ -57,6 +57,11 @@ public class OrderMapperTest {
             orderMapper.delete(orderDTO.getId());
         }
 
+        List<BasketDTO> basketDTOS = basketMapper.selectAll();
+        for (BasketDTO basketDTO : basketDTOS){
+            basketMapper.delete(basketDTO.getId());
+        }
+
         List<DiscountDTO> discountDTOS = discountMapper.selectsAll();
         for (DiscountDTO discountDTO : discountDTOS){
             discountMapper.delete(discountDTO.getId());
@@ -100,7 +105,7 @@ public class OrderMapperTest {
         basketMapper.insert(basketDTO2);
         basketMapper.insert(basketDTO3);
 
-        List<BasketDTO> basketDTOS = basketMapper.selectAll();
+        basketDTOS = basketMapper.selectAll();
 
         orderDTO1 = new OrderDTO(basketDTOS.get(0), filmDTOS.get(0), discountDTOS.get(0), false);
         orderDTO2 = new OrderDTO(basketDTOS.get(1), filmDTOS.get(1), discountDTOS.get(1), false);
@@ -116,6 +121,7 @@ public class OrderMapperTest {
         orderMapper.insert(orderDTO3);
 
         List<OrderDTO> orderDTOS = orderMapper.selects(1L, 0L);
+
         assertTrue("count = 1",
                 orderDTOS.size() == 1);
         assertTrue("orderDTO1 = " + orderDTO1.toString(),

@@ -14,6 +14,7 @@ import java.util.List;
 public class ExceptionServiceImpl extends RuntimeException implements ExceptionService {
 
     @Autowired private UserMapper userMapper;
+    @Autowired private UserRoleMapper userRoleMapper;
     @Autowired private DiscountMapper discountMapper;
     @Autowired private FilmMapper filmMapper;
     @Autowired private OrderMapper orderMapper;
@@ -34,7 +35,7 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         USER_ROLE_ERROR_WRONG_ROLE,
 
         // UserService
-        USER_ERROR_NULL_POINTER_EXCEPTION,
+        USER_INFO_ERROR_NULL_POINTER_EXCEPTION,
         USER_ERROR_WRONG_ID_PROVIDED,
         USER_ERROR_WRONG_NUMBER_PROVIDED,
         USER_ERROR_NUMBER_VALUE_MORE_THAN_100,
@@ -132,8 +133,9 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
         super(error.toString());
     }
 
-    public ExceptionServiceImpl(UserMapper userMapper){
+    public ExceptionServiceImpl(UserMapper userMapper, UserRoleMapper userRoleMapper){
         this.userMapper = userMapper;
+        this.userRoleMapper = userRoleMapper;
     }
 
     public ExceptionServiceImpl(DiscountMapper discountMapper){
@@ -203,25 +205,6 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
     }
 
     @Override
-    public void checkUserRoleWithoutId(UserRoleDTO userRoleDTO) {
-        LOG.debug("checkUserRoleWithoutId: {}",
-                userRoleDTO);
-
-        if (userRoleDTO == null) {
-            throw new ExceptionServiceImpl(Errors.USER_ROLE_ERROR_NULL_POINTER_EXCEPTION);
-        } else if (userRoleDTO.getLogin() == null) {
-            throw new ExceptionServiceImpl(Errors.USER_ROLE_ERROR_WRONG_LOGIN_PROVIDED);
-        } else if (userRoleDTO.getRole() == null) {
-            throw new ExceptionServiceImpl(Errors.USER_ROLE_ERROR_WRONG_ROLE);
-        }
-
-        UserDTO userDTO = userMapper.selectByLogin(userRoleDTO.getLogin());
-        if (userDTO == null) {
-            throw new ExceptionServiceImpl(Errors.USER_ERROR_NULL_POINTER_EXCEPTION);
-        }
-    }
-
-    @Override
     public void checkUserRole(UserRoleDTO userRoleDTO) {
         LOG.debug("checkUserRole: {}",
                 userRoleDTO);
@@ -238,7 +221,7 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
 
         UserDTO userDTO = userMapper.selectByLogin(userRoleDTO.getLogin());
         if (userDTO == null) {
-            throw new ExceptionServiceImpl(Errors.USER_ERROR_NULL_POINTER_EXCEPTION);
+            throw new ExceptionServiceImpl(Errors.USER_INFO_ERROR_NULL_POINTER_EXCEPTION);
         }
     }
 
@@ -279,18 +262,20 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
     }
 
     @Override
-    public void checkUserWithoutId(UserDTO userDTO) {
-        LOG.debug("checkUserWithoutId: {}",
-                userDTO);
+    public void checkUserInfoWithoutId(UserInfoDTO userInfoDTO) {
+        LOG.debug("checkUserInfoWithoutId: {}",
+                userInfoDTO);
 
-        if (userDTO == null) {
-            throw new ExceptionServiceImpl(Errors.USER_ERROR_NULL_POINTER_EXCEPTION);
-        } else if (userDTO.getLogin() == null) {
+        if (userInfoDTO == null) {
+            throw new ExceptionServiceImpl(Errors.USER_INFO_ERROR_NULL_POINTER_EXCEPTION);
+        } else if (userInfoDTO.getLogin() == null) {
             throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_LOGIN_PROVIDED);
-        } else if (userDTO.getPassword() == null){
+        } else if (userInfoDTO.getPassword() == null){
             throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_PASSWORD_PROVIDED);
-        } else if (userDTO.getEnabled() == null || userDTO.getEnabled() < 0){
+        } else if (userInfoDTO.getEnabled() == null || userInfoDTO.getEnabled() < 0){
             throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_ENABLE_PROVIDED);
+        } else if (userInfoDTO.getRole() == null){
+            throw new ExceptionServiceImpl(Errors.USER_ROLE_ERROR_WRONG_ROLE);
         }
     }
 
@@ -300,7 +285,7 @@ public class ExceptionServiceImpl extends RuntimeException implements ExceptionS
                 userDTO);
 
         if (userDTO == null) {
-            throw new ExceptionServiceImpl(Errors.USER_ERROR_NULL_POINTER_EXCEPTION);
+            throw new ExceptionServiceImpl(Errors.USER_INFO_ERROR_NULL_POINTER_EXCEPTION);
         } else if (userDTO.getId() == null || userDTO.getId() < 0){
             throw new ExceptionServiceImpl(Errors.USER_ERROR_WRONG_ID_PROVIDED);
         } else if (userDTO.getLogin() == null) {

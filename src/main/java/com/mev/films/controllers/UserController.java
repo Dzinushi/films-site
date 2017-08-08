@@ -2,6 +2,7 @@ package com.mev.films.controllers;
 
 
 import com.mev.films.model.UserDTO;
+import com.mev.films.model.UserInfoDTO;
 import com.mev.films.model.UserRoleDTO;
 import com.mev.films.service.interfaces.UserRoleService;
 import com.mev.films.service.interfaces.UserService;
@@ -94,13 +95,11 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/api/users", "/admin/api/users"}, method = RequestMethod.POST)
-    public void addUser(@RequestBody UserDTO userDTO,
-                        @RequestBody UserRoleDTO userRoleDTO) {
-        LOG.debug("addUser: userDTO = {}, userRoleDTO = {}",
-                userDTO, userRoleDTO);
+    public void addUser(@RequestBody UserInfoDTO userInfoDTO) {
+        LOG.debug("addUser: userInfoDTO = {}",
+                userInfoDTO);
 
-        userService.addUser(userDTO);
-        userRoleService.addUserRole(userRoleDTO);
+        userService.addUser(userInfoDTO);
     }
 
     @RequestMapping(value = {"/api/users", "/admin/api/users"}, method = RequestMethod.PUT)

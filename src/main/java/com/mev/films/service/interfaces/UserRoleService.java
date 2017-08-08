@@ -9,6 +9,6 @@ public interface UserRoleService {
     Long getUserRolesCount();
     UserRoleDTO getUserRole(Long id);
     UserRoleDTO getUserRoleByLogin(String login);
-    void addUserRole(UserRoleDTO userRoleDTO);
+    //void addUserRole(UserRoleDTO userRoleDTO);
     void updateUserRole(UserRoleDTO userRoleDTO);
 }

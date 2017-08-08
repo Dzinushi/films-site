@@ -8,14 +8,13 @@ public interface ExceptionService {
     void checkUserRoleId(Long id);
     void checkUserRolesNumberFrom(Long number, Long from);
     void checkUserRoleLogin(String login);
-    void checkUserRoleWithoutId(UserRoleDTO userRoleDTO);
     void checkUserRole(UserRoleDTO userRoleDTO);
 
     // UserService
     void checkUserId(Long id);
     void checkUserNumberFrom(Long number, Long from);
     void checkUserLogin(String login);
-    void checkUserWithoutId(UserDTO userDTO);
+    void checkUserInfoWithoutId(UserInfoDTO userInfoDTO);
     void checkUser(UserDTO userDTO);
 
     // DiscountService

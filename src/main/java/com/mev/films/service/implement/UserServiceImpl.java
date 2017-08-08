@@ -1,7 +1,10 @@
 package com.mev.films.service.implement;
 
 import com.mev.films.mappers.interfaces.UserMapper;
+import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.UserDTO;
+import com.mev.films.model.UserInfoDTO;
+import com.mev.films.model.UserRoleDTO;
 import com.mev.films.service.interfaces.ExceptionService;
 import com.mev.films.service.interfaces.UserService;
 import org.apache.logging.log4j.LogManager;
@@ -19,14 +22,16 @@ public class UserServiceImpl implements UserService{
     private static final Logger LOG = LogManager.getLogger();
 
     @Autowired private UserMapper userMapper;
+    @Autowired private UserRoleMapper userRoleMapper;
 
     @Autowired private ExceptionService exceptionService;
 
     public UserServiceImpl(){
     }
 
-    public UserServiceImpl(UserMapper userMapper, ExceptionService exceptionService){
+    public UserServiceImpl(UserMapper userMapper, UserRoleMapper userRoleMapper, ExceptionService exceptionService){
         this.userMapper = userMapper;
+        this.userRoleMapper = userRoleMapper;
         this.exceptionService = exceptionService;
     }
 
@@ -82,14 +87,28 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public void addUser(UserDTO userDTO) {
+    public void addUser(UserInfoDTO userInfoDTO) {
         LOG.debug("addUser: {}",
-                userDTO);
+                userInfoDTO);
 
-        exceptionService.checkUserWithoutId(userDTO);
+        exceptionService.checkUserInfoWithoutId(userInfoDTO);
+
+        UserDTO userDTO = new UserDTO(userInfoDTO.getLogin(), userInfoDTO.getPassword(), userInfoDTO.getEnabled());
+        UserRoleDTO userRoleDTO = new UserRoleDTO(userInfoDTO.getLogin(), userInfoDTO.getRole());
 
         userMapper.insert(userDTO);
+        userRoleMapper.insert(userRoleDTO);
     }
+
+//    @Override
+//    public void addUser(UserDTO userDTO) {
+//        LOG.debug("addUser: {}",
+//                userDTO);
+//
+//        exceptionService.checkUserWithoutId(userDTO);
+//
+//        userMapper.insert(userDTO);
+//    }
 
     @Override
     public void updateUser(UserDTO userDTO) {

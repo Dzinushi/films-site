@@ -73,16 +73,16 @@ public class UserRoleServiceImpl implements UserRoleService{
         return userRoleMapper.selectByLogin(login);
     }
 
-    @Override
-    public void addUserRole(UserRoleDTO userRoleDTO) {
-
-        LOG.debug("addUserRole: {}",
-                userRoleDTO);
-
-        exceptionService.checkUserRoleWithoutId(userRoleDTO);
-
-        userRoleMapper.insert(userRoleDTO);
-    }
+//    @Override
+//    public void addUserRole(UserRoleDTO userRoleDTO) {
+//
+//        LOG.debug("addUserRole: {}",
+//                userRoleDTO);
+//
+//        exceptionService.checkUserRoleWithoutId(userRoleDTO);
+//
+//        userRoleMapper.insert(userRoleDTO);
+//    }
 
     @Override
     public void updateUserRole(UserRoleDTO userRoleDTO) {

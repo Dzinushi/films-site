@@ -1,7 +1,10 @@
 package com.mev.films.service;
 
 import com.mev.films.mappers.interfaces.UserMapper;
+import com.mev.films.mappers.interfaces.UserRoleMapper;
 import com.mev.films.model.UserDTO;
+import com.mev.films.model.UserInfoDTO;
+import com.mev.films.model.UserRoleDTO;
 import com.mev.films.service.implement.ExceptionServiceImpl;
 import com.mev.films.service.implement.UserServiceImpl;
 import com.mev.films.service.interfaces.ExceptionService;
@@ -28,22 +31,40 @@ public class UserServiceTest {
 
     @Autowired private UserService userService;
     @Autowired private UserMapper userMapperMock;
+    @Autowired private UserRoleMapper userRoleMapperMock;
 
     @Autowired private ExceptionService exceptionService;
 
-    private UserDTO userDTO1 = new UserDTO("user1", "user1", (short) 1);
-    private UserDTO userDTO2 = new UserDTO("user2", "user2", (short) 1);
+    private UserInfoDTO userInfoDTO1 = new UserInfoDTO("user1", "pass1", (short) 1, "ROLE_USER");
+    private UserInfoDTO userInfoDTO2 = new UserInfoDTO("user2", "pass2", (short) 1, "ROLE_ADMIN");
+
+    private UserDTO userDTO1;
+    private UserDTO userDTO2;
+
+    private UserRoleDTO userRoleDTO1;
+    private UserRoleDTO userRoleDTO2;
 
     @Before
     public void setup(){
+
         userMapperMock = createNiceMock(UserMapper.class);
+        userRoleMapperMock = createNiceMock(UserRoleMapper.class);
 
-        exceptionService = new ExceptionServiceImpl(userMapperMock);
+        exceptionService = new ExceptionServiceImpl(userMapperMock, userRoleMapperMock);
 
-        userService = new UserServiceImpl(userMapperMock, exceptionService);
+        userService = new UserServiceImpl(userMapperMock, userRoleMapperMock, exceptionService);
 
+        userDTO1 = new UserDTO(userInfoDTO1.getLogin(), userInfoDTO1.getPassword(), userInfoDTO1.getEnabled());
         userDTO1.setId(1L);
+
+        userDTO2 = new UserDTO(userInfoDTO2.getLogin(), userInfoDTO2.getPassword(), userInfoDTO2.getEnabled());
         userDTO2.setId(2L);
+
+        userRoleDTO1 = new UserRoleDTO(userInfoDTO1.getLogin(), userInfoDTO1.getRole());
+        userRoleDTO1.setId(1L);
+
+        userRoleDTO2 = new UserRoleDTO(userInfoDTO2.getLogin(), userInfoDTO2.getRole());
+        userRoleDTO2.setId(2L);
     }
 
     @Test
@@ -195,51 +216,60 @@ public class UserServiceTest {
     @Test
     public void addUserTest(){
 
-        userService.addUser(userDTO2);
+        userService.addUser(userInfoDTO2);
 
         // check null
         try {
             userService.addUser(null);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_NULL_POINTER_EXCEPTION).getMessage());
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_INFO_ERROR_NULL_POINTER_EXCEPTION).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("userDTO = null",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_NULL_POINTER_EXCEPTION).getMessage()));
+            assertTrue("userInfoDTO = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_INFO_ERROR_NULL_POINTER_EXCEPTION).getMessage()));
         }
 
         // check login null
         try {
-            userService.addUser(new UserDTO(null, userDTO2.getPassword(), userDTO2.getEnabled()));
+            userService.addUser(new UserInfoDTO(null, userInfoDTO2.getPassword(), userInfoDTO2.getEnabled(), userInfoDTO1.getRole()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_LOGIN_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("userDTO.login = null",
+            assertTrue("userInfoDTO.login = null",
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_LOGIN_PROVIDED).getMessage()));
         }
 
         // check password null
         try {
-            userService.addUser(new UserDTO(userDTO2.getLogin(), null, userDTO2.getEnabled()));
+            userService.addUser(new UserInfoDTO(userInfoDTO2.getLogin(), null, userInfoDTO2.getEnabled(), userInfoDTO2.getRole()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_PASSWORD_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("userDTO.password = null",
+            assertTrue("userInfoDTO.password = null",
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_PASSWORD_PROVIDED).getMessage()));
         }
 
         // check enable null
         try {
-            userService.addUser(new UserDTO(userDTO2.getLogin(), userDTO2.getPassword(), null));
+            userService.addUser(new UserInfoDTO(userInfoDTO2.getLogin(), userInfoDTO2.getPassword(), null, userInfoDTO2.getRole()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_ENABLE_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("userDTO.enable = null",
+            assertTrue("userInfoDTO.enable = null",
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_ENABLE_PROVIDED).getMessage()));
         }
 
         // check enable < 0
         try {
-            userService.addUser(new UserDTO(userDTO2.getLogin(), userDTO2.getPassword(), (short) -7));
+            userService.addUser(new UserInfoDTO(userInfoDTO2.getLogin(), userInfoDTO2.getPassword(), (short) -7, userInfoDTO2.getRole()));
             fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_ENABLE_PROVIDED).getMessage());
         } catch (ExceptionServiceImpl e){
-            assertTrue("userDTO.enable = -7",
+            assertTrue("userInfoDTO.enable = -7",
                     e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_WRONG_ENABLE_PROVIDED).getMessage()));
+        }
+
+        // check role null
+        try {
+            userService.addUser(new UserInfoDTO(userInfoDTO2.getLogin(), userInfoDTO2.getPassword(), (short) 1, null));
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ROLE_ERROR_WRONG_ROLE).getMessage());
+        } catch (ExceptionServiceImpl e){
+            assertTrue("userInfoDTO.role = null",
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ROLE_ERROR_WRONG_ROLE).getMessage()));
         }
     }
 
@@ -251,10 +281,10 @@ public class UserServiceTest {
         // check null
         try {
             userService.updateUser(null);
-            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_NULL_POINTER_EXCEPTION).getMessage());
+            fail(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_INFO_ERROR_NULL_POINTER_EXCEPTION).getMessage());
         } catch (ExceptionServiceImpl e){
             assertTrue("userDTO = null",
-                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_ERROR_NULL_POINTER_EXCEPTION).getMessage()));
+                    e.getMessage().equals(new ExceptionServiceImpl(ExceptionServiceImpl.Errors.USER_INFO_ERROR_NULL_POINTER_EXCEPTION).getMessage()));
         }
 
         // check id null

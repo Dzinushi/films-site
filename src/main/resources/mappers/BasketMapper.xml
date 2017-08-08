@@ -20,7 +20,7 @@
             u.login AS usr_login
         FROM
             baskets AS b
-            INNER JOIN users AS u ON b.user_id = u.id
+            LEFT JOIN users AS u ON b.user_id = u.id
     </select>
 
     <select id="selects" parameterType="map" resultMap="basketDTO">
@@ -32,7 +32,7 @@
             u.login AS usr_login
         FROM
             baskets AS b
-            INNER JOIN users AS u ON b.user_id = u.id
+            LEFT JOIN users AS u ON b.user_id = u.id
         LIMIT #{0}
         OFFSET #{1}
     </select>

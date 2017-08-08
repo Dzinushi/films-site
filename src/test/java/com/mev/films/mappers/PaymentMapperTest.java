@@ -54,6 +54,16 @@ public class PaymentMapperTest {
             paymentMapper.delete(paymentDTO.getId());
         }
 
+        List<OrderDTO> orders = orderMapper.selectAll();
+        for (OrderDTO orderDTO : orders){
+            orderMapper.delete(orderDTO.getId());
+        }
+
+        List<BasketDTO> baskets = basketMapper.selectAll();
+        for (BasketDTO basketDTO : baskets){
+            basketMapper.delete(basketDTO.getId());
+        }
+
         List<DiscountDTO> discountDTOS = discountMapper.selectsAll();
         for (DiscountDTO discountDTO : discountDTOS){
             discountMapper.deleteByCode(discountDTO.getCode());
@@ -84,7 +94,7 @@ public class PaymentMapperTest {
         discountDTOS = discountMapper.selectsAll();
         filmDTOS = filmMapper.selectsAll();
         userDTOS = userMapper.selectsIdLogin();
-
+        
         // added baskets
         basketDTOS = new ArrayList<>();
         basketDTOS.add(new BasketDTO(userDTOS.get(0)));
@@ -122,7 +132,7 @@ public class PaymentMapperTest {
         paymentDTOS = new ArrayList<>();
         for (BasketDTO basketDTO : basketDTOS){
             Long time = System.currentTimeMillis();
-            List<OrderDTO> orders = orderMapper.selectsByBasket(basketDTO.getId());
+            orders = orderMapper.selectsByBasket(basketDTO.getId());
             for (OrderDTO orderDTO : orders){
                 if (orderDTO.isMark()){
                     if (orderDTO.getBasketDTO().getUserDTO().getId() == 2 && user2Add != 0){
@@ -324,6 +334,8 @@ public class PaymentMapperTest {
 
     @Test
     public void deletePaymentTest(){
+
+        System.out.println("paymentDTOS = " + paymentDTOS);
 
         // add 1 delete 1
         paymentMapper.insert(paymentDTOS.get(0));
