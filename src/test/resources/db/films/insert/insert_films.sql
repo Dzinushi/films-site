@@ -80,4 +80,4 @@ $$ language plpgsql;
 
 
 select insert_film(1000000);
-select count(id) from films;
+select * from films limit 10;

@@ -56,5 +56,6 @@ end;
 $$ language plpgsql;
 
 
-select insert_users(10000000);
-select count(id) from users;
+select insert_users(1000000);
+select * from user_roles limit 10;
+

@@ -73,3 +73,4 @@ end;
 $$ language plpgsql;
 
 select insert_user_roles();
+select * from user_roles limit 10;

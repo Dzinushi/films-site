@@ -54,5 +54,5 @@ end;
 $$ language plpgsql;
 
 
-select insert_discount(10000000);
-select count(id) from discounts;
+select insert_discount(1000000);
+select * from discounts limit 10;

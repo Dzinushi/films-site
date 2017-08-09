@@ -111,4 +111,4 @@ $$ language plpgsql;
 
 
 select insert_order(1000000);
-select count(id) from orders;
+select * from orders limit 10;

@@ -82,4 +82,4 @@ end;
 $$ language plpgsql;
 
 select insert_user_discount(1000000);
-select count(id) from user_discounts;
+select * from user_discounts limit 10;

@@ -40,4 +40,4 @@ $$ language plpgsql;
 
 
 select insert_basket(1000000);
-select count(id) from baskets;
+select * from baskets limit 10;
