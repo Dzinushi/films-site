@@ -54,7 +54,7 @@ begin
 			-- p_time
 			chance_time_update := trunc(random() * 5);
 			if chance_time_update = 0 then
-				select cast(now() - '1 minute'::interval * random() as timestamp) into p_time;
+				select cast(now() - '1 year'::interval * random() as timestamp) into p_time;
 			end if;
 
 			-- insert data

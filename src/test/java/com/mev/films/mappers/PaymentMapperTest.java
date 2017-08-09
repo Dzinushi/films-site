@@ -148,8 +148,8 @@ public class PaymentMapperTest {
                             orderDTO.getBasketDTO().getUserDTO(),
                             orderDTO.getFilmDTO(),
                             orderDTO.getDiscountDTO(),
-                            totalPrice,
                             new Timestamp(time));
+                    paymentDTO.setTotalPrice(totalPrice);
                     paymentDTOS.add(paymentDTO);
                 }
             }
@@ -266,7 +266,9 @@ public class PaymentMapperTest {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time);
 
-        List<UserDTO> userDTOS = paymentMapper.selectUsersPayingAboveMedianForLastMonth(calendar.get(Calendar.MONTH) + 1);
+        List<PaymentStatDTO> userDTOS = paymentMapper.selectUsersPayingAboveMedianForLastMonth(
+                (short) calendar.get(Calendar.YEAR),
+                (short) (calendar.get(Calendar.MONTH) + 1));
 
 //        assertTrue("count = 1",
 //                userDTOS.size() == 1);
@@ -304,10 +306,30 @@ public class PaymentMapperTest {
             paymentMapper.insert(paymentDTO);
         }
 
-        List<UserDTO> userDTOS = paymentMapper.selectsTop5Orders();
-        for (UserDTO userDTO : userDTOS){
-            System.out.println(userDTO);
+        List<PaymentStatDTO> paymentStatDTOS = paymentMapper.selectsTop5Orders();
+        for (PaymentStatDTO paymentStatDTO : paymentStatDTOS){
+            System.out.println(paymentStatDTO);
         }
+    }
+
+    // need to check test
+    @Test
+    public void selectsAverageDayPurchasesPricesTest(){
+
+        for (PaymentDTO paymentDTO : paymentDTOS){
+            paymentMapper.insert(paymentDTO);
+        }
+
+        Timestamp paymentTime = paymentDTOS.get(0).getTime();
+        Long time = paymentTime.getTime();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+
+        Long dayAP = paymentMapper.selectsAveragePriceDayPurchases(
+                (short) calendar.get(Calendar.YEAR),
+                (short) (calendar.get(Calendar.MONTH) + 1),
+                (short) calendar.get(Calendar.DAY_OF_MONTH)
+        );
     }
 
     @Test

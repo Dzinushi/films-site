@@ -8,8 +8,6 @@ public class UserDTO {
     private String login;
     private String password;
     private Short enabled;
-    private Integer median;
-    private Integer totalOrdersPrice;
     private Timestamp time;
 
     public UserDTO(){
@@ -53,22 +51,6 @@ public class UserDTO {
         this.enabled = enabled;
     }
 
-    public void setMedian(Integer median) {
-        this.median = median;
-    }
-
-    public Integer getMedian() {
-        return median;
-    }
-
-    public void setTotalOrdersPrice(Integer totalOrdersPrice) {
-        this.totalOrdersPrice = totalOrdersPrice;
-    }
-
-    public Integer getTotalOrdersPrice() {
-        return totalOrdersPrice;
-    }
-
     public Timestamp getTime() {
         return time;
     }
@@ -101,8 +83,6 @@ public class UserDTO {
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", enabled=" + enabled +
-                ", median=" + median +
-                ", totalOrdersPrice=" + totalOrdersPrice +
                 ", time=" + time +
                 '}';
     }

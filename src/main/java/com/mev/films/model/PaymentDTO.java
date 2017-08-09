@@ -14,18 +14,10 @@ public class PaymentDTO {
     public PaymentDTO(){
     }
 
-    public PaymentDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, Integer totalPrice){
+    public PaymentDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, Timestamp time){
         this.userDTO = userDTO;
         this.filmDTO = filmDTO;
         this.discountDTO = discountDTO;
-        this.totalPrice = totalPrice;
-    }
-
-    public PaymentDTO(UserDTO userDTO, FilmDTO filmDTO, DiscountDTO discountDTO, Integer totalPrice, Timestamp time){
-        this.userDTO = userDTO;
-        this.filmDTO = filmDTO;
-        this.discountDTO = discountDTO;
-        this.totalPrice = totalPrice;
         this.time = time;
     }
 
@@ -61,16 +53,20 @@ public class PaymentDTO {
         this.discountDTO = discountDTO;
     }
 
-    public void setTotalPrice(Integer totalPrice){
-        this.totalPrice = totalPrice;
-    }
-
     public Integer getTotalPrice() {
         return totalPrice;
     }
 
+    public void setTotalPrice(Integer totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
     public Timestamp getTime() {
         return time;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
     }
 
     @Override

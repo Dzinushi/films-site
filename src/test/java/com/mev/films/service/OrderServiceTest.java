@@ -90,6 +90,11 @@ public class OrderServiceTest {
         orderDTO3 = new OrderDTO(basketDTO2, filmDTO1, null, false);
         orderDTO4 = new OrderDTO(basketDTO3, filmDTO2, null, true);
 
+        OrderServiceImpl.priceByDiscount(orderDTO1);
+        OrderServiceImpl.priceByDiscount(orderDTO2);
+        OrderServiceImpl.priceByDiscount(orderDTO3);
+        OrderServiceImpl.priceByDiscount(orderDTO4);
+
         orderDTO1.setId(1L);
         orderDTO2.setId(2L);
         orderDTO3.setId(3L);

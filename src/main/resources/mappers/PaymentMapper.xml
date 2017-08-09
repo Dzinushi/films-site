@@ -14,11 +14,10 @@
         <association property="discountDTO" resultMap="com.mev.films.mappers.interfaces.DiscountMapper.discountDTO" columnPrefix="dsc_"/>
     </resultMap>
 
-    <resultMap id="userDTO" type="com.mev.films.model.UserDTO">
+    <resultMap id="paymentStatDTO" type="com.mev.films.model.PaymentStatDTO">
         <id property="id" column="id"/>
-        <result property="login" column="login"/>
-        <result property="median" column="median"/>
-        <result property="totalOrdersPrice" column="totalOrdersPrice"/>
+        <result property="userName" column="userName"/>
+        <result property="price" column="price"/>
     </resultMap>
 
     <select id="selectAll" resultMap="paymentDTO">
@@ -163,35 +162,40 @@
             p.id = #{0}
     </select>
 
-    <select id="selectUsersPayingAboveMedianForLastMonth" parameterType="map" resultMap="userDTO">
+    <select id="selectUsersPayingAboveMedianForLastMonth" parameterType="map" resultMap="paymentStatDTO">
         SELECT
-            u2.id,
-            u2.login,
-            avg(bought) AS median
+            u2.id AS id,
+            u2.login AS userName,
+            avg(purchase) AS price
         FROM
             users AS u2
             INNER JOIN (
                 SELECT
                     u.id,
                     p.time,
-                    sum(p.total_price) AS bought
+                    sum(p.total_price) AS purchase
                 FROM
                     users as u
                     INNER JOIN payments AS p ON u.id = p.user_id
                 WHERE
-                    extract(MONTH FROM p.time) = #{0}
+                    extract(YEAR FROM p.time) = #{0} AND
+                    extract(MONTH FROM p.time) = #{1}
                 GROUP BY
                     u.id, p.time
             ) AS p2 ON u2.id = p2.id
         GROUP BY
             u2.id, u2.login
         HAVING
-            avg(bought) > (SELECT
+            avg(purchase) > (SELECT
                                   avg(payments.total_price)
                               FROM
-                                  payments)
+                                  payments
+                              WHERE
+                                  extract(YEAR FROM time) = #{0} AND
+                                  extract(MONTH FROM time) = #{1}
+                            )
         ORDER BY
-            avg(bought) DESC
+            price DESC
     </select>
 
     <select id="selectsSortByUsersOrders" resultMap="paymentDTO">
@@ -214,17 +218,17 @@
             u.login, f.name, p.time
     </select>
 
-    <select id="selectsTop5Orders" resultMap="userDTO">
+    <select id="selectsTop5Orders" resultMap="paymentStatDTO">
         SELECT
-            u2.id,
-            u2.login,
-            sum(bought) AS totalOrdersPrice
+            u2.id AS id,
+            u2.login AS userName,
+            sum(purchase) AS price
         FROM
             users AS u2
             INNER JOIN (
                 SELECT
                     u.id,
-                    sum(p.total_price) AS bought
+                    sum(p.total_price) AS purchase
                 FROM
                     payments AS p
                     INNER JOIN users AS u ON p.user_id = u.id
@@ -234,8 +238,29 @@
         GROUP BY
             u2.id, u2.login
         ORDER BY
-            totalOrdersPrice DESC
+            price DESC
         LIMIT 5
+    </select>
+
+    <select id="selectsAveragePriceDayPurchases" parameterType="map" resultType="long">
+        select
+            avg(user_day_purchase) as price
+        from
+            users as u2
+            INNER JOIN (
+                           select
+                               u.id,
+                               sum(p.total_price) as user_day_purchase
+                           from
+                               users as u
+                               INNER JOIN payments as p on u.id = p.user_id
+                           where
+                               extract(year from p.time) = #{0} AND
+                               extract(month from p.time) = #{1} AND
+                               extract(day from p.time) = #{2}
+                           group by
+                               u.id
+                       ) as p2 on p2.id = u2.id
     </select>
 
     <insert id="insert" parameterType="com.mev.films.model.PaymentDTO">

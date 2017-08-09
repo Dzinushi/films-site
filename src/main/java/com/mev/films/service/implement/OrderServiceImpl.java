@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService{
         this.exceptionService = exceptionService;
     }
 
-    private void priceByDiscount(OrderDTO orderDTO){
+    public static void priceByDiscount(OrderDTO orderDTO){
 
         if (orderDTO.getDiscountDTO() != null) {
 
@@ -43,6 +43,8 @@ public class OrderServiceImpl implements OrderService{
                 Float price_discount = price - (price * value);
                 orderDTO.setPriceByDiscount(Math.round(price_discount));
             }
+        } else {
+            orderDTO.setPriceByDiscount(orderDTO.getFilmDTO().getPrice());
         }
     }
 
@@ -71,10 +73,7 @@ public class OrderServiceImpl implements OrderService{
 
         exceptionService.checkOrderId(id);
 
-        OrderDTO orderDTO = orderMapper.select(id);
-        priceByDiscount(orderDTO);
-
-        return orderDTO;
+        return orderMapper.select(id);
     }
 
     @Override
@@ -85,12 +84,7 @@ public class OrderServiceImpl implements OrderService{
 
         exceptionService.checkOrderBasketId(basketId);
 
-        List<OrderDTO> orderDTOS = orderMapper.selectsByBasket(basketId);
-        for (OrderDTO orderDTO : orderDTOS){
-            priceByDiscount(orderDTO);
-        }
-
-        return orderDTOS;
+        return orderMapper.selectsByBasket(basketId);
     }
 
     @Override
@@ -101,12 +95,7 @@ public class OrderServiceImpl implements OrderService{
 
         exceptionService.checkOrderBasketId(basketId);
 
-        List<OrderDTO> orderDTOS = orderMapper.selectsByBasketIsMark(basketId);
-        for (OrderDTO orderDTO : orderDTOS){
-            priceByDiscount(orderDTO);
-        }
-
-        return orderDTOS;
+        return orderMapper.selectsByBasketIsMark(basketId);
     }
 
     @Override
@@ -128,6 +117,10 @@ public class OrderServiceImpl implements OrderService{
         // set basketDTO for orderDTO
         basketDTO = basketMapper.selectByUser(orderDTO.getBasketDTO().getUserDTO().getId());
         orderDTO.setBasketDTO(basketDTO);
+
+        // calc priceByDiscount
+        priceByDiscount(orderDTO);
+
         orderMapper.insert(orderDTO);
     }
 

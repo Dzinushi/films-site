@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,7 +113,12 @@ public class PaymentServiceTest {
             for (OrderDTO orderDTO : orders){
                 if (orderDTO.getBasketDTO().equals(basketDTO)){
                     Integer totalPrice = orderDTO.getDiscountDTO() == null ? orderDTO.getFilmDTO().getPrice() : orderDTO.getPriceByDiscount();
-                    PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getBasketDTO().getUserDTO(), orderDTO.getFilmDTO(), orderDTO.getDiscountDTO(), totalPrice);
+                    PaymentDTO paymentDTO = new PaymentDTO(
+                            orderDTO.getBasketDTO().getUserDTO(),
+                            orderDTO.getFilmDTO(),
+                            orderDTO.getDiscountDTO(),
+                            new Timestamp(System.currentTimeMillis()));
+                    paymentDTO.setTotalPrice(totalPrice);
                     paymentDTO.setId(id);
                     payments.add(paymentDTO);
                     ++id;

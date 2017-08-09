@@ -2,6 +2,7 @@ package com.mev.films.mappers.interfaces;
 
 
 import com.mev.films.model.PaymentDTO;
+import com.mev.films.model.PaymentStatDTO;
 import com.mev.films.model.UserDTO;
 
 import java.util.List;
@@ -13,9 +14,10 @@ public interface PaymentMapper {
     List<PaymentDTO> selectsByUser(Long userId);
     List<PaymentDTO> selectsByFilm(Long filmId);
     PaymentDTO select(Long id);
-    List<UserDTO> selectUsersPayingAboveMedianForLastMonth(Integer month);
+    List<PaymentStatDTO> selectUsersPayingAboveMedianForLastMonth(Short year, Short month);
     List<PaymentDTO> selectsSortByUsersOrders();
-    List<UserDTO> selectsTop5Orders();
+    List<PaymentStatDTO> selectsTop5Orders();
+    Long selectsAveragePriceDayPurchases(Short year, Short month, Short day);
     void insert(PaymentDTO paymentDTO);
     void delete(Long id);
 }

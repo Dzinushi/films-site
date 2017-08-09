@@ -93,10 +93,7 @@ public class PaymentServiceImpl implements PaymentService{
         Long time = System.currentTimeMillis();
         List<OrderDTO> orderDTOS = orderMapper.selectsByBasketIsMark(basketDTO.getId());
         for (OrderDTO orderDTO : orderDTOS){
-            Integer totalPrice;
             if (orderDTO.getDiscountDTO() != null){
-
-                totalPrice = orderDTO.getPriceByDiscount();
 
                 // set 'used' in UserDiscount
                 UserDiscountDTO userDiscountDTO = userDiscountMapper.selectByDiscount(orderDTO.getDiscountDTO().getId());
@@ -110,14 +107,11 @@ public class PaymentServiceImpl implements PaymentService{
                     userDiscountMapper.update(userDiscountDTO);
                 }
             }
-            else {
-                totalPrice = orderDTO.getFilmDTO().getPrice();
-            }
             PaymentDTO paymentDTO = new PaymentDTO(orderDTO.getBasketDTO().getUserDTO(),
                     orderDTO.getFilmDTO(),
                     orderDTO.getDiscountDTO(),
-                    totalPrice,
                     new Timestamp(time));
+            paymentDTO.setTotalPrice(orderDTO.getPriceByDiscount());
             paymentMapper.insert(paymentDTO);
 
             // delete order that just payed
